@@ -1,0 +1,10 @@
+package com.badao.quiz.base.animation;
+
+public enum AnimationType {
+    FROM_TOP_LEFT_CORNER_TO_WHOLE_SCREEN,
+    FROM_INSIDE_TO_OUTSIDE,
+    FROM_LEFT_TO_RIGHT,
+    FROM_RIGHT_TO_LEFT,
+    FROM_BOTTOM_LEFT_CORNER_TO_WHOLE_SCREEN,
+    FROM_OUTSIDE_TO_INSIDE, NONE
+}

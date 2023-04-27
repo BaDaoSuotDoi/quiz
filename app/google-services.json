@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "171416518999",
+    "project_id": "quiz-296b6",
+    "storage_bucket": "quiz-296b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171416518999:android:4562106c37c828583cbe12",
+        "android_client_info": {
+          "package_name": "com.badao.quiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171416518999-a83ckqjig4fc3puplv4gss30kepciif5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZiJOdUGTVaSx8mJUYt8uJbwv6NiGoJiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171416518999-a83ckqjig4fc3puplv4gss30kepciif5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
