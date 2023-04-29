@@ -57,9 +57,6 @@ public class MainActivity  extends BaseMvpActivity<MainActivityContract.Presente
         return new MainActivityPresenter(this);
     }
 
-    @Override
-    public void onBackPressed() {
-    }
 
 
 }

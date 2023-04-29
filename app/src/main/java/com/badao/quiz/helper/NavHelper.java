@@ -66,22 +66,22 @@ public class NavHelper {
     }
 
     public void navigate(int layoutId, Bundle bundle, AnimationType type) {
-        if (layoutId == R.id.loginFragment) {
-            forceNavigate(layoutId, type, null);
-            return;
-        }
+       
+        Log.e("Push here1", "OK");
         if (hasBackStackNavigationId(layoutId)) {
             NavDestination current = getCurrentDestination();
             if (current != null && current.getId() == layoutId) {
                 BaseFragment baseFragment = (BaseFragment) getCurrentFragment();
                 if (baseFragment != null) {
                     baseFragment.onRefreshData(bundle);
+                    Log.e("Push here2", "OK");
                     return;
                 }
             }
-
+            Log.e("Push here", "OK");
             popBackStack(layoutId, false, bundle);
         } else {
+            Log.e("Push here3", "OK");
             forceNavigate(layoutId, type, bundle);
         }
     }
@@ -161,9 +161,9 @@ public class NavHelper {
 
 
     private NavOptions createNavOptions(int layoutId, AnimationType type) {
-//        if (layoutId == R.id.loginFragment) {
-//            return AnimationHelper.createNavAnimationClearStack(R.id.loginFragment);
-//        }
+        if (layoutId == R.id.loginFragment || layoutId == R.id.homeFragment) {
+            return AnimationHelper.createNavAnimationClearStack(R.id.loginFragment);
+        }
         return AnimationHelper.createNavAnimation(type);
     }
 }

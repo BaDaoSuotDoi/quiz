@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.badao.quiz.R;
 import com.badao.quiz.base.contract.BaseContract;
 import com.badao.quiz.base.mvp.view.ViewInflate;
-import com.badao.quiz.component.CpnMainLayout;
 import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.main.view.MainActivity;
 import com.badao.quiz.helper.AnnotationHelper;

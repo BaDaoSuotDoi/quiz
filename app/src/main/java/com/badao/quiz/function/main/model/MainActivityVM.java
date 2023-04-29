@@ -8,17 +8,7 @@ import com.badao.quiz.viewmode.SingleLiveEvent;
 
 public class MainActivityVM extends ViewModel {
     private boolean pendingCheckActivity = false;
-    private boolean pendingBackToHome = false;
-    private MutableLiveData<Integer> mldNumberOfTasks = new MutableLiveData<>();
-    private MutableLiveData<Error> mldErrorDeviceDisable = new MutableLiveData<>();
-    private SingleLiveEvent<Boolean> mldIsRecreateFragment = new SingleLiveEvent<>();
-    private SingleLiveEvent<Long> mMaxPosition = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> mldPendingUpdateLesson = new SingleLiveEvent<>();
-    private SingleLiveEvent<Integer> mVideoIdSeen = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> mldSearchKeyword = new SingleLiveEvent<>();
-    private SingleLiveEvent<Void> mldRefreshSearch = new SingleLiveEvent<>();
-    private SingleLiveEvent<Void> mRefreshNetwork = new SingleLiveEvent<>();
-    private SingleLiveEvent<Void> eventPendingBackToHome = new SingleLiveEvent<>();
+    private MutableLiveData<Payload> mldProjectStatus = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> eventShowKeyBoard = new SingleLiveEvent<>();
 
     public SingleLiveEvent<Boolean> getEventShowKeyBoard() {
@@ -28,8 +18,41 @@ public class MainActivityVM extends ViewModel {
     public void setStatusShowKey(Boolean isShow){
         eventShowKeyBoard.postValue(isShow);
     }
+    public void setProjectStatus(Payload payload){
+        mldProjectStatus.postValue(payload);
+    }
+
+    public MutableLiveData<Payload> getMldProjectStatus() {
+        return mldProjectStatus;
+    }
 
     public boolean isPendingCheckActivity() {
         return pendingCheckActivity;
+    }
+
+    public static class Payload {
+        private int action;
+        private Object value;
+
+        public Payload(int action, Object value) {
+            this.action = action;
+            this.value = value;
+        }
+
+        public int getAction() {
+            return action;
+        }
+
+        public void setAction(int action) {
+            this.action = action;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
     }
 }

@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.badao.quiz.R;
 import com.badao.quiz.base.dialog.BaseDialog;
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.ProjectDB;
+import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.main.view.MainActivity;
 import com.badao.quiz.model.Project;
 
@@ -38,6 +40,11 @@ public class ProjectDialog extends BaseDialog {
                 Project project = new Project(edName.getText().toString());
                 Log.e("Project", project.toString());
                 ProjectDB.getInstance(getContext()).create(project);
+                getViewModel().setProjectStatus(new MainActivityVM.Payload(
+                        AppConstants.PROJECT_ADD,
+                        project
+                ));
+                dismiss();
         }
     }
 

@@ -23,4 +23,9 @@
         android:id="@+id/homeFragment"
         android:name="com.badao.quiz.function.home.view.HomeFragment"
         android:label="HomeFragment" />
+
+    <fragment
+        android:id="@+id/projectDetailFragment"
+        android:name="com.badao.quiz.function.project_detail.view.ProjectDetailFragment"
+        android:label="HomeFragment" />
 </navigation>

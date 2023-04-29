@@ -2,32 +2,25 @@ package com.badao.quiz.component;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.badao.quiz.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class CpnMainLayout extends CoordinatorLayout { ;
+public class MainLayoutCpn extends CoordinatorLayout { ;
     int statusbarHeight;
 
-    public CpnMainLayout(Context context) {
+    public MainLayoutCpn(Context context) {
         super(context);
         init();
     }
 
-    public CpnMainLayout(Context context, AttributeSet attrs) {
+    public MainLayoutCpn(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CpnMainLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MainLayoutCpn(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -55,7 +48,4 @@ public class CpnMainLayout extends CoordinatorLayout { ;
     }
 
 
-//    public interface OnWindownCallBack {
-//        WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat windowInsetsCompat);
-//    }
 }
