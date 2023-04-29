@@ -3,6 +3,7 @@ package com.badao.quiz.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -79,5 +80,11 @@ public class ProjectDB  extends  SQLiteHelper{
         int mode = cursor.getInt(7);
         Boolean isSync = cursor.getInt(8) == 1? true: false;
         return  new Project(id,name, createdAt,lastUpdated,isRandom,questionPerSession,duration,mode,isSync );
+    }
+
+    public void destroy(Project project){
+        Log.e("Project delete", "Ok "+ project.getID());
+        String[] args = {project.getID()+""};
+        sqlWrite.delete("projects", "id = ?", args);
     }
 }

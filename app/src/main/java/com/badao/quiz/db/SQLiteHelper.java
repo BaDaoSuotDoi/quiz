@@ -14,7 +14,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION );
     }
     protected SQLiteDatabase sqlRead = getReadableDatabase();
-    protected SQLiteDatabase sqlWrite = getReadableDatabase();
+    protected SQLiteDatabase sqlWrite = getWritableDatabase();
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

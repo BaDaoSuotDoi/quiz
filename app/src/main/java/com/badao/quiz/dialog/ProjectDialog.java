@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.badao.quiz.R;
 import com.badao.quiz.base.dialog.BaseDialog;
+import com.badao.quiz.base.dialog.BaseEditForm;
 import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.function.main.model.MainActivityVM;
@@ -22,78 +23,29 @@ import com.badao.quiz.model.Project;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ProjectDialog extends BaseDialog {
-    @BindView(R.id.edName)
-    EditText edName;
+public class ProjectDialog extends BaseEditForm {
 
-    @BindView(R.id.tvCreate)
-    TextView tvCreate;
-
-    @OnClick({R.id.tvCancel, R.id.tvCreate})
-    protected void OnClick(View view) {
-        switch (view.getId()){
-            case  R.id.tvCancel:
-                dismiss();
-                getViewModel().setStatusShowKey(false);
-                break;
-            case R.id.tvCreate:
-                Project project = new Project(edName.getText().toString());
-                Log.e("Project", project.toString());
-                ProjectDB.getInstance(getContext()).create(project);
-                getViewModel().setProjectStatus(new MainActivityVM.Payload(
-                        AppConstants.PROJECT_ADD,
-                        project
-                ));
-                dismiss();
-        }
+    public ProjectDialog() {
+        setTitle("New project");
+        setContent("");
+        setHint("Enter the project name...");
+        setLabelApply("CREATE");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        edName.requestFocus();
-        validCreate(edName.getText().toString());
-        getViewModel().setStatusShowKey(true);
-        edName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                validCreate(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-    }
 
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        getViewModel().setStatusShowKey(false);
+    public void onClickCancel() {
     }
 
-    public void validCreate(String name){
-        ViewGroup.LayoutParams layoutParams =  tvCreate.getLayoutParams();
-        if(name.length() > 0){
-            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            tvCreate.setLayoutParams(layoutParams);
-        }else{
-            layoutParams.width = 0;
-            layoutParams.height = 0;
-            tvCreate.setLayoutParams(layoutParams);
-        }
-    }
     @Override
-    protected int getDialogLayout() {
-        return R.layout.dialog_project;
+    public void onClickApply(String content) {
+        Project project = new Project(content);
+        Log.e("Project", project.toString());
+        ProjectDB.getInstance(getContext()).create(project);
+        getViewModel().setProjectStatus(new MainActivityVM.Payload(
+                AppConstants.PROJECT_ADD,
+                project
+        ));
     }
-
 }

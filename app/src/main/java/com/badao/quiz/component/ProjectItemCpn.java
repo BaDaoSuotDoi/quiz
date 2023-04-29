@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.badao.quiz.R;
+import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.model.Project;
 
 import butterknife.BindView;
@@ -77,9 +78,12 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
                         switch (menuItem.getItemId()){
                             case R.id.action_edit:
                                 Log.e("Project Action", "edit");
+                                iAction.navigateEdit(project);
                                 return true;
                             case R.id.action_delete:
                                 Log.e("Project Action", "delete");
+                                ProjectDB.getInstance(getContext()).destroy(project);
+                                iAction.onDelete(project);
                                 return true;
                             case R.id.action_play:
                                 Log.e("Project Action", "play");
@@ -98,10 +102,11 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        iAction.click(project);
+        iAction.navigateEdit(project);
     }
 
      public interface IAction{
-        void click(Project project);
+        void navigateEdit(Project project);
+        void onDelete(Project project);
     }
 }

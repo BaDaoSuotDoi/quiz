@@ -70,10 +70,15 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
     public void addProject(Project project) {
         flProject.addView(new ProjectItemCpn(getContext(), project, new ProjectItemCpn.IAction() {
             @Override
-            public void click(Project project) {
+            public void navigateEdit(Project project) {
                 navigate(R.id.projectDetailFragment, BundleBuilder.bundleOf(
                         Pair.create(AppConstants.PROJECT_ID, project.getID())
                 ), AnimationType.FROM_RIGHT_TO_LEFT);
+            }
+
+            @Override
+            public void onDelete(Project project) {
+                getPresenter().initProjects();
             }
         }));
     }

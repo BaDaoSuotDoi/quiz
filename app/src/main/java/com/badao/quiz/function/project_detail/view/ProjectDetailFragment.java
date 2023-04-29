@@ -13,6 +13,8 @@ import com.badao.quiz.R;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.dialog.ProjectDialog;
+import com.badao.quiz.dialog.ProjectNameDialog;
 import com.badao.quiz.function.project_detail.presenter.ProjectDetailContract;
 import com.badao.quiz.function.project_detail.presenter.ProjectDetailPresenter;
 import com.badao.quiz.model.Project;
@@ -24,6 +26,8 @@ import butterknife.BindView;
 public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailContract.View, ProjectDetailContract.Presenter> implements ProjectDetailContract.View{
     @BindView(R.id.tvName)
     TextView tvName;
+    @BindView(R.id.imName)
+    ImageView imName;
     @BindView(R.id.tvCreatedAt)
     TextView tvCreatedAt;
     @BindView(R.id.tvUpdatedAt)
@@ -58,11 +62,19 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         project = getPresenter().getProject();
+        updateName();
         updateRandomMode();
         updateTotalQuestion();
         updateQuestionPerSession();
         updateDuration();
 
+        imName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProjectNameDialog dialog = new ProjectNameDialog(tvName.getText().toString());
+                dialog.show(getParentFragmentManager(), ProjectNameDialog.class.getName());
+            }
+        });
         imRandomMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +113,10 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         });
     }
 
+    @Override
+    public void updateName() {
+        tvName.setText(project.getName());
+    }
 
     @Override
     public void updateRandomMode() {

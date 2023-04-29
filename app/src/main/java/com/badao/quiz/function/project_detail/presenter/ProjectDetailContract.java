@@ -5,7 +5,7 @@ import com.badao.quiz.model.Project;
 
 public class ProjectDetailContract {
     public interface View extends BaseContract.View {
-
+          void updateName();
           void updateRandomMode();
           void updateTotalQuestion();
           void updateQuestionPerSession();

@@ -14,12 +14,20 @@
             android:text="Project name"
             android:id="@+id/tvName"
             />
-        <ImageView
-            android:id="@+id/imName"
-            android:layout_width="20dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/pen"
-            />
+            android:layout_weight="0.5"
+            android:gravity="right"
+            >
+            <ImageView
+                android:id="@+id/imName"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/pen"
+                android:layout_gravity="right"
+                />
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_below="@+id/llName"
