@@ -26,6 +26,11 @@
 
     <fragment
         android:id="@+id/projectDetailFragment"
-        android:name="com.badao.quiz.function.project_detail.view.ProjectDetailFragment"
-        android:label="HomeFragment" />
+        android:name="com.badao.quiz.function.project.detail.view.ProjectDetailFragment"
+        android:label="ProjectDetailFragment" />
+
+    <fragment
+        android:id="@+id/projectQuestionEditFragment"
+        android:name="com.badao.quiz.function.project.question_edit.view.ProjectQuestionEditFragment"
+        android:label="ProjectQuestionEditFragment" />
 </navigation>

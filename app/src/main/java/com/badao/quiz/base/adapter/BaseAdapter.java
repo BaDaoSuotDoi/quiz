@@ -94,12 +94,29 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends Recycler
         if (mListener != null) mListener.onItemClick(this, holder.itemView, position);
     }
 
+    protected void onItemClick(View view, int position) {
+        if (mListener != null) mListener.onItemClick(this, view, position);
+    }
+
     protected void initOnItemClicked(VH holder) {
         holder.itemView.setOnClickListener(v -> {
             onItemClick((VH) holder, holder.getAdapterPosition());
         });
     }
 
+    public void setData(List<T> items){
+        if (items == null) items = new ArrayList<>();
+        this.mDisplayItems = items;
+        notifyDataSetChanged();
+    }
+
+    public final void addData(T item) {
+        if (mDisplayItems == null) {
+            mDisplayItems = new ArrayList<>();
+        }
+        mDisplayItems.add(item);
+        notifyDataSetChanged();
+    }
     public final void addData(List<T> items) {
         if (mDisplayItems == null) {
             mDisplayItems = new ArrayList<>();
@@ -108,10 +125,4 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends Recycler
         notifyDataSetChanged();
     }
 
-    public void updateData(List<T> items) {
-        if (items == null) items = new ArrayList<>();
-        mDisplayItems = new ArrayList<>();
-        mDisplayItems.addAll(items);
-        notifyDataSetChanged();
-    }
 }

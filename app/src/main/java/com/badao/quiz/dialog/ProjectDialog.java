@@ -32,12 +32,6 @@ public class ProjectDialog extends BaseEditForm {
         setLabelApply("CREATE");
     }
 
-
-
-    @Override
-    public void onClickCancel() {
-    }
-
     @Override
     public void onClickApply(String content) {
         Project project = new Project(content);

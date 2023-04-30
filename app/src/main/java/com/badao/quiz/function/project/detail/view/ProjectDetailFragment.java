@@ -1,8 +1,9 @@
-package com.badao.quiz.function.project_detail.view;
+package com.badao.quiz.function.project.detail.view;
 
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,14 +11,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.badao.quiz.R;
+import com.badao.quiz.base.animation.AnimationType;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
-import com.badao.quiz.dialog.ProjectDialog;
 import com.badao.quiz.dialog.ProjectNameDialog;
-import com.badao.quiz.function.project_detail.presenter.ProjectDetailContract;
-import com.badao.quiz.function.project_detail.presenter.ProjectDetailPresenter;
+import com.badao.quiz.function.project.detail.presenter.ProjectDetailContract;
+import com.badao.quiz.function.project.detail.presenter.ProjectDetailPresenter;
 import com.badao.quiz.model.Project;
+import com.badao.quiz.utils.BundleBuilder;
 
 import butterknife.BindView;
 
@@ -55,6 +57,9 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     @BindView(R.id.imDuration)
     ImageView imDuration;
 
+    @BindView(R.id.tvEdit)
+    TextView tvEdit;
+
     Project project;
     int totalQuestion = 0;
 
@@ -62,16 +67,11 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         project = getPresenter().getProject();
-        updateName();
-        updateRandomMode();
-        updateTotalQuestion();
-        updateQuestionPerSession();
-        updateDuration();
-
+        init();
         imName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProjectNameDialog dialog = new ProjectNameDialog(tvName.getText().toString());
+                ProjectNameDialog dialog = new ProjectNameDialog(project);
                 dialog.show(getParentFragmentManager(), ProjectNameDialog.class.getName());
             }
         });
@@ -111,11 +111,47 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
 
             }
         });
+
+        tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigate(R.id.projectQuestionEditFragment, BundleBuilder.bundleOf(
+                        Pair.create(AppConstants.PROJECT_ID, project.getID())
+                ), AnimationType.FROM_RIGHT_TO_LEFT);
+            }
+        });
+
+        getViewModel().getMldProjectStatus().observe(this, payload -> {
+            if(payload.getAction()  == AppConstants.PROJECT_UPDATE){
+                Project project =(Project) payload.getValue();
+                this.project = project;
+                init();
+            }
+        });
     }
 
+    public void init(){
+        updateName();
+        updateRandomMode();
+        updateTotalQuestion();
+        updateQuestionPerSession();
+        updateDuration();
+        updateCreatedAt();
+        updateUpdatedAt();
+    }
     @Override
     public void updateName() {
         tvName.setText(project.getName());
+    }
+
+    @Override
+    public void updateCreatedAt() {
+        tvCreatedAt.setText(project.getCreatedAt());
+    }
+
+    @Override
+    public void updateUpdatedAt() {
+        tvUpdatedAt.setText(project.getLastUpdated());
     }
 
     @Override
@@ -138,15 +174,4 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         tvDuration.setText(String.valueOf(project.getDuration()));
     }
 
-    @Override
-    protected void onBackHardwareClicked() {
-        super.onBackHardwareClicked();
-        Log.d("Hacker", "--->1");
-    }
-
-    @Override
-    protected void onBack() {
-        super.onBack();
-        Log.d("Hacker", "--->2");
-    }
 }

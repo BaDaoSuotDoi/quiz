@@ -1,4 +1,4 @@
-package com.badao.quiz.function.project_detail.presenter;
+package com.badao.quiz.function.project.detail.presenter;
 
 import com.badao.quiz.base.contract.BaseContract;
 import com.badao.quiz.model.Project;
@@ -6,6 +6,8 @@ import com.badao.quiz.model.Project;
 public class ProjectDetailContract {
     public interface View extends BaseContract.View {
           void updateName();
+          void updateCreatedAt();
+          void updateUpdatedAt();
           void updateRandomMode();
           void updateTotalQuestion();
           void updateQuestionPerSession();

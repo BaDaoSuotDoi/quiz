@@ -74,7 +74,7 @@
         android:id="@+id/llAction"
         >
         <ImageView
-            android:src="@drawable/ic_project_edit_buttion"
+            android:src="@drawable/ic_project_edit_button"
             android:backgroundTint="@color/primary"
             android:layout_width="20dp"
             android:layout_height="20dp"/>
@@ -84,7 +84,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Edit"
-           android:background="@drawable/ic_project_edit_buttion"
+           android:background="@drawable/ic_project_edit_button"
            />
     </LinearLayout>
     <LinearLayout

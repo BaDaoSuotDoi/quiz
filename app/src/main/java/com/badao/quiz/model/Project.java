@@ -2,6 +2,7 @@ package com.badao.quiz.model;
 
 import com.badao.quiz.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
@@ -14,7 +15,7 @@ public class Project {
     private int duration = -1 ;
     private int mode = 1;
     private boolean isSync = false;
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     public Project(int ID, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync) {
         this.ID = ID;

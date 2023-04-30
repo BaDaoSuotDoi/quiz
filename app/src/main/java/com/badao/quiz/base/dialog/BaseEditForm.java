@@ -37,7 +37,6 @@ public abstract class BaseEditForm  extends BaseDialog{
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickCancel();
                 dismiss();
                 getViewModel().setStatusShowKey(false);
             }
@@ -91,7 +90,7 @@ public abstract class BaseEditForm  extends BaseDialog{
         edContent.setHint(hint == null ? "Enter here..": hint);
         tvApply.setText(labelApply == null ? "APPLY": labelApply);
     }
-    public abstract void onClickCancel();
+
     public abstract void onClickApply(String content);
 
     public void setTitle(String title){

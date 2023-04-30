@@ -87,4 +87,13 @@ public class ProjectDB  extends  SQLiteHelper{
         String[] args = {project.getID()+""};
         sqlWrite.delete("projects", "id = ?", args);
     }
+
+    public void update(Map<String, String> keys, int id){
+        String[] args = {id+""};
+        ContentValues values = new ContentValues();
+        for(String key: keys.keySet()){
+            values.put(key, keys.get(key));
+        }
+        sqlWrite.update("projects",values,"id = ?",args);
+    }
 }
