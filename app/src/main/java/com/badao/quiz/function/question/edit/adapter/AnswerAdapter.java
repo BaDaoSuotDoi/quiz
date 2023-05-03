@@ -2,6 +2,8 @@ package com.badao.quiz.function.question.edit.adapter;
 
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -21,8 +23,10 @@ import butterknife.BindView;
 
 public class AnswerAdapter extends BaseAdapter<QuestionAnswer, AnswerAdapter.ViewHolder> {
 
+    private  List<QuestionAnswer> questionAnswers;
     public AnswerAdapter(Context context, List<QuestionAnswer> items) {
         super(context, items);
+        this.questionAnswers = items;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class AnswerAdapter extends BaseAdapter<QuestionAnswer, AnswerAdapter.Vie
 
     @Override
     protected void bindView(ViewHolder holder, QuestionAnswer item, int position) throws JSONException {
-
+        holder.edAnswer.setText(item.getContent());
     }
 
     public class ViewHolder extends BaseViewHolder {
@@ -55,6 +59,23 @@ public class AnswerAdapter extends BaseAdapter<QuestionAnswer, AnswerAdapter.Vie
                 public void onClick(View view) {
                     Log.e("Delete answer", getAdapterPosition()+"");
                     onItemClick(view, getAdapterPosition());
+                }
+            });
+
+            edAnswer.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    questionAnswers.get(getAdapterPosition()).setContent(charSequence.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
                 }
             });
         }

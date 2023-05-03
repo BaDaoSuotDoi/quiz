@@ -78,7 +78,7 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
                         switch (menuItem.getItemId()){
                             case R.id.action_edit:
                                 Log.e("Project Action", "edit");
-                                iAction.navigateEdit(project);
+                                iAction.navigateQuestionEdit(project);
                                 return true;
                             case R.id.action_delete:
                                 Log.e("Project Action", "delete");
@@ -107,6 +107,7 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
 
      public interface IAction{
         void navigateEdit(Project project);
+        void navigateQuestionEdit(Project project);
         void onDelete(Project project);
     }
 }

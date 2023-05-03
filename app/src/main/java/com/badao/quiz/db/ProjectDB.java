@@ -50,6 +50,15 @@ public class ProjectDB  extends  SQLiteHelper{
         }
         return  null;
     }
+
+    public int getNumberQuestion(int id){
+        String[] args = {id+""};
+        Cursor cursor = sqlRead.rawQuery("select count(*) from question_versions where project_id = ?  and status = 1", args);
+        if(cursor!= null && cursor.moveToNext()){
+            return  cursor.getInt(0);
+        }
+        return 0;
+    }
     public List<Project> findBy( Map<String,String> query){
         List<Project> projects = new ArrayList<>();
         if(query != null){

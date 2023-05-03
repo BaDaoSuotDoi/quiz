@@ -1,6 +1,10 @@
 package com.badao.quiz.utils;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.badao.quiz.model.Question;
+import com.badao.quiz.model.QuestionAnswer;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,5 +26,41 @@ public class Utils {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String formattedDate = formatter.format(now);
         return  formattedDate;
+    }
+
+    public static String checkValid(Question question){
+        Log.e("check valid question", question.toString());
+        if(question.getContent().isEmpty()){
+            return "Empty content!";
+        }
+
+        if(question.getType() == 0){
+            return "Invalid type";
+        }
+
+        for(QuestionAnswer answer: question.getAnswers()){
+            if(answer.getContent().isEmpty()){
+                return "Answer question empty";
+            }
+        }
+
+        return "";
+    }
+
+    public static String displayTime(int t){
+        String time = "";
+        int seconds = t % 60;
+        if(seconds < 10){
+            time += "0"+seconds;
+        }else{
+            time += seconds;
+        }
+        int remand = (t - seconds)/60;
+        if(remand < 10){
+            time = "0"+remand+":" + time;
+        }else{
+            time = remand+":"+ time;
+        }
+        return time;
     }
 }

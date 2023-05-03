@@ -1,22 +1,48 @@
 package com.badao.quiz.model;
 
+import com.badao.quiz.constants.AppConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
-    private int ID;
+    private int ID = 0;
+    private int index = 0;
     private String content = "";
-    private String comment = "";
     private String createdAt = "";
     private String lastUpdated = "";
-    private int type;
+    private int type = AppConstants.QUESTION_NORMAL_TYPE;
     private boolean isSync;
+    private String comment = "";
+
+    private boolean isTemp = false;
+
+    public Question(int ID, String content, String createdAt, String lastUpdated, int type, boolean isSync, String comment) {
+        this.ID = ID;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.lastUpdated = lastUpdated;
+        this.type = type;
+        this.isSync = isSync;
+        this.comment = comment;
+        this.userAnswers = new RecordUserAnswer(this.ID);
+    }
 
     private List<QuestionAnswer> answers = new ArrayList<>();
-    private List<RecordUserAnswer> userAnswers = new ArrayList<>();
+    private RecordUserAnswer userAnswers ;
 
+    public Question(int id) {
+        this.ID = id;
+        this.answers.add(new QuestionAnswer(this.ID));
+    }
+
+    public Question(int index, boolean isTemp) {
+        this.index = index;
+        this.answers.add(new QuestionAnswer(this.ID));
+        this.isTemp = isTemp;
+    }
     public Question() {
-        this.answers.add(new QuestionAnswer());
+        this.answers.add(new QuestionAnswer(this.ID));
     }
 
     public int getID() {
@@ -83,12 +109,28 @@ public class Question {
         this.answers = answers;
     }
 
-    public List<RecordUserAnswer> getUserAnswers() {
+    public RecordUserAnswer getUserAnswers() {
         return userAnswers;
     }
 
-    public void setUserAnswers(List<RecordUserAnswer> userAnswers) {
+    public void setUserAnswers(RecordUserAnswer userAnswers) {
         this.userAnswers = userAnswers;
+    }
+
+    public boolean isTemp() {
+        return isTemp;
+    }
+
+    public void setTemp(boolean temp) {
+        isTemp = temp;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override

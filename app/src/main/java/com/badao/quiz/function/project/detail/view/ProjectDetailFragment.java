@@ -24,7 +24,7 @@ import com.badao.quiz.utils.BundleBuilder;
 import butterknife.BindView;
 
 @SuppressLint("NonConstantResourceId")
-@ViewInflate(presenter = ProjectDetailPresenter.class, layout = R.layout.fragment_project_detail, isDisableBack = false)
+@ViewInflate(presenter = ProjectDetailPresenter.class, layout = R.layout.fragment_project_detail)
 public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailContract.View, ProjectDetailContract.Presenter> implements ProjectDetailContract.View{
     @BindView(R.id.tvName)
     TextView tvName;
@@ -59,6 +59,8 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
 
     @BindView(R.id.tvEdit)
     TextView tvEdit;
+    @BindView(R.id.imPlay)
+    ImageView imPlay;
 
     Project project;
     int totalQuestion = 0;
@@ -67,6 +69,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         project = getPresenter().getProject();
+        totalQuestion = getPresenter().getNumberQuestion();
         init();
         imName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,13 +124,13 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
             }
         });
 
-        getViewModel().getMldProjectStatus().observe(this, payload -> {
-            if(payload.getAction()  == AppConstants.PROJECT_UPDATE){
-                Project project =(Project) payload.getValue();
-                this.project = project;
-                init();
+        imPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateProjectPlay();
             }
         });
+        observe();
     }
 
     public void init(){
@@ -139,6 +142,26 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         updateCreatedAt();
         updateUpdatedAt();
     }
+
+    @Override
+    public void navigateProjectPlay() {
+        navigate(R.id.projectPlayFragment, BundleBuilder.bundleOf(
+                Pair.create(AppConstants.PROJECT_ID, project.getID()),
+                Pair.create(AppConstants.VIEW_MODE, AppConstants.PROJECT_PLAY)
+        ), AnimationType.FROM_RIGHT_TO_LEFT);
+    }
+
+    @Override
+    public void observe() {
+        getViewModel().getMldProjectStatus().observe(this, payload -> {
+            if(payload.getAction()  == AppConstants.PROJECT_UPDATE){
+                Project project =(Project) payload.getValue();
+                this.project = project;
+                init();
+            }
+        });
+    }
+
     @Override
     public void updateName() {
         tvName.setText(project.getName());

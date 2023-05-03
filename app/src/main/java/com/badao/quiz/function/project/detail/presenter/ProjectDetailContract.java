@@ -12,9 +12,12 @@ public class ProjectDetailContract {
           void updateTotalQuestion();
           void updateQuestionPerSession();
           void updateDuration();
+          void navigateProjectPlay();
+          void observe();
     }
 
     public interface Presenter extends BaseContract.Presenter<ProjectDetailContract.View> {
         Project getProject();
+        int getNumberQuestion();
     }
 }

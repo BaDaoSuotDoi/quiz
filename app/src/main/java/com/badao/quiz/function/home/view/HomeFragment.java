@@ -52,7 +52,6 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
                     projectDialog = new ProjectDialog();
                 }
                 projectDialog.show(getParentFragmentManager(), ProjectDialog.class.getName());
-
         }
     }
 
@@ -72,6 +71,13 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
             @Override
             public void navigateEdit(Project project) {
                 navigate(R.id.projectDetailFragment, BundleBuilder.bundleOf(
+                        Pair.create(AppConstants.PROJECT_ID, project.getID())
+                ), AnimationType.FROM_RIGHT_TO_LEFT);
+            }
+
+            @Override
+            public void navigateQuestionEdit(Project project) {
+                navigate(R.id.projectQuestionEditFragment, BundleBuilder.bundleOf(
                         Pair.create(AppConstants.PROJECT_ID, project.getID())
                 ), AnimationType.FROM_RIGHT_TO_LEFT);
             }

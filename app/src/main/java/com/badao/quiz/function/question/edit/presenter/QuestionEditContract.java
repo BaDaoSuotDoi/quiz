@@ -6,10 +6,9 @@ import com.badao.quiz.model.Project;
 
 public class QuestionEditContract {
     public interface View extends BaseContract.View {
-
+        void updateListAnswer();
     }
 
     public interface Presenter extends BaseContract.Presenter<QuestionEditContract.View> {
-
     }
 }

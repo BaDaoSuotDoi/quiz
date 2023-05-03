@@ -74,6 +74,7 @@
         android:id="@+id/llAction"
         >
         <ImageView
+            android:id="@+id/imPlay"
             android:src="@drawable/ic_project_edit_button"
             android:backgroundTint="@color/primary"
             android:layout_width="20dp"

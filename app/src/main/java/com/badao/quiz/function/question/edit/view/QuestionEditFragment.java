@@ -1,5 +1,7 @@
 package com.badao.quiz.function.question.edit.view;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +15,8 @@ import com.badao.quiz.R;
 import com.badao.quiz.base.adapter.BaseAdapter;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
+import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.project.question_edit.presenter.ProjectQuestionEditContract;
 import com.badao.quiz.function.project.question_edit.presenter.ProjectQuestionEditPresenter;
 import com.badao.quiz.function.question.edit.adapter.AnswerAdapter;
@@ -40,7 +44,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
     ImageView imComment;
     private  int position;
     private  Question question;
-
+    private AnswerAdapter adapter;
     public QuestionEditFragment(int position, Question question){
         this.position = position;
         this.question = question;
@@ -52,26 +56,63 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
         edContent.setText(question.getContent());
         edComment.setText(question.getComment());
         if(question.getAnswers().size() == 0){
-            question.getAnswers().add(new QuestionAnswer());
+            question.getAnswers().add(new QuestionAnswer(question.getID()));
         }
-        AnswerAdapter adapter = new AnswerAdapter(getActivity(), question.getAnswers());
-        rvListAnswer.setAdapter(adapter);
+        updateListAnswer();
         adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseAdapter adapter, View view, int position) {
                 Log.e("Run delete here", "Ok");
                 question.getAnswers().remove(position);
-                Log.e("QA", question.getAnswers().size()+"");
                 adapter.setData(question.getAnswers());
             }
         });
-        rvListAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        edContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                question.setContent(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        edComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                question.setComment(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.addData(new QuestionAnswer());
+                adapter.addData(new QuestionAnswer(question.getID()));
             }
         });
     }
 
+    @Override
+    public void updateListAnswer() {
+        adapter = new AnswerAdapter(getActivity(), question.getAnswers());
+        Log.e("Update adapter", "Ok");
+        rvListAnswer.setAdapter(adapter);
+        rvListAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+    }
 }

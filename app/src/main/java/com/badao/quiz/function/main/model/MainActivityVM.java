@@ -9,6 +9,7 @@ import com.badao.quiz.viewmode.SingleLiveEvent;
 public class MainActivityVM extends ViewModel {
     private boolean pendingCheckActivity = false;
     private MutableLiveData<Payload> mldProjectStatus = new SingleLiveEvent<>();
+    private MutableLiveData<Payload> mlQuestionStatus = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> eventShowKeyBoard = new SingleLiveEvent<>();
 
     public SingleLiveEvent<Boolean> getEventShowKeyBoard() {
@@ -24,6 +25,10 @@ public class MainActivityVM extends ViewModel {
 
     public MutableLiveData<Payload> getMldProjectStatus() {
         return mldProjectStatus;
+    }
+
+    public MutableLiveData<Payload> getMlQuestionStatus() {
+        return mlQuestionStatus;
     }
 
     public boolean isPendingCheckActivity() {
