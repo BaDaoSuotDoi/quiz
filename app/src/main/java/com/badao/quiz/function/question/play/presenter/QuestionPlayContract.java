@@ -5,6 +5,7 @@ public class QuestionPlayContract {
     public interface View extends BaseContract.View {
         void updateListAnswer();
         void updateContent();
+        void updateComment();
     }
 
     public interface Presenter extends BaseContract.Presenter<QuestionPlayContract.View> {

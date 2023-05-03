@@ -1,5 +1,6 @@
 package com.badao.quiz.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.RecordUserAnswer;
+import com.badao.quiz.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,22 @@ public class RecordUserAnswerDB extends SQLiteHelper{
             recordUserAnswerDB = new RecordUserAnswerDB(context);
         }
         return  recordUserAnswerDB;
+    }
+
+    public long create(RecordUserAnswer recordUserAnswer){
+        ContentValues values = new ContentValues();
+        recordUserAnswer.setCreatedAt(Utils.getTimeCurrent());
+        recordUserAnswer.setLastUpdated(Utils.getTimeCurrent());
+        values.put("history_id", recordUserAnswer.getHistoryId());
+        values.put("question_id", recordUserAnswer.getQuestionId());
+        values.put("answer", recordUserAnswer.getAnswer());
+        values.put("status", recordUserAnswer.getStatus() );
+        values.put("is_sync", recordUserAnswer.isSync()? 1:0);
+        values.put("created_at", recordUserAnswer.getCreatedAt());
+        values.put("last_updated", recordUserAnswer.getLastUpdated());
+        long id = sqlWrite.insert(RecordUserAnswerDB.name, null, values);
+        recordUserAnswer.setID((int)id);
+        return id ;
     }
     public List<RecordUserAnswer> findBy(Map<String, String>keys){
         List<RecordUserAnswer> records = new ArrayList<>();

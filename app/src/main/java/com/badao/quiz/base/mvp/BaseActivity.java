@@ -33,4 +33,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void hiddenKeyboard(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
 }

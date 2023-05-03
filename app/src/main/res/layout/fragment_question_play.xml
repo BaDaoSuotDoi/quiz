@@ -8,11 +8,18 @@
         android:id="@+id/tvContent"
         android:textColor="@color/black"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvComment"
+        android:textColor="@color/black"
+        android:layout_below="@+id/tvContent"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcAnswer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvContent"
+        android:layout_below="@+id/tvComment"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

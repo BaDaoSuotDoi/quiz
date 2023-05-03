@@ -2,9 +2,14 @@ package com.badao.quiz.function.home.view;
 
 import android.util.Log;
 import android.util.Pair;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.badao.quiz.R;
 import com.badao.quiz.base.animation.AnimationType;
@@ -17,9 +22,11 @@ import com.badao.quiz.dialog.ProjectDialog;
 import com.badao.quiz.function.home.presenter.HomeContract;
 import com.badao.quiz.function.home.presenter.HomePresenter;
 import com.badao.quiz.function.login.presenter.LoginContract;
+import com.badao.quiz.function.main.view.MainActivity;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.utils.BundleBuilder;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
@@ -27,15 +34,43 @@ import butterknife.OnClick;
 
 @ViewInflate(presenter = HomePresenter.class, layout = R.layout.fragment_home, hasToolbar = false)
 public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeContract.Presenter> implements HomeContract.View{
-
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.flProject)
     FlexboxLayout flProject;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
     ProjectDialog projectDialog;
 
     @Override
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         getPresenter().initProjects();
+//        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.mProject:
+                        Log.e("Select Nav", "Project");
+                        drawerLayout.closeDrawer(navigationView);
+                        return  true;
+                    case R.id.mRecord:
+                        Log.e("Select Nav", "Record");
+                        drawerLayout.closeDrawer(navigationView);
+                        navigate(R.id.recordFragment, AnimationType.FROM_RIGHT_TO_LEFT);
+                        return  true;
+                }
+                return false;
+            }
+        });
         observe();
 
     }
@@ -94,4 +129,9 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
         flProject.removeAllViews();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        navigationView.setCheckedItem(R.id.mProject);
+    }
 }

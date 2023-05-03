@@ -1,11 +1,15 @@
 package com.badao.quiz.function.project.play.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.badao.quiz.base.mvp.presenter.BasePresenter;
 import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.db.HistorySubmitDB;
 import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.db.QuestionDB;
+import com.badao.quiz.db.RecordUserAnswerDB;
+import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
 import com.badao.quiz.utils.Utils;
@@ -49,6 +53,35 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
     public void stopTime() {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
+        }
+    }
+
+    @Override
+    public void submit(Project project) {
+        stopTime();
+        List<Question> questions = project.getQuestions();
+        int questionNumber = questions.size();
+        int correctAnswerNumber = 0;
+        int noAnswerNumber = 0;
+
+        for(Question question: questions){
+            String answer = question.getUserAnswers().getAnswer();
+            if(answer.isEmpty()){
+                noAnswerNumber++;
+            }else if(question.getContent().equals(answer)){
+                correctAnswerNumber++;
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+            }else{
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+            }
+        }
+
+        Log.e("Submit", "correctAnswerNumber: "+correctAnswerNumber+"//noAnswerNumber:"+noAnswerNumber );
+        HistorySubmit historySubmit = new HistorySubmit(project.getID(),totalTime, Utils.getTimeCurrent(),correctAnswerNumber,noAnswerNumber,questionNumber );
+        HistorySubmitDB.getInstance(getContext()).create(historySubmit);
+        for(Question question: questions){
+            question.getUserAnswers().setHistoryId(historySubmit.getID());
+            RecordUserAnswerDB.getInstance(getContext()).create(question.getUserAnswers());
         }
     }
 

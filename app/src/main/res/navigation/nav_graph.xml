@@ -38,4 +38,9 @@
         android:id="@+id/projectPlayFragment"
         android:name="com.badao.quiz.function.project.play.view.ProjectPlayFragment"
         android:label="ProjectPlayFragment" />
+
+    <fragment
+        android:id="@+id/recordFragment"
+        android:name="com.badao.quiz.function.record.view.RecordFragment"
+        android:label="recordFragment" />
 </navigation>

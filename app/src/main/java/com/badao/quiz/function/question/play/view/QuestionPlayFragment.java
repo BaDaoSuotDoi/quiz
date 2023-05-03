@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.badao.quiz.R;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.function.question.edit.presenter.QuestionEditPresenter;
 import com.badao.quiz.function.question.play.adapter.AnswerFillTextAdapter;
 import com.badao.quiz.function.question.play.presenter.QuestionPlayContract;
@@ -22,6 +23,8 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
 
     @BindView(R.id.tvContent)
     TextView tvContent;
+    @BindView(R.id.tvComment)
+    TextView tvComment;
     @BindView(R.id.rcAnswer)
     RecyclerView rcAnswer;
 
@@ -31,6 +34,7 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
     private int viewMode;
     private  int position;
     private Question question;
+    private AnswerFillTextAdapter adapter;
 
     public QuestionPlayFragment(int position, Question question, int viewMode){
         this.position = position;
@@ -43,12 +47,15 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
         super.initViews(isRefreshData);
         updateContent();
         updateListAnswer();
+        if(this.viewMode == AppConstants.PROJECT_SHOW_ANSWER){
+            updateComment();
+            Log.e("ViewMode", this.viewMode+"");
+        }
     }
 
     @Override
     public void updateListAnswer() {
-        AnswerFillTextAdapter adapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(),question.getUserAnswers(),this.viewMode);
-        Log.e("Update adapter", "Ok");
+        adapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(),question.getUserAnswers(),this.viewMode);
         rcAnswer.setAdapter(adapter);
         rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
     }
@@ -56,5 +63,22 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
     @Override
     public void updateContent() {
         tvContent.setText(question.getContent());
+    }
+
+    @Override
+    public void updateComment() {
+        Log.e("Element", "CC"+question.getComment());
+        this.tvComment.setText(question.getComment());
+    }
+
+    public void setViewMode(int viewMode){
+        this.viewMode = viewMode;
+        if(this.viewMode == AppConstants.PROJECT_SHOW_ANSWER && this.tvComment != null){
+            updateComment();
+            Log.e("ViewMode 2", this.viewMode+"");
+        }
+        if(adapter != null){
+            adapter.setViewMode(viewMode);
+        }
     }
 }

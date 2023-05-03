@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "quiz.db";
-    private static int DATABASE_VERSION = 8;
+    private static int DATABASE_VERSION = 9;
 
     public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -68,6 +68,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "  is_sync INTEGER NOT NULL,\n" +
                 "  time_elapsed INTEGER NOT NULL,\n" +
                 "  submitted_at VARCHAR(255) NOT NULL,\n" +
+                "  correct_answer_number INTEGER NOT NULL,\n" +
+                "  no_answer_number INTEGER NOT NULL,\n" +
+                "  question_number INTEGER NOT NULL,\n" +
                 "  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE\n"  +
                 ");\n";
 
@@ -97,6 +100,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         if(i1> 4){
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS question_versions");
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS history_submits");
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS record_user_answers");
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS question_answers");
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS questions");

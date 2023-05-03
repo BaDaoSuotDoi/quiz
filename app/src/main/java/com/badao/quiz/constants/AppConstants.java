@@ -15,4 +15,7 @@ public class AppConstants {
     public  static final int TIMER_COUNTDOWN= -1;
     public  static final int PROJECT_PLAY= 1;
     public  static final int PROJECT_SHOW_ANSWER= 2;
+    public  static final int QUESTION_ANSWER_CORRECT= 1;
+    public  static final int QUESTION_ANSWER_WRONG= 2;
+    public  static final int QUESTION_NO_ANSWER= 0;
 }

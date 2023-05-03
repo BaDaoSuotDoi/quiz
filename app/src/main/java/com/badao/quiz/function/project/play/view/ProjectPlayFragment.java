@@ -12,6 +12,7 @@ import com.badao.quiz.R;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.function.main.view.MainActivity;
 import com.badao.quiz.function.project.play.adapter.ProjectPlayAdapter;
 import com.badao.quiz.function.project.play.presenter.ProjectPlayContract;
 import com.badao.quiz.function.project.play.presenter.ProjectPlayPresenter;
@@ -54,10 +55,10 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         tvRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // update here
-                for(Question question: project.getQuestions()){
-                    Log.e("Submit", question.toString());
-                }
+                getPresenter().submit(project);
+                Log.e("Submit", "OK");
+                adapter.setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+                ((MainActivity)getActivity()).hiddenKeyboard();
             }
         });
     }

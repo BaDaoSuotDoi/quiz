@@ -18,6 +18,7 @@ public class ProjectPlayContract {
         List<Question> getQuestions(int projectId);
         void start();
         void stopTime();
+        void submit(Project project);
 
     }
 }

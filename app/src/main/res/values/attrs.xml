@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TabLayout2">
+        <attr name="selected_color" format="color"/>
+        <attr name="unselected_color" format="color" />
+    </declare-styleable>
+    <declare-styleable name="CpnWebView">
+        <attr name="web_view_text_size" format="dimension"/>
+    </declare-styleable>
+</resources>

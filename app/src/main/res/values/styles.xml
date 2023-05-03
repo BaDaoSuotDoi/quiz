@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="my_custom_text_appearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">@font/avertastdcy_bold</item>
+        <item name="fontFamily">@font/avertastdcy_bold</item>
+    </style>
+</resources>
