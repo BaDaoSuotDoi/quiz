@@ -144,7 +144,7 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                         if(!valid.isEmpty()){
                             Toast.makeText(getContext(), valid, Toast.LENGTH_SHORT).show();
                             vpQuestionEdit.setCurrentItem(i);
-                            // warning
+                            // warning valid input
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             for(Fragment fragment: fragmentManager.getFragments()){
                                 if(fragment instanceof  BaseFragment){

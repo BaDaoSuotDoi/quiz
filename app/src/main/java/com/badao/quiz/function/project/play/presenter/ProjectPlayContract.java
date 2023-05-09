@@ -12,6 +12,9 @@ public class ProjectPlayContract {
     public interface View extends BaseContract.View {
         void updateTime(String time);
         void updateQuestionPlay();
+        void updateMenuQuestion();
+        void observe();
+
     }
 
     public interface Presenter extends BaseContract.Presenter<ProjectPlayContract.View> {

@@ -10,6 +10,7 @@ import com.badao.quiz.R;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.question.edit.presenter.QuestionEditPresenter;
 import com.badao.quiz.function.question.play.adapter.AnswerFillTextAdapter;
 import com.badao.quiz.function.question.play.presenter.QuestionPlayContract;
@@ -55,7 +56,14 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
 
     @Override
     public void updateListAnswer() {
-        adapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(),question.getUserAnswers(),this.viewMode);
+        adapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(), question.getUserAnswers(), this.viewMode, new AnswerFillTextAdapter.AnswerFillListener() {
+            @Override
+            public void onAnswerChange(String content) {
+
+                getViewModel().getMlUserChangeAnswer().postValue(
+                        new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), !content.isEmpty())));
+            }
+        });
         rcAnswer.setAdapter(adapter);
         rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
     }
@@ -79,6 +87,32 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
         }
         if(adapter != null){
             adapter.setViewMode(viewMode);
+        }
+    }
+
+    public class QuestionUserAnswer{
+        private int questionPosition;
+        private boolean isAnswer;
+
+        public QuestionUserAnswer(int questionPosition, boolean isAnswer) {
+            this.questionPosition = questionPosition;
+            this.isAnswer = isAnswer;
+        }
+
+        public int getQuestionPosition() {
+            return questionPosition;
+        }
+
+        public void setQuestionPosition(int questionPosition) {
+            this.questionPosition = questionPosition;
+        }
+
+        public boolean isAnswer() {
+            return isAnswer;
+        }
+
+        public void setAnswer(boolean answer) {
+            isAnswer = answer;
         }
     }
 }

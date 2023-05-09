@@ -10,6 +10,7 @@ public class MainActivityVM extends ViewModel {
     private boolean pendingCheckActivity = false;
     private MutableLiveData<Payload> mldProjectStatus = new SingleLiveEvent<>();
     private MutableLiveData<Payload> mlQuestionStatus = new SingleLiveEvent<>();
+    private MutableLiveData<Payload> mlUserChangeAnswer = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> eventShowKeyBoard = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> getEventShowKeyBoard() {
         return eventShowKeyBoard;
@@ -26,6 +27,9 @@ public class MainActivityVM extends ViewModel {
         return mldProjectStatus;
     }
 
+    public MutableLiveData<Payload> getMlUserChangeAnswer() {
+        return mlUserChangeAnswer;
+    }
 
     public MutableLiveData<Payload> getMlQuestionStatus() {
         return mlQuestionStatus;

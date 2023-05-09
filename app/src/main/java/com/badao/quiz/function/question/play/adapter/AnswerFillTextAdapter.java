@@ -29,13 +29,13 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
     private List<QuestionAnswer> questionAnswers;
 
     private RecordUserAnswer recordUserAnswer;
-
-    public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items,RecordUserAnswer recordUserAnswer, int viewMode) {
+    private AnswerFillListener answerFillListener;
+    public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items,RecordUserAnswer recordUserAnswer, int viewMode, AnswerFillListener answerFillListener) {
         super(context, items);
-        Log.e("AnswerFillTextAdapter", recordUserAnswer.getAnswer());
         this.questionAnswers = items;
         this.recordUserAnswer = recordUserAnswer;
         this.viewMode = viewMode;
+        this.answerFillListener = answerFillListener;
     }
 
     @Override
@@ -65,6 +65,9 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
         notifyDataSetChanged();
     }
 
+    public interface AnswerFillListener {
+        void onAnswerChange(String content);
+    }
     public class ViewHolder extends BaseViewHolder{
         @BindView(R.id.edContent)
         EditText edContent;
@@ -82,7 +85,9 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    recordUserAnswer.setAnswer(charSequence.toString());
+                    String content = charSequence.toString();
+                    answerFillListener.onAnswerChange(content);
+                    recordUserAnswer.setAnswer(content);
                 }
 
                 @Override
