@@ -16,7 +16,7 @@ import com.badao.quiz.helper.NavHelper;
 import com.badao.quiz.viewmode.BaseVMF;
 
 public class MainActivity  extends BaseMvpActivity<MainActivityContract.Presenter>
-        implements MainActivityContract.View, SharedPreferences.OnSharedPreferenceChangeListener{
+        implements MainActivityContract.View{
     public NavHelper navHelper;
     private MainActivityVM mMainActivityModel;
     @Override
@@ -30,10 +30,6 @@ public class MainActivity  extends BaseMvpActivity<MainActivityContract.Presente
     }
 
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
-    }
     private void initViewModel() {
         mMainActivityModel = new ViewModelProvider(this, BaseVMF.getInstance()).get(MainActivityVM.class);
     }

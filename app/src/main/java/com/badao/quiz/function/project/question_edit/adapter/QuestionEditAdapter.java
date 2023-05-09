@@ -16,22 +16,24 @@ import com.badao.quiz.utils.Utils;
 
 public class QuestionEditAdapter extends FragmentStateAdapter {
     private Project project;
-    public QuestionEditAdapter(@NonNull FragmentActivity fragmentActivity, Project project) {
+    private QuestionEditFragment.QuestionEditListener questionEditListener;
+    public QuestionEditAdapter(@NonNull FragmentActivity fragmentActivity, Project project, QuestionEditFragment.QuestionEditListener questionEditListener) {
         super(fragmentActivity);
         this.project = project;
+        this.questionEditListener = questionEditListener;
     }
-
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Log.e("Question Position", position+"//"+project.getQuestions().size());
+        Log.e("createFragment Question Position", position+"//"+project.getQuestions().size());
         Question question = project.getQuestions().get(position);
 //        if(position == project.getQuestions().size()- 1){
 //            project.getQuestions().add(new Question(AppConstants.QUESTION_TEMP_ID));
 //        }
-        Log.e("Question here", project.getQuestions().get(position).toString());
-        return new QuestionEditFragment(position, question);
+        QuestionEditFragment questionEditFragment = new QuestionEditFragment(position, question, questionEditListener);
+        questionEditFragment.setTagCustom("qe" +question.getPosition());
+        return questionEditFragment;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class QuestionEditAdapter extends FragmentStateAdapter {
 
     @Override
     public long getItemId(int position) {
-        return project.getQuestions().get(position).getIndex();
+        return project.getQuestions().get(position).getPosition();
     }
 
     public Question removeFragment(int position) {
@@ -50,5 +52,10 @@ public class QuestionEditAdapter extends FragmentStateAdapter {
         return  question;
     }
 
+
+    public void addFragment(int position,Question question){
+        project.getQuestions().add(question);
+        notifyItemInserted(position);
+    }
 
 }

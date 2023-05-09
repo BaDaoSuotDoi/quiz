@@ -18,6 +18,8 @@ public abstract class BaseEditForm  extends BaseDialog{
     TextView tvTitle;
     @BindView(R.id.edContent)
     EditText edContent;
+    @BindView(R.id.tvInstruction)
+    TextView tvInstruction;
     @BindView(R.id.tvCancel)
     TextView tvCancel;
     @BindView(R.id.tvApply)
@@ -27,6 +29,7 @@ public abstract class BaseEditForm  extends BaseDialog{
     private String content;
     private String hint;
     private String labelApply;
+    private String instruction = "";
 
     @Override
     public void onStart() {
@@ -89,6 +92,13 @@ public abstract class BaseEditForm  extends BaseDialog{
         edContent.setText(content == null ? "": content);
         edContent.setHint(hint == null ? "Enter here..": hint);
         tvApply.setText(labelApply == null ? "APPLY": labelApply);
+        if(!instruction.isEmpty()){
+            tvInstruction.setText(instruction);
+            ViewGroup.LayoutParams layoutParams =  tvInstruction.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tvInstruction.setLayoutParams(layoutParams);
+        }
     }
 
     public abstract void onClickApply(String content);
@@ -99,6 +109,9 @@ public abstract class BaseEditForm  extends BaseDialog{
 
     public void setHint(String hint){
         this.hint = hint;
+    }
+    public void setInstruction(String instruction){
+        this.instruction = instruction;
     }
 
     public void setContent(String content){

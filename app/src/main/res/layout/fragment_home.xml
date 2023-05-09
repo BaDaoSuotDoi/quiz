@@ -20,7 +20,9 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:elevation="2dp"
-            app:titleTextColor="@android:color/white"/>
+            app:menu="@menu/menu_search"
+            app:titleTextColor="@android:color/white"
+            app:title="quiz" />
         <FrameLayout
             android:id="@+id/main_content"
             android:layout_width="match_parent"
@@ -62,7 +64,6 @@
                     android:layout_alignParentBottom="true"
                     />
             </RelativeLayout>
-
         </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -73,7 +74,6 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/menu_navigation" />
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

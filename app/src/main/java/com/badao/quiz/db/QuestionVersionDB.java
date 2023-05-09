@@ -3,6 +3,7 @@ package com.badao.quiz.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -30,7 +31,7 @@ public class QuestionVersionDB  extends  SQLiteHelper{
         String[] args = {projectId+"",questionId+""};
         Cursor cursor = sqlWrite.rawQuery("select * from question_versions where project_id=? and question_id=?",args);
         int version = 0;
-        if(cursor != null){
+        if(cursor != null && cursor.moveToNext()){
             version = cursor.getInt(1);
         }
         ContentValues values = new ContentValues();

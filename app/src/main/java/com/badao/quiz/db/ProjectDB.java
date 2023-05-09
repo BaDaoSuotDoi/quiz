@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.badao.quiz.model.Project;
+import com.badao.quiz.model.Statistic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,5 +105,28 @@ public class ProjectDB  extends  SQLiteHelper{
             values.put(key, keys.get(key));
         }
         sqlWrite.update("projects",values,"id = ?",args);
+    }
+
+    public List<Statistic> statisticAllProject(){
+        List<Statistic> statistics = new ArrayList<>();
+        Cursor cursor = sqlRead.rawQuery("SELECT projects.id AS project_id, \n" +
+                "       projects.name AS project_name,\n" +
+                "       COUNT(DISTINCT history_submits.id) AS num_of_submissions,\n" +
+                "       COUNT(record_user_answers.id) AS total_num_of_answers, \n" +
+                "       SUM(CASE WHEN record_user_answers.status=1 THEN 1 ELSE 0 END) AS num_of_correct_answers\n" +
+                "FROM projects\n" +
+                "LEFT JOIN history_submits ON projects.id = history_submits.project_id\n" +
+                "LEFT JOIN record_user_answers ON history_submits.id = record_user_answers.history_id\n" +
+                "GROUP BY projects.id;\n", null);
+
+        while (cursor!= null && cursor.moveToNext()){
+            String projectName = cursor.getString(1);
+            int numberPlayed = cursor.getInt(2);
+            int numberCorrect = cursor.getInt(4);
+            int numberAnswer = cursor.getInt(3);
+            statistics.add(new Statistic(projectName,numberPlayed,numberCorrect,numberAnswer ));
+        }
+        return statistics;
+
     }
 }

@@ -22,7 +22,7 @@ public class QuestionAnswerDB extends  SQLiteHelper{
 
     static QuestionAnswerDB questionAnswerDB;
 
-    static QuestionAnswerDB  getInstance(@Nullable Context context){
+    public static QuestionAnswerDB  getInstance(@Nullable Context context){
         if(questionAnswerDB == null){
             questionAnswerDB = new QuestionAnswerDB(context);
         }

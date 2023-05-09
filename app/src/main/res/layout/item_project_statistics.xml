@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary"
+    >
+    <TextView
+        android:id="@+id/tvProjectName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Project name"
+        android:textColor="@color/white"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNumberPlayed"
+        android:text="87 Played"
+        android:layout_below="@+id/tvProjectName"
+        android:textColor="@color/white"
+        />
+    <LinearLayout
+        android:id="@+id/llStatistic"
+        android:layout_below="@+id/tvNumberPlayed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/correct"
+            />
+        <TextView
+            android:id="@+id/tvNumberCorrect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20/30"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+    <ProgressBar
+        android:layout_below="@+id/tvNumberPlayed"
+        android:layout_toEndOf="@+id/llStatistic"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:id="@+id/skProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:progress="10"
+        android:layout_height="@dimen/_8sdp"
+        android:progressDrawable="@drawable/usage_progress" />
+</RelativeLayout>

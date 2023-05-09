@@ -93,6 +93,8 @@ public class RecordUserAnswer {
     public String toString() {
         return "RecordUserAnswer{" +
                 "ID=" + ID +
+                ", historyId=" + historyId +
+                ", questionId=" + questionId +
                 ", answer='" + answer + '\'' +
                 ", status=" + status +
                 ", isSync=" + isSync +

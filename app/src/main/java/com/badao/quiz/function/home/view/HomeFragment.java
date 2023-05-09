@@ -4,9 +4,11 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,30 +51,31 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         getPresenter().initProjects();
-//        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
+
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.mProject:
-                        Log.e("Select Nav", "Project");
                         drawerLayout.closeDrawer(navigationView);
                         return  true;
-                    case R.id.mRecord:
-                        Log.e("Select Nav", "Record");
+                    case R.id.mHistory:
                         drawerLayout.closeDrawer(navigationView);
-                        navigate(R.id.recordFragment, AnimationType.FROM_RIGHT_TO_LEFT);
+                        navigate(R.id.historyFragment, AnimationType.FROM_RIGHT_TO_LEFT);
+                        return  true;
+                    case R.id.mStatistic:
+                        drawerLayout.closeDrawer(navigationView);
+                        navigate(R.id.statisticsFragment, AnimationType.FROM_RIGHT_TO_LEFT);
                         return  true;
                 }
                 return false;
             }
         });
         observe();
-
     }
 
     @OnClick({R.id.btLogout, R.id.btCreateProject})
@@ -118,6 +121,14 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
             }
 
             @Override
+            public void navigateProjectPlay(Project project) {
+                navigate(R.id.projectPlayFragment, BundleBuilder.bundleOf(
+                        Pair.create(AppConstants.PROJECT_ID, project.getID()),
+                        Pair.create(AppConstants.VIEW_MODE, AppConstants.PROJECT_PLAY)
+                ), AnimationType.FROM_RIGHT_TO_LEFT);
+            }
+
+            @Override
             public void onDelete(Project project) {
                 getPresenter().initProjects();
             }
@@ -134,4 +145,6 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
         super.onResume();
         navigationView.setCheckedItem(R.id.mProject);
     }
+
+
 }

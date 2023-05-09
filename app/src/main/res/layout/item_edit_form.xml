@@ -10,36 +10,50 @@
         android:gravity="center"
         android:id="@+id/llLabel"
         android:background="@color/primary"
+        android:padding="10dp"
         >
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/pen"
+            android:src="@drawable/ic_pen_dialog"
             />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llTitle"
-        android:layout_below="@+id/llLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/llLabel"
+        android:layout_margin="10dp"
         >
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
             android:textColor="@color/black"
-            />
+            android:textStyle="bold" />
     </LinearLayout>
-    <EditText
-        android:layout_marginTop="15dp"
+
+    <TextView
+        android:id="@+id/tvInstruction"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_below="@+id/llTitle"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        />
+
+    <EditText
+        android:layout_margin="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/tvInstruction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edContent"
         android:hint="Enter here..."
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/grey"
         android:textColor="@color/black"
         />
     <LinearLayout
@@ -47,13 +61,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/edContent"
         android:gravity="right"
+        android:layout_margin="10dp"
         >
         <TextView
             android:id="@+id/tvCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CANCEL"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
             />
         <TextView
             android:layout_marginStart="10dp"
@@ -61,7 +77,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="APPLY"
-            android:textColor="@color/black"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
             />
     </LinearLayout>
 </RelativeLayout>

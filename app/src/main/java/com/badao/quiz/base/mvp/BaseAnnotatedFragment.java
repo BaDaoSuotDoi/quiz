@@ -37,8 +37,7 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("View null", mView == null ? "NUll":"OK");
-        if (mView == null || isRecreateFragment()) {
+        if (mView == null ) {
             mView = inflater.inflate(R.layout.fragment_base_toolbar_back, container, false);
             View viewStub = inflater.inflate(getLayoutId(), container, false);
             FrameLayout mainContent = mView.findViewById(R.id.content_layout);
@@ -48,11 +47,6 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
             viewStub.postDelayed(() -> {
                 mView.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
             }, 50);
-        }
-        Log.e("View null", mView == null ? "NUll":"OK");
-        EditText editText = mView.findViewById(R.id.edEmail);
-        if(editText != null){
-            Log.e("Created", "edit");
         }
         unbinder = ButterKnife.bind(this, mView);
         prepareInitView();
@@ -120,17 +114,6 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
-
-    @Override
-    protected boolean isVisibleBottomNavigation() {
-        return false;
-    }
-
-    protected boolean isRecreateFragment() {
-        return true;
-    }
-
-
 
     protected void onBackHardwareClicked() {
         popBackStack();

@@ -6,77 +6,100 @@
     android:background="@color/white"
     >
    <LinearLayout
+       android:layout_marginTop="10dp"
+       android:layout_marginBottom="10dp"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:id="@+id/llContent"
+       android:layout_marginLeft="15dp"
+       android:layout_marginRight="15dp"
        >
        <EditText
            android:layout_width="match_parent"
-           android:layout_height="match_parent"
+           android:layout_height="wrap_content"
            android:id="@+id/edContent"
            android:hint="Question..."
            android:textColorHint="@color/black"
            android:textColor="@color/black"
+           android:textSize="30dp"
            />
    </LinearLayout>
+
     <LinearLayout
-        android:id="@+id/llMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llContent"
-        android:gravity="right"
+        android:id="@+id/llAnswer"
+        android:orientation="vertical"
+        android:layout_below="@+id/llContent"
+        android:background="@drawable/shadow_background"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         >
-        <ImageView
-            android:id="@+id/imMode"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/three_dot"
-            />
-    </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llMode"
-        tools:itemCount="1"
-        tools:listitem="@layout/item_question_answer"
-        />
-    <LinearLayout
-        android:id="@+id/llAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rvListAnswer"
-        >
-        <TextView
-            android:gravity="center"
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id="@+id/llMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/llContent"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/imMode"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/three_dot" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_question_answer" />
+
+        <TextView
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:id="@+id/tvAdd"
             android:text="Add an answer"
             android:textColor="@color/black"
+            android:textSize="20dp"
+            android:background="@drawable/background_button_add"
             />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/llAdd"
+        android:layout_below="@+id/llAnswer"
+        android:gravity="center_vertical"
+        android:background="@drawable/shadow_background"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         >
-        <EditText
+        <TextView
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:id="@+id/edComment"
+            android:layout_weight="0.7"
+            android:id="@+id/tvComment"
             android:hint="Add a comment..."
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            android:textColor="@color/text_grey"
             />
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/pen"
             android:id="@+id/imComment"
+            android:layout_weight="0.3"
             />
     </LinearLayout>
 </RelativeLayout>

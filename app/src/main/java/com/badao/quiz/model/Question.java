@@ -7,17 +7,18 @@ import java.util.List;
 
 public class Question {
     private int ID = 0;
-    private int index = 0;
     private String content = "";
     private String createdAt = "";
     private String lastUpdated = "";
     private int type = AppConstants.QUESTION_NORMAL_TYPE;
     private boolean isSync;
     private String comment = "";
+    private int position = 0;
 
     private boolean isTemp = false;
+    private boolean isViewed = false;
 
-    public Question(int ID, String content, String createdAt, String lastUpdated, int type, boolean isSync, String comment) {
+    public Question(int ID, String content, String createdAt, String lastUpdated, int type, boolean isSync, String comment, int position) {
         this.ID = ID;
         this.content = content;
         this.createdAt = createdAt;
@@ -25,9 +26,13 @@ public class Question {
         this.type = type;
         this.isSync = isSync;
         this.comment = comment;
+        this.position = position;
         this.userAnswers = new RecordUserAnswer(this.ID);
     }
 
+    public boolean isValid(){
+        return (!this.isTemp && !(this.ID == 0 && !this.isViewed));
+    }
     private List<QuestionAnswer> answers = new ArrayList<>();
     private RecordUserAnswer userAnswers ;
 
@@ -36,8 +41,8 @@ public class Question {
         this.answers.add(new QuestionAnswer(this.ID));
     }
 
-    public Question(int index, boolean isTemp) {
-        this.index = index;
+    public Question(int position, boolean isTemp) {
+        this.position = position;
         this.answers.add(new QuestionAnswer(this.ID));
         this.isTemp = isTemp;
     }
@@ -125,12 +130,20 @@ public class Question {
         isTemp = temp;
     }
 
-    public int getIndex() {
-        return index;
+    public boolean isViewed() {
+        return isViewed;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override
@@ -138,11 +151,14 @@ public class Question {
         return "Question{" +
                 "ID=" + ID +
                 ", content='" + content + '\'' +
-                ", comment='" + comment + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", lastUpdated='" + lastUpdated + '\'' +
                 ", type=" + type +
                 ", isSync=" + isSync +
+                ", comment='" + comment + '\'' +
+                ", position=" + position +
+                ", isTemp=" + isTemp +
+                ", isViewed=" + isViewed +
                 ", answers=" + answers +
                 ", userAnswers=" + userAnswers +
                 '}';

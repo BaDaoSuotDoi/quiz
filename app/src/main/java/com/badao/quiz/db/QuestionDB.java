@@ -46,15 +46,14 @@ public class QuestionDB extends  SQLiteHelper{
         values.put("type", question.getType());
         values.put("is_sync", 0);
         values.put("comment", question.getComment());
+        values.put("position", question.getPosition());
         long id = sqlWrite.insert(QuestionDB.name, null, values);
         question.setID((int)id);
 
         QuestionVersionDB.getInstance(this.context).create(projectId, question.getID(), version);
 
         for(QuestionAnswer questionAnswer : question.getAnswers()){
-            if(questionAnswer.getQuestionId() <= 0){
-                questionAnswer.setQuestionId(question.getID());
-            }
+            questionAnswer.setQuestionId(question.getID());
             Log.e("Question answer created", questionAnswer.toString());
             QuestionAnswerDB.getInstance(context).create(questionAnswer);
         }
@@ -74,9 +73,9 @@ public class QuestionDB extends  SQLiteHelper{
         String[] args = {projectId+""};
         List<Question> questions = new ArrayList<>();
         Cursor cursor = sqlRead.rawQuery(
-                "select q.id, q.content, q.created_at, q.last_updated, q.type,q.is_sync, q.comment " +
+                "select q.id, q.content, q.created_at, q.last_updated, q.type,q.is_sync, q.comment,q.position " +
                         "from questions as q, question_versions as qv " +
-                        "where q.id = qv.question_id and qv.project_id = ? and qv.status = 1",
+                        "where q.id = qv.question_id and qv.project_id = ? and qv.status = 1 order by q.position asc",
                 args);
         while (cursor != null && cursor.moveToNext()){
             Question question = exact(cursor);
@@ -93,8 +92,9 @@ public class QuestionDB extends  SQLiteHelper{
         int type = cursor.getInt(4);
         boolean isSync = cursor.getInt(5) == 1;
         String comment = cursor.getString(6);
+        int position = cursor.getInt(7);
 
-        return  new Question(id,content, createdAt, lastUpdated, type, isSync, comment);
+        return  new Question(id,content, createdAt, lastUpdated, type, isSync, comment,position);
     }
 
     public void destroy(int id){
@@ -138,13 +138,17 @@ public class QuestionDB extends  SQLiteHelper{
                     }
                 }
             }
-            boolean isNew = isNewContent || isNewAnswer ||isNewType ||isDelete;
+            boolean isNew = isNewContent || isNewAnswer ||isNewType;
 
-            if(isNew && wasDone){
+            // question edited
+            if((isNew && wasDone) || (wasDone && isDelete)){
                 //update question all version
                 int version = QuestionVersionDB.getInstance(context).disable(projectId, question.getID());
-                // copy to new question
-                create(question, projectId,  version + 1);
+                if(!isDelete){
+                    // copy to new question
+                    create(question, projectId,  version + 1);
+                }
+
                 return;
             }
 

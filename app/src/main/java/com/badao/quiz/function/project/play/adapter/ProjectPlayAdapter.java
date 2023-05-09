@@ -28,7 +28,7 @@ public class ProjectPlayAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Log.e("createFragment", position+"");
+        Log.e("createFragment", position+"//"+viewMode);
         QuestionPlayFragment questionPlayFragment = new QuestionPlayFragment(position, project.getQuestions().get(position), viewMode);
         questionPlayFragments.add(questionPlayFragment);
         return questionPlayFragment;

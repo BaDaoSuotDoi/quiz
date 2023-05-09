@@ -2,6 +2,7 @@ package com.badao.quiz.function.question.edit.adapter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.badao.quiz.R;
 import com.badao.quiz.base.adapter.BaseAdapter;
 import com.badao.quiz.base.view_holder.BaseViewHolder;
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.model.QuestionAnswer;
 
 import org.json.JSONException;
@@ -23,10 +25,14 @@ import butterknife.BindView;
 
 public class AnswerAdapter extends BaseAdapter<QuestionAnswer, AnswerAdapter.ViewHolder> {
 
-    private  List<QuestionAnswer> questionAnswers;
-    public AnswerAdapter(Context context, List<QuestionAnswer> items) {
+    private List<QuestionAnswer> questionAnswers;
+    private int mode;
+    private boolean isChecked;
+    public AnswerAdapter(Context context, List<QuestionAnswer> items, int mode, boolean isChecked) {
         super(context, items);
         this.questionAnswers = items;
+        this.mode = mode;
+        this.isChecked = isChecked;
     }
 
     @Override
@@ -54,14 +60,26 @@ public class AnswerAdapter extends BaseAdapter<QuestionAnswer, AnswerAdapter.Vie
 
         public ViewHolder(View view) {
             super(view);
+            if(mode == AppConstants.ANSWER_SELECTION){
+                imAcross.setVisibility(View.VISIBLE);
+                cbAnswer.setVisibility(View.VISIBLE);
+            }
             imAcross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.e("Delete answer", getAdapterPosition()+"");
-                    onItemClick(view, getAdapterPosition());
+                    if(mode == AppConstants.ANSWER_SELECTION){
+                        onItemClick(view, getAdapterPosition());
+                    }
                 }
             });
 
+            if(isChecked){
+                if(edAnswer.getText().toString().isEmpty()){
+                    edAnswer.setHint("Empty! ");
+                    edAnswer.setHintTextColor(Color.parseColor("#D30C12"));
+                }
+            }
             edAnswer.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -78,6 +96,8 @@ public class AnswerAdapter extends BaseAdapter<QuestionAnswer, AnswerAdapter.Vie
 
                 }
             });
+
+
         }
     }
 }

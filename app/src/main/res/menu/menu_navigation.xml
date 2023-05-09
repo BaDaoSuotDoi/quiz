@@ -6,8 +6,12 @@
             android:icon="@drawable/pen"
             android:title="Project" />
         <item
-            android:id="@+id/mRecord"
-            android:icon="@drawable/across"
-            android:title="Record" />
+            android:id="@+id/mHistory"
+            android:icon="@drawable/ic_history"
+            android:title="History" />
+        <item
+            android:id="@+id/mStatistic"
+            android:icon="@drawable/ic_statistics"
+            android:title="Statistics" />
     </group>
 </menu>

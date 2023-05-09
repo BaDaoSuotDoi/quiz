@@ -29,6 +29,16 @@ public class HistorySubmitDB extends  SQLiteHelper{
         return  historySubmitDB;
     }
 
+    public HistorySubmit findByPk(int id){
+        String[] arg = new String[]{id+""};
+        Cursor cursor = sqlRead.rawQuery(
+                "select * from history_submits where id = ?", arg);
+        while (cursor != null && cursor.moveToNext()){
+           return exact(cursor);
+        }
+        return null;
+    }
+
     public List<HistorySubmit> findBy(){
         List<HistorySubmit>  historySubmits = new ArrayList<>();
         Cursor cursor = sqlRead.rawQuery(

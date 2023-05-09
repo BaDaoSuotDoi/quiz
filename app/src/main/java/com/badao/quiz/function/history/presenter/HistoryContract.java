@@ -7,6 +7,7 @@ import java.util.List;
 
 public class HistoryContract {
     public interface View extends BaseContract.View {
+        void navigateProjectResult(HistorySubmit historySubmit);
     }
 
     public interface Presenter extends BaseContract.Presenter<HistoryContract.View> {

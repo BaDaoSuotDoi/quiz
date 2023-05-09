@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "quiz.db";
-    private static int DATABASE_VERSION = 9;
+    private static int DATABASE_VERSION = 14;
 
     public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -37,7 +37,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "  last_updated VARCHAR(255) NOT NULL,\n" +
                 "  type INTEGER NOT NULL,\n"+
                 "  is_sync INTEGER NOT NULL,\n" +
-                "  comment TEXT NOT NULL\n" +
+                "  comment TEXT NOT NULL,\n" +
+                "  position INTEGER NOT NULL\n" +
                 ");\n";
 
         String questionVersionDB = "CREATE TABLE IF NOT EXISTS question_versions (\n" +

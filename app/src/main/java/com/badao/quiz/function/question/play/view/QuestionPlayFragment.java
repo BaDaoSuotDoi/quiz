@@ -47,9 +47,9 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
         super.initViews(isRefreshData);
         updateContent();
         updateListAnswer();
+        Log.e("ViewMode question play", this.viewMode+"");
         if(this.viewMode == AppConstants.PROJECT_SHOW_ANSWER){
             updateComment();
-            Log.e("ViewMode", this.viewMode+"");
         }
     }
 

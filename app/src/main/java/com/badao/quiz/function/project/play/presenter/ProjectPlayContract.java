@@ -1,8 +1,10 @@
 package com.badao.quiz.function.project.play.presenter;
 
 import com.badao.quiz.base.contract.BaseContract;
+import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
+import com.badao.quiz.model.RecordUserAnswer;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class ProjectPlayContract {
         void start();
         void stopTime();
         void submit(Project project);
+
+        HistorySubmit getHistorySubmit();
+        List<RecordUserAnswer> getUserAnswers();
 
     }
 }

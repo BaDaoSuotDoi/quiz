@@ -24,12 +24,13 @@ public abstract class BaseFragment extends Fragment {
     protected Unbinder unbinder;
 
     protected abstract int getLayoutId();
-
+    private View view;
+    private String tagCustom = "";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutId(), container, false);
+        view = inflater.inflate(getLayoutId(), container, false);
 //        unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -42,6 +43,15 @@ public abstract class BaseFragment extends Fragment {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+
+    public String getTagCustom() {
+        return tagCustom;
+    }
+
+    public void setTagCustom(String tagCustom) {
+        this.tagCustom = tagCustom;
     }
 
     public void navigate(int layoutId, AnimationType type) {
@@ -92,4 +102,5 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public abstract void setRefreshBundle(Bundle bundle);
+
 }

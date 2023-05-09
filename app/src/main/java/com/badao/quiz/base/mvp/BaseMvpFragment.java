@@ -23,9 +23,6 @@ public abstract class BaseMvpFragment<V extends BaseContract.View, P extends Bas
         return presenter;
     }
 
-    protected abstract boolean isVisibleBottomNavigation();
-
-
     @SuppressWarnings("unchecked")
     @CallSuper
     @Override

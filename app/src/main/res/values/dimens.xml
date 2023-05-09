@@ -2,4 +2,5 @@
 <resources>
     <dimen name="default_radius_image">@dimen/_6sdp</dimen>
     <dimen name="layout2_text_size">@dimen/_9ssp</dimen>
+    <dimen name="toolbar_height">60dp</dimen>
 </resources>

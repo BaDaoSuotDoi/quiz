@@ -2,6 +2,7 @@ package com.badao.quiz.function.history.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.badao.quiz.R;
@@ -48,7 +49,9 @@ public class HistoryAdapter extends BaseAdapter<HistorySubmit, HistoryAdapter.Vi
         holder.tvNumberNoAnswer.setText(String.valueOf(numberNoAnswer));
     }
 
-    public class ViewHolder extends BaseViewHolder{
+    public class ViewHolder extends BaseViewHolder implements View.OnClickListener{
+        @BindView(R.id.rlProjectHistory)
+        RelativeLayout rlProjectHistory;
         @BindView(R.id.tvProjectName)
         TextView tvProjectName;
         @BindView(R.id.tvPercent)
@@ -65,6 +68,18 @@ public class HistoryAdapter extends BaseAdapter<HistorySubmit, HistoryAdapter.Vi
         TextView tvNumberNoAnswer;
         public ViewHolder(View view) {
             super(view);
+            rlProjectHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemClick(view, getAdapterPosition());
+                }
+            });
         }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+
     }
 }

@@ -31,5 +31,9 @@ public class ProjectQuestionEditPresenter extends BasePresenter<ProjectQuestionE
     public int getQuestionIndex() {
         return questionIndex++;
     }
+    @Override
+    public void setQuestionIndex(int index) {
+        this.questionIndex = index;
+    }
 
 }

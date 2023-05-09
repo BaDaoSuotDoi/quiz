@@ -32,6 +32,7 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
 
     public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items,RecordUserAnswer recordUserAnswer, int viewMode) {
         super(context, items);
+        Log.e("AnswerFillTextAdapter", recordUserAnswer.getAnswer());
         this.questionAnswers = items;
         this.recordUserAnswer = recordUserAnswer;
         this.viewMode = viewMode;
@@ -49,6 +50,7 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
 
     @Override
     protected void bindView(ViewHolder holder, QuestionAnswer item, int position) throws JSONException {
+        Log.e("Bind view", position+"//"+recordUserAnswer.getAnswer());
         if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
             Log.e("Reload data", recordUserAnswer.getAnswer());
             holder.tvContent.setText(recordUserAnswer.getAnswer());

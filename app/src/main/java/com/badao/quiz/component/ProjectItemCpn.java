@@ -3,6 +3,7 @@ package com.badao.quiz.component;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,8 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.badao.quiz.R;
+import com.badao.quiz.base.animation.AnimationType;
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.model.Project;
+import com.badao.quiz.utils.BundleBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,7 +90,7 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
                                 iAction.onDelete(project);
                                 return true;
                             case R.id.action_play:
-                                Log.e("Project Action", "play");
+                                iAction.navigateProjectPlay(project);
                                 return true;
                             case R.id.action_rename:
                                 Log.e("Project Action", "rename");
@@ -108,6 +112,7 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
      public interface IAction{
         void navigateEdit(Project project);
         void navigateQuestionEdit(Project project);
+        void navigateProjectPlay(Project project);
         void onDelete(Project project);
     }
 }

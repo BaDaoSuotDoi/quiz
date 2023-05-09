@@ -12,8 +12,11 @@ import com.badao.quiz.db.RecordUserAnswerDB;
 import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
+import com.badao.quiz.model.RecordUserAnswer;
 import com.badao.quiz.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -81,8 +84,19 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
         HistorySubmitDB.getInstance(getContext()).create(historySubmit);
         for(Question question: questions){
             question.getUserAnswers().setHistoryId(historySubmit.getID());
-            RecordUserAnswerDB.getInstance(getContext()).create(question.getUserAnswers());
+            RecordUserAnswer recordUserAnswer = question.getUserAnswers();
+            Log.e("recordUserAnswer", recordUserAnswer.toString());
+            RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
         }
+    }
+
+    @Override
+    public HistorySubmit getHistorySubmit() {
+        if(getStateBundle().containsKey(AppConstants.HISTORY_PROJECT_ID)){
+            int id = getStateBundle().getInt(AppConstants.HISTORY_PROJECT_ID);
+            return  HistorySubmitDB.getInstance(getContext()).findByPk(id);
+        }
+        return null;
     }
 
     @Override
@@ -99,5 +113,16 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
     @Override
     public List<Question> getQuestions(int projectId) {
         return  QuestionDB.getInstance(getContext()).findByProjectId(projectId);
+    }
+
+    @Override
+    public List<RecordUserAnswer> getUserAnswers() {
+        if(getStateBundle().containsKey(AppConstants.HISTORY_PROJECT_ID)){
+            int id = getStateBundle().getInt(AppConstants.HISTORY_PROJECT_ID);
+            return  RecordUserAnswerDB.getInstance(getContext()).findBy(new HashMap<String, String>(){{
+                put("history_id", ""+id);
+            }});
+        }
+        return null;
     }
 }

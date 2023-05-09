@@ -3,6 +3,7 @@ package com.badao.quiz.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -41,6 +42,7 @@ public class RecordUserAnswerDB extends SQLiteHelper{
         values.put("created_at", recordUserAnswer.getCreatedAt());
         values.put("last_updated", recordUserAnswer.getLastUpdated());
         long id = sqlWrite.insert(RecordUserAnswerDB.name, null, values);
+        Log.e(" RecordUserAnswerDB ID", id+"");
         recordUserAnswer.setID((int)id);
         return id ;
     }
