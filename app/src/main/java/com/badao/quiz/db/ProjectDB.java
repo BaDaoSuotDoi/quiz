@@ -102,7 +102,11 @@ public class ProjectDB  extends  SQLiteHelper{
         String[] args = {id+""};
         ContentValues values = new ContentValues();
         for(String key: keys.keySet()){
-            values.put(key, keys.get(key));
+            if(key.equals("is_random") ||  key.equals("is_sync") || key.equals("question_per_session")){
+                values.put(key, Integer.parseInt(keys.get(key)));
+            }else{
+                values.put(key, keys.get(key));
+            }
         }
         sqlWrite.update("projects",values,"id = ?",args);
     }

@@ -1,6 +1,7 @@
 package com.badao.quiz.function.question.play.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,16 +26,12 @@ import java.util.List;
 import butterknife.BindView;
 
 public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFillTextAdapter.ViewHolder> {
-    private int viewMode;
     private List<QuestionAnswer> questionAnswers;
 
-    private RecordUserAnswer recordUserAnswer;
     private AnswerFillListener answerFillListener;
-    public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items,RecordUserAnswer recordUserAnswer, int viewMode, AnswerFillListener answerFillListener) {
+    public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items, AnswerFillListener answerFillListener) {
         super(context, items);
         this.questionAnswers = items;
-        this.recordUserAnswer = recordUserAnswer;
-        this.viewMode = viewMode;
         this.answerFillListener = answerFillListener;
     }
 
@@ -50,19 +47,7 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
 
     @Override
     protected void bindView(ViewHolder holder, QuestionAnswer item, int position) throws JSONException {
-        Log.e("Bind view", position+"//"+recordUserAnswer.getAnswer());
-        if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-            Log.e("Reload data", recordUserAnswer.getAnswer());
-            holder.tvContent.setText(recordUserAnswer.getAnswer());
-            holder.showSolution();
-        }else{
-            holder.showAnswer();
-        }
-    }
 
-    public void setViewMode(int viewMode) {
-        this.viewMode = viewMode;
-        notifyDataSetChanged();
     }
 
     public interface AnswerFillListener {
@@ -71,9 +56,6 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
     public class ViewHolder extends BaseViewHolder{
         @BindView(R.id.edContent)
         EditText edContent;
-
-        @BindView(R.id.tvContent)
-        TextView tvContent;
 
         public ViewHolder(View view) {
             super(view);
@@ -87,7 +69,6 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     String content = charSequence.toString();
                     answerFillListener.onAnswerChange(content);
-                    recordUserAnswer.setAnswer(content);
                 }
 
                 @Override
@@ -96,22 +77,6 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
                 }
             });
 
-        }
-
-        public void showSolution(){
-            tvContent.setLayoutParams(new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            ));
-            edContent.setLayoutParams(new RelativeLayout.LayoutParams(0,0));
-        }
-
-        public void showAnswer(){
-            edContent.setLayoutParams(new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            ));
-            tvContent.setLayoutParams(new RelativeLayout.LayoutParams(0,0));
         }
     }
 }

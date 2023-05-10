@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/tvMean"
+        android:text="SBC"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:layout_below="@id/tvMean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/tvNote"
+        android:text="SBC"
+        android:textColor="@color/black"
+        />
+    <com.badao.quiz.component.SetupTimeCpn
+        android:layout_below="@id/tvNote"
+        android:id="@+id/stSetupTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        />
+</RelativeLayout>

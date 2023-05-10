@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +47,8 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    @BindView(R.id.imPrevious)
+    ImageView imPrevious;
     @BindView(R.id.tvTime)
     TextView tvTime;
     @BindView(R.id.vpQuestionPlay)
@@ -58,7 +61,12 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
     TextView tvRight;
     @BindView(R.id.imMenu)
     ImageView imMenu;
-
+    TextView tvPage;
+    TextView tvQuestionAnswered;
+    TextView tvRemainingQuestion;
+    TextView tvQuestionSaw;
+    TextView tvTimeElapsed;
+    Button btSubmit;
     private Project project;
     private List<Question> questions;
     private ProjectPlayAdapter adapter;
@@ -67,7 +75,6 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
 
     private int viewMode;
     private MenuItem menuItemSelected;
-
     @Override
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
@@ -77,13 +84,31 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         initViewMode();
         updateQuestionPlay();
         updateMenuQuestion();
-        tvRight.setOnClickListener(new View.OnClickListener() {
+        initMenuHeader();
+
+        vpQuestionPlay.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onClick(View view) {
-                getPresenter().submit(project);
-                Log.e("Submit", "OK");
-                adapter.setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
-                ((MainActivity)getActivity()).hiddenKeyboard();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                Question questionCurrent = project.getQuestions().get(position);
+                int n = project.getQuestions().size();
+                selectMenuItem(position);
+                questionCurrent.setViewed(true);
+                int questionSawNumber = 0;
+                int questionAnsweredNumber = 0;
+                for(Question question: project.getQuestions()){
+                    if(question.isViewed()){
+                        questionSawNumber++;
+                    }
+                    if(!question.getUserAnswers().getAnswer().isEmpty()){
+                        questionAnsweredNumber++;
+                    }
+                }
+                tvQuestionIndex.setText(String.format(AppConstants.FORMAT_RATIO, position+1, n));
+                tvPage.setText(String.format(AppConstants.FORMAT_RATIO, position+1, n));
+                tvQuestionAnswered.setText(String.format(AppConstants.FORMAT_RATIO, questionAnsweredNumber, n));
+                tvRemainingQuestion.setText(String.format(AppConstants.FORMAT_RATIO, n - questionSawNumber, n));
+                tvQuestionSaw.setText(String.format(AppConstants.FORMAT_RATIO, questionSawNumber, n));
             }
         });
 
@@ -116,13 +141,56 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
             }
         });
 
+        tvLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int index =  vpQuestionPlay.getCurrentItem();
+                if(index > 0){
+                    vpQuestionPlay.setCurrentItem(index - 1);
+                }
+            }
+        });
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int index =  vpQuestionPlay.getCurrentItem();
+                int n = project.getQuestions().size();
+                if(index < n - 1){
+                    vpQuestionPlay.setCurrentItem(index + 1);
+                }
+            }
+        });
+
+        imPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireActivity().onBackPressed();
+            }
+        });
         selectMenuItem(0);
         observe();
+
+        if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
+            btSubmit.setVisibility(View.INVISIBLE);
+        }
+        btSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(viewMode == AppConstants.PROJECT_PLAY){
+                    getPresenter().submit(project);
+                    Log.e("Submit", "OK");
+                    adapter.setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+                }
+            }
+        });
     }
 
     @Override
     public void updateTime(String time) {
         tvTime.setText(time);
+        if(tvTimeElapsed != null){
+            tvTimeElapsed.setText(time);
+        }
     }
 
     @Override
@@ -145,8 +213,31 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                     TextView tvContent = actionView.findViewById(R.id.tvMenuContent);
                     tvContent.setText(question.getContent());
                     menuItem.setActionView(actionView);
+                    if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
+                        ImageView imageView = actionView.findViewById(R.id.imQuestionAnswer);
+                        if(question.getUserAnswers().getStatus() == AppConstants.QUESTION_ANSWER_CORRECT){
+                            imageView.setImageResource(R.drawable.ic_correct);
+                        }else{
+                            imageView.setImageResource(R.drawable.ic_wrong);
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    @Override
+    public void initMenuHeader() {
+        View view = navigationView.getHeaderView(0);
+        tvPage = view.findViewById(R.id.tvPage);
+        tvQuestionAnswered = view.findViewById(R.id.tvQuestionAnswered);
+        tvRemainingQuestion = view.findViewById(R.id.tvRemainingQuestion);
+        tvQuestionSaw = view.findViewById(R.id.tvQuestionSaw);
+        tvTimeElapsed = view.findViewById(R.id.tvTimeElapsed);
+        btSubmit = view.findViewById(R.id.btSubmit);
+
+        if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
+            tvTimeElapsed.setText(Utils.displayTime(historySubmit.getTimeElapsed()));
         }
     }
 
@@ -157,6 +248,8 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                 QuestionPlayFragment.QuestionUserAnswer questionUserAnswer = (QuestionPlayFragment.QuestionUserAnswer) payload.getValue();
                 int position = questionUserAnswer.getQuestionPosition();
                 int n = questions.size();
+                int questionAnsweredNumber = 0;
+
                 for(int i = 0; i<n;i++){
                     Question question = questions.get(i);
                     if(question.getPosition() == position){
@@ -169,8 +262,15 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                             imageView.setImageResource(R.drawable.ic_uncheck);
                         }
                     }
+                    if(!question.getUserAnswers().getAnswer().isEmpty()){
+                        questionAnsweredNumber++;
+                    }
                 }
 
+                if(questionUserAnswer.isAnswer()){
+                    tvQuestionAnswered.setText(String.format(AppConstants.FORMAT_RATIO, questionAnsweredNumber, n));
+
+                }
             }
         });
     }

@@ -46,16 +46,17 @@
         />
 
     <EditText
-        android:layout_margin="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/tvInstruction"
+        android:id="@+id/edContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edContent"
+        android:layout_below="@+id/tvInstruction"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:hint="Enter here..."
-        android:textColorHint="@color/grey"
         android:textColor="@color/black"
-        />
+        android:textColorHint="@color/grey" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

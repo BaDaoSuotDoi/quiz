@@ -13,6 +13,7 @@ public class ProjectPlayContract {
         void updateTime(String time);
         void updateQuestionPlay();
         void updateMenuQuestion();
+        void initMenuHeader();
         void observe();
 
     }

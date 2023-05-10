@@ -1,6 +1,9 @@
 package com.badao.quiz.function.question.play.view;
 
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,6 +16,8 @@ import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.question.edit.presenter.QuestionEditPresenter;
 import com.badao.quiz.function.question.play.adapter.AnswerFillTextAdapter;
+import com.badao.quiz.function.question.play.adapter.SolutionFillTextAdapter;
+import com.badao.quiz.function.question.play.adapter.UserAnswerFillTextAdapter;
 import com.badao.quiz.function.question.play.presenter.QuestionPlayContract;
 import com.badao.quiz.model.Question;
 
@@ -31,11 +36,12 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
 
     @BindView(R.id.rcSolution)
     RecyclerView rcSolution;
+    @BindView(R.id.llSolution)
+    LinearLayout llSolution;
 
     private int viewMode;
     private  int position;
     private Question question;
-    private AnswerFillTextAdapter adapter;
 
     public QuestionPlayFragment(int position, Question question, int viewMode){
         this.position = position;
@@ -47,25 +53,39 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         updateContent();
-        updateListAnswer();
+        initMode();
         Log.e("ViewMode question play", this.viewMode+"");
         if(this.viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-            updateComment();
+            if(!question.getComment().isEmpty()){
+                updateComment();
+            }
+            updateSolution(true);
         }
     }
 
     @Override
-    public void updateListAnswer() {
-        adapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(), question.getUserAnswers(), this.viewMode, new AnswerFillTextAdapter.AnswerFillListener() {
-            @Override
-            public void onAnswerChange(String content) {
+    public void initMode() {
+        if(viewMode == AppConstants.PROJECT_PLAY){
+            AnswerFillTextAdapter answerFillTextAdapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(), new AnswerFillTextAdapter.AnswerFillListener() {
+                @Override
+                public void onAnswerChange(String content) {
 
-                getViewModel().getMlUserChangeAnswer().postValue(
-                        new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), !content.isEmpty())));
-            }
-        });
-        rcAnswer.setAdapter(adapter);
-        rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+                    getViewModel().getMlUserChangeAnswer().postValue(
+                            new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), !content.isEmpty())));
+                }
+            });
+            rcAnswer.setAdapter(answerFillTextAdapter);
+            rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        }else if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
+            UserAnswerFillTextAdapter userAnswerFillTextAdapter = new UserAnswerFillTextAdapter(getContext(), question.getAnswers(), question.getUserAnswers());
+            rcAnswer.setAdapter(userAnswerFillTextAdapter);
+            rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+
+            SolutionFillTextAdapter solutionFillTextAdapter = new SolutionFillTextAdapter(getContext(), question.getAnswers());
+            rcSolution.setAdapter(solutionFillTextAdapter);
+            rcSolution.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        }
+
     }
 
     @Override
@@ -75,19 +95,25 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
 
     @Override
     public void updateComment() {
-        Log.e("Element", "CC"+question.getComment());
+        ViewGroup.LayoutParams layoutParams = this.tvComment.getLayoutParams();
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        this.tvComment.setLayoutParams(layoutParams);
         this.tvComment.setText(question.getComment());
+    }
+
+    @Override
+    public void updateSolution(boolean isShow) {
+        if(isShow){
+            llSolution.setVisibility(View.VISIBLE);
+        }else{
+            llSolution.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void setViewMode(int viewMode){
         this.viewMode = viewMode;
-        if(this.viewMode == AppConstants.PROJECT_SHOW_ANSWER && this.tvComment != null){
-            updateComment();
-            Log.e("ViewMode 2", this.viewMode+"");
-        }
-        if(adapter != null){
-            adapter.setViewMode(viewMode);
-        }
+        initMode();
     }
 
     public class QuestionUserAnswer{

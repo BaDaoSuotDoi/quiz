@@ -66,8 +66,6 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
     ImageView imSave;
     @BindView(R.id.imAcross)
     ImageView imAcross;
-    @BindView(R.id.imInsert)
-    ImageView imInsert;
     @BindView(R.id.imMenu)
     ImageView imMenu;
     @BindView(R.id.vpQuestionEdit)
@@ -129,6 +127,26 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                 if(numberQuestionInvalid > 2){
                     int n = project.getQuestions().size();
                     adapter.removeFragment(n-1);
+                }
+            }
+        });
+
+        tvPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               int index =  vpQuestionEdit.getCurrentItem();
+               if(index > 0){
+                   vpQuestionEdit.setCurrentItem(index - 1);
+               }
+            }
+        });
+        tvNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int index =  vpQuestionEdit.getCurrentItem();
+                int n = project.getQuestions().size();
+                if(index < n - 3){
+                    vpQuestionEdit.setCurrentItem(index + 1);
                 }
             }
         });
@@ -201,16 +219,8 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                     addMenuQuestion(questionTemp.getPosition(), itemCurrent, "1. --Waiting edition--");
                 }
                 if(!question.isTemp() && n > 2){
-                    Log.e("Delete question "+itemCurrent + "//"+n , project.getQuestions().get(itemCurrent).toString());
-//                QuestionEditAdapter adapter = (QuestionEditAdapter)vpQuestionEdit.getAdapter();
-//                adapter.notifyDataSetChanged();
                     // delete end question
                     if(itemCurrent == n - 3){
-                        Log.e("Run here", "Question end");
-//                        project.getQuestions().get(n-1).setTemp(false);
-//                        Question questionAdd = new Question(getPresenter().getQuestionIndex(), true);
-//                        project.getQuestions().add(questionAdd);
-//                        addMenuQuestion(questionAdd.getIndex(),n, (n+1) + "--Waiting edition--");
                         vpQuestionEdit.setCurrentItem(itemCurrent - 1);
                         adapter.removeFragment(itemCurrent);
                         selectMenuItem(itemCurrent);
@@ -233,19 +243,24 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
             }
         });
 
-        imInsert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int itemCurrent = vpQuestionEdit.getCurrentItem();
-
-            }
-        });
         vpQuestionEdit.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 Question questionCurrent = project.getQuestions().get(position);
                 int n = project.getQuestions().size();
+                tvQuestionCurrent.setText((position+1)+"/"+(n - 2));
+//                if(position < n - 3){
+//                    tvNext.setText("Next");
+//                }else{
+//                    tvNext.setText("Add");
+//                }
+//
+//                if(position == 0){
+//                    tvPrevious.setText("None");
+//                }else{
+//                    tvPrevious.setText("Previous");
+//                }
                 if(questionCurrent.isTemp()){
                     Log.e("PAGE selected", "POS:" +position+"//"+n);
                     boolean isValid = true;

@@ -37,6 +37,7 @@ public abstract class BaseDialog extends DialogFragment {
         View view = inflater.inflate(getDialogLayout(), container, false);
         unbinder = ButterKnife.bind(this, view);
         initViewModel();
+        setupView();
         return view;
     }
 
@@ -108,12 +109,8 @@ public abstract class BaseDialog extends DialogFragment {
         return mainActivityVM;
     }
 
-    public static void setIsShowing(boolean isShowing) {
-        BaseDialog.isShowing = isShowing;
-    }
+    public void setupView(){
 
-    public static boolean getIsShowing() {
-        return isShowing;
     }
 
     protected void setupDialog(int width, int height) {

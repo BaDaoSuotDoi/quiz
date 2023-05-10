@@ -2,4 +2,85 @@
     <string name="app_name">Quiz</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string-array name="hour_setup">
+        <item>00 h</item>
+        <item>1 h</item>
+        <item>2 h</item>
+        <item>3 h</item>
+        <item>4 h</item>
+        <item>Endless</item>
+    </string-array>
+
+    <string-array name="minute_setup">
+        <item>00 mm</item>
+        <item>1 mm</item>
+        <item>2 mm</item>
+        <item>3 mm</item>
+        <item>4 mm</item>
+        <item>5 mm</item>
+        <item>6 mm</item>
+        <item>7 mm</item>
+        <item>8 mm</item>
+        <item>9 mm</item>
+        <item>10 mm</item>
+        <item>11 mm</item>
+        <item>12 mm</item>
+        <item>13 mm</item>
+        <item>14 mm</item>
+        <item>15 mm</item>
+        <item>16 mm</item>
+        <item>17 mm</item>
+        <item>18 mm</item>
+        <item>19 mm</item>
+        <item>20 mm</item>
+        <item>21 mm</item>
+        <item>22 mm</item>
+        <item>23 mm</item>
+        <item>24 mm</item>
+        <item>25 mm</item>
+        <item>26 mm</item>
+        <item>27 mm</item>
+        <item>28 mm</item>
+        <item>29 mm</item>
+        <item>30 mm</item>
+        <item>31 mm</item>
+        <item>32 mm</item>
+        <item>33 mm</item>
+        <item>34 mm</item>
+        <item>35 mm</item>
+        <item>36 mm</item>
+        <item>37 mm</item>
+        <item>38 mm</item>
+        <item>39 mm</item>
+        <item>40 mm</item>
+        <item>41 mm</item>
+        <item>42 mm</item>
+        <item>43 mm</item>
+        <item>44 mm</item>
+        <item>45 mm</item>
+        <item>46 mm</item>
+        <item>47 mm</item>
+        <item>48 mm</item>
+        <item>49 mm</item>
+        <item>50 mm</item>
+        <item>51 mm</item>
+        <item>52 mm</item>
+        <item>53 mm</item>
+        <item>54 mm</item>
+        <item>55 mm</item>
+        <item>56 mm</item>
+        <item>57 mm</item>
+        <item>58 mm</item>
+        <item>59 mm</item>
+        <item>60 mm</item>
+    </string-array>
+
+    <string-array name="second_setup">
+        <item>00 sec</item>
+        <item>10 sec</item>
+        <item>20 sec</item>
+        <item>30 sec</item>
+        <item>30 sec</item>
+    </string-array>
 </resources>

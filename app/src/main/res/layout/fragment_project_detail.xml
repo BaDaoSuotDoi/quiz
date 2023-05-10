@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/llName"
         android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_margin="5dp"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Project name"
             android:id="@+id/tvName"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+            android:textStyle="bold"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -22,8 +29,8 @@
             >
             <ImageView
                 android:id="@+id/imName"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/pen"
                 android:layout_gravity="right"
                 />
@@ -34,6 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/llCreatedAt"
+        android:layout_margin="5dp"
+        android:padding="5dp"
         >
         <ImageView
             android:backgroundTint="@color/primary"
@@ -43,9 +52,12 @@
 
         <TextView
             android:id="@+id/tvCreatedAt"
+            android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2023/20/12"
+            android:textStyle="italic"
+            android:textColor="@color/black"
             />
     </LinearLayout>
     <LinearLayout
@@ -53,6 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/llUpdateAt"
+        android:padding="5dp"
+        android:layout_margin="5dp"
         >
         <ImageView
             android:src="@drawable/calendar"
@@ -64,6 +78,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2023/20/12"
+            android:textStyle="italic"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/black"
             />
     </LinearLayout>
     <LinearLayout
@@ -73,20 +90,31 @@
         android:gravity="right"
         android:id="@+id/llAction"
         >
-        <ImageView
-            android:id="@+id/imPlay"
-            android:src="@drawable/ic_project_edit_button"
-            android:backgroundTint="@color/primary"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            >
+            <ImageView
+                android:id="@+id/imPlay"
+                android:src="@drawable/ic_play"
+                android:backgroundTint="@color/primary"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                />
 
-       <TextView
-           android:id="@+id/tvEdit"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Edit"
-           android:background="@drawable/ic_project_edit_button"
-           />
+            <TextView
+                android:id="@+id/tvEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Edit"
+                android:padding="5dp"
+                android:background="@drawable/radius_border"
+                android:layout_margin="5dp"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llSeparate1"
@@ -100,37 +128,49 @@
         />
 
     <LinearLayout
-        android:layout_below="@+id/llSeparate1"
-        android:id="@+id/llTotalQuestion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Total Questions"
-            />
-        <TextView
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/primary"
-            />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/llSeparate1"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        >
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="0.5"
+            android:id="@+id/llTotalQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             >
             <TextView
-                android:id="@+id/tvTotalQuestion"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Total Questions"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:text="10"
-                android:gravity="center"
-                android:layout_weight="0.8"
+                android:background="@color/primary"
                 />
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:layout_weight="0.2"
-                android:layout_width="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/tvTotalQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="10"
+                    android:gravity="center"
+                    android:layout_weight="0.8"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="0.2"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="invisible"
                 >
@@ -143,41 +183,46 @@
                     />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_below="@+id/llTotalQuestion"
-        android:id="@+id/llRandomMode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Random mode enable"
-            />
-        <TextView
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/primary"
-            />
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="0.5"
+            android:id="@+id/llRandomMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             >
             <TextView
-                android:id="@+id/tvRandomMode"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Random mode enable"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:text="Yes"
-                android:gravity="center"
-                android:layout_weight="0.8"
+                android:background="@color/primary"
+                android:textColor="@color/black"
                 />
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                >
+                <TextView
+                    android:id="@+id/tvRandomMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Yes"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
+                android:gravity="center"
                 >
                 <ImageView
                     android:id="@+id/imRandomMode"
@@ -187,41 +232,47 @@
                     />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_below="@+id/llRandomMode"
-        android:id="@+id/llQuestionPerSession"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Question per session"
-            />
-        <TextView
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/primary"
-            />
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:id="@+id/llQuestionPerSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="horizontal"
-            android:layout_weight="0.5"
             >
             <TextView
-                android:id="@+id/tvQuestionPerSession"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Question per session"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:text="10"
-                android:gravity="center"
-                android:layout_weight="0.8"
+                android:background="@color/primary"
+                android:textColor="@color/black"
                 />
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                >
+                <TextView
+                    android:id="@+id/tvQuestionPerSession"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="10"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
+                android:gravity="center"
                 >
                 <ImageView
                     android:id="@+id/imQuestionPerSession"
@@ -231,41 +282,47 @@
                     />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_below="@+id/llQuestionPerSession"
-        android:id="@+id/llDuration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Duration of the questionnaire"
-            />
-        <TextView
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/primary"
-            />
         <LinearLayout
+            android:id="@+id/llDuration"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             >
             <TextView
-                android:id="@+id/tvDuration"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Duration of the questionnaire"
+                android:textColor="@color/black"
+                android:id="@+id/tvLabelDuration"
+                />
+            <TextView
+                android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:text="10"
-                android:gravity="center"
-                android:layout_weight="0.8"
+                android:background="@color/primary"
+                android:textColor="@color/black"
                 />
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                >
+                <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="10"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
+                android:gravity="center"
                 >
                 <ImageView
                     android:id="@+id/imDuration"

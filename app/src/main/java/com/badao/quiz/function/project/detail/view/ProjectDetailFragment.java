@@ -6,20 +6,29 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.badao.quiz.R;
 import com.badao.quiz.base.animation.AnimationType;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.dialog.ProjectNameDialog;
+import com.badao.quiz.function.project.detail.dialog.QuestionPerSessionDialog;
+import com.badao.quiz.function.project.detail.dialog.SetupTimeDurationDialog;
 import com.badao.quiz.function.project.detail.presenter.ProjectDetailContract;
 import com.badao.quiz.function.project.detail.presenter.ProjectDetailPresenter;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.utils.BundleBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -37,9 +46,6 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     @BindView(R.id.tvTotalQuestion)
     TextView tvTotalQuestion;
 
-//    @BindView(R.id.imTotalQuestion)
-//    ImageView imTotalQuestion;
-
     @BindView(R.id.tvRandomMode)
     TextView tvRandomMode;
     @BindView(R.id.imRandomMode)
@@ -53,6 +59,8 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
 
     @BindView(R.id.tvDuration)
     TextView tvDuration;
+    @BindView(R.id.tvLabelDuration)
+    TextView tvLabelDuration;
 
     @BindView(R.id.imDuration)
     ImageView imDuration;
@@ -61,6 +69,9 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     TextView tvEdit;
     @BindView(R.id.imPlay)
     ImageView imPlay;
+
+    @BindView(R.id.llQuestionPerSession)
+    LinearLayout llQuestionPerSession;
 
     Project project;
     int totalQuestion = 0;
@@ -86,12 +97,27 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
+                        Map<String, String> keys = new HashMap<>();
+                        ViewGroup.LayoutParams layoutParams = llQuestionPerSession.getLayoutParams();
+
                         switch (menuItem.getItemId()){
                             case R.id.action_yes:
-                                Log.e("Project Action", "yes");
+                                keys.put("is_random", 1+"");
+                                ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                                Toast.makeText(getContext(),"Update Random Successful", Toast.LENGTH_SHORT).show();
+                                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                                llQuestionPerSession.setLayoutParams(layoutParams);
+                                tvRandomMode.setText("true");
                                 return true;
                             case R.id.action_no:
-                                Log.e("Project Action", "no");
+                                keys.put("is_random", 0+"");
+                                ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                                Toast.makeText(getContext(),"Update Random Successful", Toast.LENGTH_SHORT).show();
+                                layoutParams.height = 0;
+                                layoutParams.width = 0;
+                                llQuestionPerSession.setLayoutParams(layoutParams);
+                                tvRandomMode.setText("false");
                                 return true;
                         }
                         return false;
@@ -128,6 +154,42 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
             @Override
             public void onClick(View view) {
                 navigateProjectPlay();
+            }
+        });
+
+        imQuestionPerSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                QuestionPerSessionDialog dialog = new QuestionPerSessionDialog(tvQuestionPerSession.getText().toString(), new QuestionPerSessionDialog.IQuestionPerSession() {
+                    @Override
+                    public void onDataChange(String content) {
+                        Map<String, String> keys = new HashMap<>();
+                        keys.put("question_per_session", content);
+                        ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                        tvQuestionPerSession.setText(content);
+                        project.setQuestionPerSession(Integer.parseInt(content));
+                        Toast.makeText(getContext(), "Update question per session successful!",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show(getParentFragmentManager(), QuestionPerSessionDialog.class.getName());
+            }
+        });
+
+        imDuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SetupTimeDurationDialog dialog = new SetupTimeDurationDialog(project.getDuration(),new SetupTimeDurationDialog.IListener() {
+                    @Override
+                    public void onSave(int time) {
+                        Log.e("Save duration", "Ok");
+                        Map<String, String> keys = new HashMap<>();
+                        keys.put("duration",String.valueOf(time));
+                        ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                        project.setDuration(time);
+                        updateDuration();
+                    }
+                });
+                dialog.show(getParentFragmentManager(),SetupTimeDurationDialog.class.getName());
             }
         });
         observe();
@@ -194,7 +256,17 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
 
     @Override
     public void updateDuration() {
-        tvDuration.setText(String.valueOf(project.getDuration()));
+        int duration = project.getDuration();
+        if(duration == -1){
+            tvDuration.setText("Endless");
+            tvLabelDuration.setText("Duration of the questionnaire");
+        }else if(duration < -1){
+            tvDuration.setText(String.valueOf(-duration));
+            tvLabelDuration.setText("Time per question");
+        }else {
+            tvDuration.setText(String.valueOf(duration));
+            tvLabelDuration.setText("Duration of the questionnaire");
+        }
     }
 
 }

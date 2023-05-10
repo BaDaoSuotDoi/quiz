@@ -2,8 +2,8 @@ package com.badao.quiz.base.dialog;
 
 import android.content.DialogInterface;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -30,6 +30,7 @@ public abstract class BaseEditForm  extends BaseDialog{
     private String hint;
     private String labelApply;
     private String instruction = "";
+    private boolean isInputNumber = false;
 
     @Override
     public void onStart() {
@@ -99,6 +100,9 @@ public abstract class BaseEditForm  extends BaseDialog{
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             tvInstruction.setLayoutParams(layoutParams);
         }
+        if(isInputNumber){
+            this.edContent.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
     }
 
     public abstract void onClickApply(String content);
@@ -118,12 +122,15 @@ public abstract class BaseEditForm  extends BaseDialog{
         this.content = content;
     }
 
+    public void setInputNumber(){
+        isInputNumber = true;
+    }
     public void setLabelApply(String label){
         this.labelApply = label;
     }
     @Override
     protected int getDialogLayout() {
-        return R.layout.item_edit_form;
+        return R.layout.dialog_edit_form;
     }
 
 

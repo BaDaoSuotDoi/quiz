@@ -21,4 +21,5 @@ public class AppConstants {
     public  static final int QUESTION_ANSWER_WRONG= 2;
     public  static final int QUESTION_NO_ANSWER= 0;
     public  static final int USER_CHANGE_ANSWER= 0;
+    public  static final String FORMAT_RATIO= "%d/%d";
 }

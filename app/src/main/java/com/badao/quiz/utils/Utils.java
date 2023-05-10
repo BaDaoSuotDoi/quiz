@@ -63,4 +63,12 @@ public class Utils {
         }
         return time;
     }
+
+    public static int getTimeSetup(String t){
+        if(t.equals("Endless")){
+            return -1;
+        }
+        String[] time = t.split(" ");
+        return Integer.parseInt(time[0]);
+    }
 }
