@@ -6,12 +6,20 @@ public class QuestionAnswer {
     private int ID;
     private int questionId;
     private String content = "";
-    private int type = AppConstants.ANSWER_FILL_INPUT;
+    private int type = AppConstants.QUESTION_NORMAL_TYPE;
     private boolean isSync = false;
     private String createdAt ;
     private String lastUpdated;
 
     public QuestionAnswer(int questionId) {
+        this.questionId = questionId;
+    }
+
+    public QuestionAnswer(int questionId, int type) {
+        if(type == AppConstants.QUESTION_SELECTION_TYPE){
+            this.content = AppConstants.TOKEN_FALSE_SELECT_ANSWER;
+        }
+        this.type = type;
         this.questionId = questionId;
     }
 
@@ -39,6 +47,10 @@ public class QuestionAnswer {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void addContent(String content) {
+        this.content += content;
     }
 
     public int getType() {

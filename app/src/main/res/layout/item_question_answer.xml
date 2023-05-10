@@ -16,6 +16,7 @@
         android:layout_weight="0.6"
         android:id="@+id/edAnswer"
         android:hint="Answer..."
+        android:textColorHint="@color/grey"
         android:textColor="@color/black"
         />
     <ImageView

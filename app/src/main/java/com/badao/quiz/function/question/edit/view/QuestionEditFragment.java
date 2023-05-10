@@ -79,14 +79,6 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
             question.getAnswers().add(new QuestionAnswer(question.getID()));
         }
         updateListAnswer();
-        adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseAdapter adapter, View view, int position) {
-                Log.e("Run delete here", "Ok");
-                question.getAnswers().remove(position);
-                adapter.setData(question.getAnswers());
-            }
-        });
         edContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -122,8 +114,8 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
         tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(question.getType() == AppConstants.ANSWER_SELECTION){
-                    adapter.addData(new QuestionAnswer(question.getID()));
+                if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
+                    adapter.addData(new QuestionAnswer(question.getID(), AppConstants.QUESTION_SELECTION_TYPE));
                 }
             }
         });
@@ -137,8 +129,13 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
                 switch (menuItem.getItemId()){
                     case R.id.selection_mode:
                         Log.e("Mode answer", "Selection");
-                        question.setType(AppConstants.ANSWER_SELECTION);
+                        for(QuestionAnswer questionAnswer: question.getAnswers()){
+                            questionAnswer.setContent(AppConstants.TOKEN_FALSE_SELECT_ANSWER);
+                            questionAnswer.setType(AppConstants.QUESTION_SELECTION_TYPE);
+                        }
+                        question.setType(AppConstants.QUESTION_SELECTION_TYPE);
                         adapter = new AnswerAdapter(getActivity(), question.getAnswers(), question.getType(),false);
+                        listenerAdapter();
                         rvListAnswer.setAdapter(adapter);
 
                         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -147,11 +144,17 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
                         return true;
                     case R.id.type_mode:
                         Log.e("Mode answer", "Selection");
-                        if( question.getAnswers().size() > 1){
-                            question.setAnswers(new ArrayList<>(Arrays.asList(question.getAnswers().get(0))));
+                        if( question.getAnswers().size() >= 1){
+                            QuestionAnswer questionAnswer = question.getAnswers().get(0);
+                            questionAnswer.setContent("");
+                            questionAnswer.setType(AppConstants.QUESTION_NORMAL_TYPE);
+                            question.setAnswers(new ArrayList<>(Arrays.asList(questionAnswer)));
+                        }else{
+                            question.setAnswers(new ArrayList<>(Arrays.asList(new QuestionAnswer(question.getID()))));
                         }
-                        question.setType(AppConstants.ANSWER_FILL_INPUT);
+                        question.setType(AppConstants.QUESTION_NORMAL_TYPE);
                         adapter = new AnswerAdapter(getActivity(), question.getAnswers(), question.getType(),false);
+
                         rvListAnswer.setAdapter(adapter);
 
                         layoutParams.width = 0;
@@ -163,6 +166,13 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
             }
         });
 
+        if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
+            ViewGroup.LayoutParams layoutParams = tvAdd.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tvAdd.setLayoutParams(layoutParams);
+        }
+
         imMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +183,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
 
     @Override
     public void updateListAnswer() {
-        if(question.getType() == AppConstants.ANSWER_FILL_INPUT){
+        if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
             if( question.getAnswers().size() > 1){
                 question.setAnswers(new ArrayList<>(Arrays.asList(question.getAnswers().get(0))));
             }
@@ -191,10 +201,24 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
             edContent.setHintTextColor(Color.parseColor("#D30C12"));
         }
         adapter = new AnswerAdapter(getActivity(), question.getAnswers(), question.getType(), true);
+        listenerAdapter();
         rvListAnswer.setAdapter(adapter);
     }
 
     public interface QuestionEditListener{
         void onContentQuestionChange(int index, String content);
+    }
+
+    void listenerAdapter(){
+        adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseAdapter adapter, View view, int position) {
+                Log.e("Run delete here", "Ok");
+                if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
+                    question.getAnswers().remove(position);
+                    adapter.setData(question.getAnswers());
+                }
+            }
+        });
     }
 }

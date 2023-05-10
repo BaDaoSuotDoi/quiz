@@ -90,12 +90,12 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
 
         Log.e("Submit", "correctAnswerNumber: "+correctAnswerNumber+"//noAnswerNumber:"+noAnswerNumber );
         HistorySubmit historySubmit = new HistorySubmit(project.getID(),totalTime, Utils.getTimeCurrent(),correctAnswerNumber,noAnswerNumber,questionNumber );
-//        HistorySubmitDB.getInstance(getContext()).create(historySubmit);
-//        for(Question question: questions){
-//            question.getUserAnswers().setHistoryId(historySubmit.getID());
-//            RecordUserAnswer recordUserAnswer = question.getUserAnswers();
-//            RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
-//        }
+        HistorySubmitDB.getInstance(getContext()).create(historySubmit);
+        for(Question question: questions){
+            question.getUserAnswers().setHistoryId(historySubmit.getID());
+            RecordUserAnswer recordUserAnswer = question.getUserAnswers();
+            RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
+        }
         return historySubmit;
     }
 

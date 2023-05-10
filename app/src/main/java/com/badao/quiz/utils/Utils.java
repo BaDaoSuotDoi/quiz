@@ -3,6 +3,7 @@ package com.badao.quiz.utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.model.Question;
 import com.badao.quiz.model.QuestionAnswer;
 
@@ -39,7 +40,11 @@ public class Utils {
         }
 
         for(QuestionAnswer answer: question.getAnswers()){
-            if(answer.getContent().isEmpty()){
+            if(answer.getContent().isEmpty() && answer.getType() == AppConstants.QUESTION_NORMAL_TYPE ){
+                return "Answer question empty";
+            }
+
+            if(answer.getContent().length() < 3 && answer.getType() == AppConstants.QUESTION_SELECTION_TYPE ){
                 return "Answer question empty";
             }
         }

@@ -19,7 +19,7 @@
            android:layout_height="wrap_content"
            android:id="@+id/edContent"
            android:hint="Question..."
-           android:textColorHint="@color/black"
+           android:textColorHint="@color/grey"
            android:textColor="@color/black"
            android:textSize="30dp"
            />
