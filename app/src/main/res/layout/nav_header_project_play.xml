@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:background="@color/primary"
     android:clickable="true"
     android:focusable="true"
@@ -13,13 +13,18 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <LinearLayout
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pages"
             android:layout_weight="0.2"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
         <TextView
             android:id="@+id/tvPage"
@@ -28,16 +33,23 @@
             android:text="0/10"
             android:layout_weight="0.8"
             android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Questions answered"
             android:layout_weight="0.2"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
         <TextView
             android:id="@+id/tvQuestionAnswered"
@@ -46,16 +58,23 @@
             android:text="0/10"
             android:layout_weight="0.8"
             android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Remaining questions"
             android:layout_weight="0.2"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
         <TextView
             android:id="@+id/tvRemainingQuestion"
@@ -64,34 +83,49 @@
             android:text="0/10"
             android:layout_weight="0.8"
             android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Question saw"
             android:layout_weight="0.2"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
+
         <TextView
             android:id="@+id/tvQuestionSaw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="0/10"
             android:layout_weight="0.8"
             android:gravity="center"
+            android:text="0/10"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time elapsed"
             android:layout_weight="0.2"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
         <TextView
             android:id="@+id/tvTimeElapsed"
@@ -100,6 +134,8 @@
             android:text="0/10"
             android:layout_weight="0.8"
             android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             />
     </LinearLayout>
     <LinearLayout

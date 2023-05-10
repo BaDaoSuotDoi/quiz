@@ -27,12 +27,14 @@ import butterknife.BindView;
 
 public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFillTextAdapter.ViewHolder> {
     private List<QuestionAnswer> questionAnswers;
+    private RecordUserAnswer recordUserAnswer;
 
     private AnswerFillListener answerFillListener;
-    public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items, AnswerFillListener answerFillListener) {
+    public AnswerFillTextAdapter(Context context, List<QuestionAnswer> items,RecordUserAnswer recordUserAnswer, AnswerFillListener answerFillListener) {
         super(context, items);
         this.questionAnswers = items;
         this.answerFillListener = answerFillListener;
+        this.recordUserAnswer = recordUserAnswer;
     }
 
     @Override
@@ -68,6 +70,7 @@ public class AnswerFillTextAdapter extends BaseAdapter<QuestionAnswer, AnswerFil
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     String content = charSequence.toString();
+                    recordUserAnswer.setAnswer(content);
                     answerFillListener.onAnswerChange(content);
                 }
 

@@ -12,6 +12,7 @@ import com.badao.quiz.db.RecordUserAnswerDB;
 import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
+import com.badao.quiz.model.QuestionAnswer;
 import com.badao.quiz.model.RecordUserAnswer;
 import com.badao.quiz.utils.Utils;
 
@@ -29,6 +30,7 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
     private int totalTime =  0;
     private int currentTime = 0;
     private int timerType = - AppConstants.TIMER_COUNTDOWN;
+    private Project project;
     public ProjectPlayPresenter(Context context) {
         super(context);
     }
@@ -47,6 +49,8 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                 .subscribe(t -> {
                     getView().updateTime(Utils.displayTime(t));
                     if (t <= 0) {
+                        getView().changeViewSubmit( submit(project));
+                        getView().setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
                         stopTime();
                     }
                 }, Throwable::printStackTrace);
@@ -60,7 +64,7 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
     }
 
     @Override
-    public void submit(Project project) {
+    public HistorySubmit submit(Project project) {
         stopTime();
         List<Question> questions = project.getQuestions();
         int questionNumber = questions.size();
@@ -68,26 +72,31 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
         int noAnswerNumber = 0;
 
         for(Question question: questions){
+            Log.e("getUserAnswers", question.getUserAnswers().toString());
             String answer = question.getUserAnswers().getAnswer();
             if(answer.isEmpty()){
                 noAnswerNumber++;
-            }else if(question.getContent().equals(answer)){
-                correctAnswerNumber++;
-                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
-            }else{
-                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+            }else if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
+                QuestionAnswer questionAnswer =  question.getAnswers().get(0);
+                Log.e("questionAnswer", questionAnswer.toString());
+                if(questionAnswer.getContent().equals(answer)){
+                    correctAnswerNumber++;
+                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+                }else{
+                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+                }
             }
         }
 
         Log.e("Submit", "correctAnswerNumber: "+correctAnswerNumber+"//noAnswerNumber:"+noAnswerNumber );
         HistorySubmit historySubmit = new HistorySubmit(project.getID(),totalTime, Utils.getTimeCurrent(),correctAnswerNumber,noAnswerNumber,questionNumber );
-        HistorySubmitDB.getInstance(getContext()).create(historySubmit);
-        for(Question question: questions){
-            question.getUserAnswers().setHistoryId(historySubmit.getID());
-            RecordUserAnswer recordUserAnswer = question.getUserAnswers();
-            Log.e("recordUserAnswer", recordUserAnswer.toString());
-            RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
-        }
+//        HistorySubmitDB.getInstance(getContext()).create(historySubmit);
+//        for(Question question: questions){
+//            question.getUserAnswers().setHistoryId(historySubmit.getID());
+//            RecordUserAnswer recordUserAnswer = question.getUserAnswers();
+//            RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
+//        }
+        return historySubmit;
     }
 
     @Override
@@ -102,7 +111,8 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
     @Override
     public Project getProject() {
         int id = getStateBundle().getInt(AppConstants.PROJECT_ID);
-        return ProjectDB.getInstance(getContext()).findByPk(id);
+        project = ProjectDB.getInstance(getContext()).findByPk(id);
+        return project;
     }
 
     @Override
@@ -124,5 +134,14 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
             }});
         }
         return null;
+    }
+
+    @Override
+    public void setTimeStart(int time) {
+        this.currentTime = time;
+    }
+    @Override
+    public void setTimeType(int type) {
+        this.timerType = type;
     }
 }

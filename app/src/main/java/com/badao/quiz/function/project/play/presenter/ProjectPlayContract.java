@@ -15,16 +15,20 @@ public class ProjectPlayContract {
         void updateMenuQuestion();
         void initMenuHeader();
         void observe();
-
+        void setViewMode(int viewMode);
+        void setModeMenuShowAnswer();
+        void changeViewSubmit(HistorySubmit historySubmit);
     }
 
     public interface Presenter extends BaseContract.Presenter<ProjectPlayContract.View> {
         int getViewMode();
         Project getProject();
         List<Question> getQuestions(int projectId);
+        void setTimeStart(int time);
+        void setTimeType(int type);
         void start();
         void stopTime();
-        void submit(Project project);
+        HistorySubmit submit(Project project);
 
         HistorySubmit getHistorySubmit();
         List<RecordUserAnswer> getUserAnswers();

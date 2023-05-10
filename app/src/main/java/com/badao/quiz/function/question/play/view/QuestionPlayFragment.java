@@ -66,10 +66,9 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
     @Override
     public void initMode() {
         if(viewMode == AppConstants.PROJECT_PLAY){
-            AnswerFillTextAdapter answerFillTextAdapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(), new AnswerFillTextAdapter.AnswerFillListener() {
+            AnswerFillTextAdapter answerFillTextAdapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(),question.getUserAnswers(), new AnswerFillTextAdapter.AnswerFillListener() {
                 @Override
                 public void onAnswerChange(String content) {
-
                     getViewModel().getMlUserChangeAnswer().postValue(
                             new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), !content.isEmpty())));
                 }
@@ -77,10 +76,11 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
             rcAnswer.setAdapter(answerFillTextAdapter);
             rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
         }else if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-            UserAnswerFillTextAdapter userAnswerFillTextAdapter = new UserAnswerFillTextAdapter(getContext(), question.getAnswers(), question.getUserAnswers());
+            UserAnswerFillTextAdapter userAnswerFillTextAdapter = new UserAnswerFillTextAdapter(getActivity(), question.getAnswers(), question.getUserAnswers());
             rcAnswer.setAdapter(userAnswerFillTextAdapter);
             rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
 
+            updateSolution(true);
             SolutionFillTextAdapter solutionFillTextAdapter = new SolutionFillTextAdapter(getContext(), question.getAnswers());
             rcSolution.setAdapter(solutionFillTextAdapter);
             rcSolution.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
@@ -113,7 +113,9 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
 
     public void setViewMode(int viewMode){
         this.viewMode = viewMode;
-        initMode();
+        if(llSolution != null){
+            initMode();
+        }
     }
 
     public class QuestionUserAnswer{

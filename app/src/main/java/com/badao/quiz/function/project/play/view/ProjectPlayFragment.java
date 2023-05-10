@@ -177,9 +177,13 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
             @Override
             public void onClick(View view) {
                 if(viewMode == AppConstants.PROJECT_PLAY){
-                    getPresenter().submit(project);
-                    Log.e("Submit", "OK");
-                    adapter.setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+//                    getPresenter().submit(project);
+//                    Log.e("Submit", "OK");
+//                    adapter.setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+                    historySubmit = getPresenter().submit(project);
+                    setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+                    changeViewSubmit(historySubmit);
+
                 }
             }
         });
@@ -214,12 +218,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                     tvContent.setText(question.getContent());
                     menuItem.setActionView(actionView);
                     if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-                        ImageView imageView = actionView.findViewById(R.id.imQuestionAnswer);
-                        if(question.getUserAnswers().getStatus() == AppConstants.QUESTION_ANSWER_CORRECT){
-                            imageView.setImageResource(R.drawable.ic_correct);
-                        }else{
-                            imageView.setImageResource(R.drawable.ic_wrong);
-                        }
+                        setModeMenuShowAnswer();
                     }
                 }
             }
@@ -289,6 +288,23 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                 Log.e("Play", question.toString());
             }
             updateTime("00:00");
+
+            int duration = project.getDuration();
+            if(duration == -1){
+                getPresenter().setTimeStart(0);
+                getPresenter().setTimeType(- AppConstants.TIMER_COUNTDOWN);
+            }else if(duration < -1){
+                getPresenter().setTimeStart(-duration*project.getQuestions().size());
+                getPresenter().setTimeType( AppConstants.TIMER_COUNTDOWN);
+            }else{
+                getPresenter().setTimeStart(duration);
+                getPresenter().setTimeType( AppConstants.TIMER_COUNTDOWN);
+            }
+
+            for(Question question: project.getQuestions()){
+                question.setAnswers(QuestionAnswerDB.getInstance(getContext()).findBy(question.getID()));
+            }
+
             getPresenter().start();
         }else if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
             historySubmit = getPresenter().getHistorySubmit();
@@ -307,6 +323,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         }
     }
 
+
     public void setBackgroundColorForMenuItem(MenuItem menuItem, @DrawableRes int draw){
         View view = menuItem.getActionView();
         view.setBackground(ContextCompat.getDrawable(getContext(), draw));
@@ -319,5 +336,36 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         MenuItem menuItem = navigationView.getMenu().getItem(position);
         menuItemSelected = menuItem;
         setBackgroundColorForMenuItem(menuItem, R.drawable.radius_border_solid);
+    }
+
+    @Override
+    public void setViewMode(int viewMode) {
+        this.viewMode = viewMode;
+        adapter.setViewMode(viewMode);
+    }
+
+    @Override
+    public void setModeMenuShowAnswer() {
+        Menu menu = navigationView.getMenu();
+        int n = menu.size();
+
+        for(int i = 0; i< n; i++){
+            MenuItem menuItem = menu.getItem(i);
+            ImageView imageView = menuItem.getActionView().findViewById(R.id.imQuestionAnswer);
+            Question question = project.getQuestions().get(i);
+            if(question.getUserAnswers().getStatus() == AppConstants.QUESTION_ANSWER_CORRECT){
+                imageView.setImageResource(R.drawable.ic_correct);
+            }else{
+                imageView.setImageResource(R.drawable.ic_wrong);
+            }
+        }
+    }
+
+    @Override
+    public void changeViewSubmit(HistorySubmit historySubmit) {
+        tvTimeElapsed.setText(Utils.displayTime(historySubmit.getTimeElapsed()));
+        Log.e("historySubmit.getTimeElapsed(", Utils.displayTime(historySubmit.getTimeElapsed()));
+        setModeMenuShowAnswer();
+        btSubmit.setVisibility(View.INVISIBLE);
     }
 }
