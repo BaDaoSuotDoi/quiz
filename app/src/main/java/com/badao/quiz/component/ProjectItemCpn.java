@@ -68,7 +68,13 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
         LayoutInflater.from(getContext()).inflate(R.layout.item_project, this, true);
         ButterKnife.bind(this);
         Log.e("Project", "init view");
-        tvName.setText(project.getName());
+        String name = project.getName();
+        if(name.length() > 8){
+            tvName.setText(name.substring(0, 5)+"...");
+        }else{
+            tvName.setText(name);
+        }
+
         tvCreatedAt.setText(project.getCreatedAt());
         imAction.setOnClickListener(new OnClickListener() {
             @Override
@@ -86,14 +92,10 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
                                 return true;
                             case R.id.action_delete:
                                 Log.e("Project Action", "delete");
-                                ProjectDB.getInstance(getContext()).destroy(project);
                                 iAction.onDelete(project);
                                 return true;
                             case R.id.action_play:
                                 iAction.navigateProjectPlay(project);
-                                return true;
-                            case R.id.action_rename:
-                                Log.e("Project Action", "rename");
                                 return true;
                         }
                         return false;

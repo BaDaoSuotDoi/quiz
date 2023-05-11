@@ -8,6 +8,8 @@ public class HomeContract {
         void observe();
         void addProject(Project project);
         void refreshView();
+        void initProfileHeaderMenu();
+        void setupSearch();
     }
 
     public interface Presenter extends BaseContract.Presenter<HomeContract.View> {

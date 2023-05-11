@@ -52,6 +52,7 @@ public class ProjectDB  extends  SQLiteHelper{
         return  null;
     }
 
+
     public int getNumberQuestion(int id){
         String[] args = {id+""};
         Cursor cursor = sqlRead.rawQuery("select count(*) from question_versions where project_id = ?  and status = 1", args);
@@ -73,6 +74,16 @@ public class ProjectDB  extends  SQLiteHelper{
         List<Project> projects = new ArrayList<>();
         String[] args = {};
         Cursor cursor = sqlRead.rawQuery("select * from projects", args);
+        while (cursor != null && cursor.moveToNext()){
+            projects.add(exact(cursor));
+        }
+        return  projects;
+    }
+
+    public List<Project> findByName(String name){
+        List<Project> projects = new ArrayList<>();
+        String[] args = {"%"+name+"%"};
+        Cursor cursor = sqlRead.rawQuery("select * from projects where name like ?", args);
         while (cursor != null && cursor.moveToNext()){
             projects.add(exact(cursor));
         }

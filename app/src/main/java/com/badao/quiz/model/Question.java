@@ -27,7 +27,7 @@ public class Question {
         this.isSync = isSync;
         this.comment = comment;
         this.position = position;
-        this.userAnswers = new RecordUserAnswer(this.ID);
+        this.userAnswers = new RecordUserAnswer(this.ID, this.type);
     }
 
     public boolean isValid(){

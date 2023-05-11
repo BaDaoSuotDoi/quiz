@@ -3,6 +3,7 @@ package com.badao.quiz.function.project.play.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.badao.quiz.R;
 import com.badao.quiz.base.mvp.presenter.BasePresenter;
 import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.HistorySubmitDB;
@@ -78,13 +79,44 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                 noAnswerNumber++;
             }else if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
                 QuestionAnswer questionAnswer =  question.getAnswers().get(0);
-                Log.e("questionAnswer", questionAnswer.toString());
                 if(questionAnswer.getContent().equals(answer)){
                     correctAnswerNumber++;
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
                 }else{
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
                 }
+            }else if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
+                String[] elements = answer.split(AppConstants.TOKEN_SPLIT_ANSWER_USER_SELECTION);
+                int questionCorrectNumber = 0;
+                boolean isAnswerCorrect = true;
+                for( QuestionAnswer questionAnswer : question.getAnswers()){
+                    if(questionAnswer.getContent().startsWith(AppConstants.TOKEN_TRUE_SELECT_ANSWER)){
+                        questionCorrectNumber++;
+                        boolean isCorrect = false;
+                        for (String element : elements) {
+                            if (!element.isEmpty()) {
+                                int id = Integer.parseInt(element);
+                                if (questionAnswer.getID() == id) {
+                                    isCorrect = true;
+                                }
+                            }
+                        }
+                        if(!isCorrect){
+                            isAnswerCorrect = false;
+                        }
+                    }
+                    Log.e("questionAnswer", questionAnswer.toString());
+                }
+
+                // user select all answer correct
+                if(isAnswerCorrect){
+                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+                }
+                // when user selection all answer correct and some answer wrong
+                if(questionCorrectNumber != elements.length - 1){
+                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+                }
+
             }
         }
 

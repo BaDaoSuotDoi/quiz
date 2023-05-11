@@ -5,6 +5,8 @@ import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import androidx.appcompat.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.badao.quiz.R;
 import com.badao.quiz.base.animation.AnimationType;
+import com.badao.quiz.base.dialog.DeleteProjectDialog;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.component.ProjectItemCpn;
@@ -30,6 +33,9 @@ import com.badao.quiz.utils.BundleBuilder;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,6 +81,8 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
                 return false;
             }
         });
+        initProfileHeaderMenu();
+        setupSearch();
         observe();
     }
 
@@ -130,9 +138,46 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
 
             @Override
             public void onDelete(Project project) {
-                getPresenter().initProjects();
+                DeleteProjectDialog dialog = new DeleteProjectDialog(project, new DeleteProjectDialog.IListener() {
+                    @Override
+                    public void onDelete() {
+                        ProjectDB.getInstance(getContext()).destroy(project);
+                        getPresenter().initProjects();
+                    }
+                });
+                dialog.show(getParentFragmentManager(), DeleteProjectDialog.class.getName());
             }
         }));
+    }
+
+    @Override
+    public void setupSearch() {
+        SearchView searchView = (SearchView) toolbar.getMenu().findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Handle search query submit
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<Project> projects = ProjectDB.getInstance(getContext()).findByName(newText);
+                refreshView();
+                for(Project project: projects){
+                    addProject(project);
+                }
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void initProfileHeaderMenu() {
+        View view = navigationView.getHeaderView(0);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        TextView textView = view.findViewById(R.id.tvEmail);
+        textView.setText(user.getEmail());
     }
 
     @Override

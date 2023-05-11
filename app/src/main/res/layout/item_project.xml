@@ -1,47 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="110dp"
-    android:layout_height="90dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/primary"
-    android:layout_marginStart="8dp"
-    android:layout_marginBottom="10dp">
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Name project"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/radius_border_solid"
+    android:layout_margin="5dp"
+    >
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@id/llName"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name project"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            >
+            <ImageView
+                android:layout_marginStart="8dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/three_dot"
+                android:textColor="@color/white"
+                android:id="@+id/imAction"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llName"
+        android:padding="5dp"
+        android:gravity="center_vertical"
         >
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:src="@drawable/calendar"
             />
         <TextView
             android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2022/10/20"
+            android:text="2022/10/20 15:25:00"
             android:maxWidth="60dp"
             android:textColor="@color/white"
             android:id="@+id/tvCreatedAt"
-            />
-
-        <ImageView
-            android:layout_marginStart="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/three_dot"
-            android:textColor="@color/white"
-            android:id="@+id/imAction"
+            android:textSize="10dp"
             />
     </LinearLayout>
 

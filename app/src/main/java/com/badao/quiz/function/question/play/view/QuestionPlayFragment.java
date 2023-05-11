@@ -16,8 +16,11 @@ import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.question.edit.presenter.QuestionEditPresenter;
 import com.badao.quiz.function.question.play.adapter.AnswerFillTextAdapter;
+import com.badao.quiz.function.question.play.adapter.AnswerSelectionAdapter;
 import com.badao.quiz.function.question.play.adapter.SolutionFillTextAdapter;
+import com.badao.quiz.function.question.play.adapter.SolutionSelectionAdapter;
 import com.badao.quiz.function.question.play.adapter.UserAnswerFillTextAdapter;
+import com.badao.quiz.function.question.play.adapter.UserSelectionAdapter;
 import com.badao.quiz.function.question.play.presenter.QuestionPlayContract;
 import com.badao.quiz.model.Question;
 
@@ -66,26 +69,49 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
     @Override
     public void initMode() {
         if(viewMode == AppConstants.PROJECT_PLAY){
-            AnswerFillTextAdapter answerFillTextAdapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(),question.getUserAnswers(), new AnswerFillTextAdapter.AnswerFillListener() {
-                @Override
-                public void onAnswerChange(String content) {
-                    getViewModel().getMlUserChangeAnswer().postValue(
-                            new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), !content.isEmpty())));
-                }
-            });
-            rcAnswer.setAdapter(answerFillTextAdapter);
-            rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+            if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
+                AnswerFillTextAdapter answerFillTextAdapter = new AnswerFillTextAdapter(getActivity(), question.getAnswers(),question.getUserAnswers(), new AnswerFillTextAdapter.AnswerFillListener() {
+                    @Override
+                    public void onAnswerChange(String content) {
+                        getViewModel().getMlUserChangeAnswer().postValue(
+                                new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), !content.isEmpty())));
+                    }
+                });
+                rcAnswer.setAdapter(answerFillTextAdapter);
+                rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+            }else{
+                Log.e("QUESTION_SELECTION_TYPE","OK");
+                AnswerSelectionAdapter answerSelectionAdapter = new AnswerSelectionAdapter(getContext(), question.getAnswers(), question.getUserAnswers(), new AnswerSelectionAdapter.IListener() {
+                    @Override
+                    public void onSelect(boolean isSelect) {
+                        getViewModel().getMlUserChangeAnswer().postValue(
+                                new MainActivityVM.Payload(AppConstants.USER_CHANGE_ANSWER, new QuestionUserAnswer(question.getPosition(), isSelect)));
+                    }
+                });
+                rcAnswer.setAdapter(answerSelectionAdapter);
+                rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+            }
         }else if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-            UserAnswerFillTextAdapter userAnswerFillTextAdapter = new UserAnswerFillTextAdapter(getActivity(), question.getAnswers(), question.getUserAnswers());
-            rcAnswer.setAdapter(userAnswerFillTextAdapter);
-            rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+            if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
+                UserAnswerFillTextAdapter userAnswerFillTextAdapter = new UserAnswerFillTextAdapter(getActivity(), question.getAnswers(), question.getUserAnswers());
+                rcAnswer.setAdapter(userAnswerFillTextAdapter);
+                rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
 
-            updateSolution(true);
-            SolutionFillTextAdapter solutionFillTextAdapter = new SolutionFillTextAdapter(getContext(), question.getAnswers());
-            rcSolution.setAdapter(solutionFillTextAdapter);
-            rcSolution.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+                updateSolution(true);
+                SolutionFillTextAdapter solutionFillTextAdapter = new SolutionFillTextAdapter(getContext(), question.getAnswers());
+                rcSolution.setAdapter(solutionFillTextAdapter);
+                rcSolution.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+            }else{
+                UserSelectionAdapter userSelectionAdapter = new UserSelectionAdapter(getActivity(), question.getAnswers(), question.getUserAnswers());
+                rcAnswer.setAdapter(userSelectionAdapter);
+                rcAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+
+                updateSolution(true);
+                SolutionSelectionAdapter solutionSelectionAdapter = new SolutionSelectionAdapter(getContext(), question.getAnswers());
+                rcSolution.setAdapter(solutionSelectionAdapter);
+                rcSolution.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+            }
         }
-
     }
 
     @Override

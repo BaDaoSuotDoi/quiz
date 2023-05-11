@@ -154,7 +154,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
                         }
                         question.setType(AppConstants.QUESTION_NORMAL_TYPE);
                         adapter = new AnswerAdapter(getActivity(), question.getAnswers(), question.getType(),false);
-
+                        listenerAdapter();
                         rvListAnswer.setAdapter(adapter);
 
                         layoutParams.width = 0;
@@ -189,6 +189,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
             }
         }
         adapter = new AnswerAdapter(getActivity(), question.getAnswers(), question.getType(), false);
+        listenerAdapter();
         rvListAnswer.setAdapter(adapter);
         rvListAnswer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
     }

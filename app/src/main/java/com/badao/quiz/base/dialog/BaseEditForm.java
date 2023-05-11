@@ -25,12 +25,14 @@ public abstract class BaseEditForm  extends BaseDialog{
     @BindView(R.id.tvApply)
     TextView tvApply;
 
+    private boolean isHideEditText = false;
     private String title;
     private String content;
     private String hint;
     private String labelApply;
     private String instruction = "";
     private boolean isInputNumber = false;
+    private boolean isShowApply = false;
 
     @Override
     public void onStart() {
@@ -64,7 +66,7 @@ public abstract class BaseEditForm  extends BaseDialog{
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 ViewGroup.LayoutParams layoutParams =  tvApply.getLayoutParams();
-                if(!content.equals(charSequence.toString())){
+                if(content!=null && !content.equals(charSequence.toString())){
                     layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
                     layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                     tvApply.setLayoutParams(layoutParams);
@@ -103,12 +105,25 @@ public abstract class BaseEditForm  extends BaseDialog{
         if(isInputNumber){
             this.edContent.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
+        if(isHideEditText){
+            edContent.setVisibility(View.INVISIBLE);
+            ViewGroup.LayoutParams layoutParams =  edContent.getLayoutParams();
+            layoutParams.width = 0;
+            layoutParams.height = 0;
+            edContent.setLayoutParams(layoutParams);
+        }
+        if(isShowApply){
+            ViewGroup.LayoutParams layoutParams =  tvApply.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tvApply.setLayoutParams(layoutParams);
+        }
     }
 
     public abstract void onClickApply(String content);
 
     public void setTitle(String title){
-        this.title =title;
+        this.title = title;
     }
 
     public void setHint(String hint){
@@ -125,9 +140,19 @@ public abstract class BaseEditForm  extends BaseDialog{
     public void setInputNumber(){
         isInputNumber = true;
     }
+
+    public void setHideEditText(boolean hideEditText) {
+        isHideEditText = hideEditText;
+    }
+
     public void setLabelApply(String label){
         this.labelApply = label;
     }
+
+    public void setShowApply(boolean showApply) {
+        isShowApply = showApply;
+    }
+
     @Override
     protected int getDialogLayout() {
         return R.layout.dialog_edit_form;

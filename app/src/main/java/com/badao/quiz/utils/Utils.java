@@ -8,8 +8,15 @@ import com.badao.quiz.model.Question;
 import com.badao.quiz.model.QuestionAnswer;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class Utils {
 
@@ -75,5 +82,23 @@ public class Utils {
         }
         String[] time = t.split(" ");
         return Integer.parseInt(time[0]);
+    }
+
+    public static List<Integer> generateRandomIntList(int range, int num) {
+        List<Integer> myList;
+        if (range < num) {
+            num = range;
+        }
+
+        Random random = new Random();
+        Set<Integer> set = new HashSet<>();
+        while (set.size() < num) {
+            set.add(random.nextInt(range));
+        }
+
+        myList = new ArrayList<>(set);
+        Collections.shuffle(myList);
+
+        return myList;
     }
 }

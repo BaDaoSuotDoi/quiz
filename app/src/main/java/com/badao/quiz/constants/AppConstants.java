@@ -21,6 +21,8 @@ public class AppConstants {
     public  static final int QUESTION_NO_ANSWER= 0;
     public  static final int USER_CHANGE_ANSWER= 0;
     public  static final String FORMAT_RATIO= "%d/%d";
+    public  static final String FORMAT_ANSWER_USER_SELECTION= "%d#";
     public  static final String TOKEN_TRUE_SELECT_ANSWER= "1#";
     public  static final String TOKEN_FALSE_SELECT_ANSWER= "0#";
+    public  static final String TOKEN_SPLIT_ANSWER_USER_SELECTION= "#";
 }

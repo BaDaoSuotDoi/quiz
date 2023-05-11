@@ -282,8 +282,20 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
 
     public void initViewMode(){
         if(viewMode == AppConstants.PROJECT_PLAY){
-            questions = getPresenter().getQuestions(project.getID());
-            project.setQuestions(questions);
+            List<Question> allQuestion  = getPresenter().getQuestions(project.getID());
+
+            if(!project.isRandom()){
+                questions = allQuestion;
+                project.setQuestions(questions);
+            }else{
+                List<Question> questionRandom = new ArrayList<>();
+                List<Integer> randomIntArray = Utils.generateRandomIntList(allQuestion.size(), project.getQuestionPerSession());
+                for(int index: randomIntArray){
+                    questionRandom.add(allQuestion.get(index));
+                }
+                questions = questionRandom;
+                project.setQuestions(questions);
+            }
             for(Question question: questions){
                 Log.e("Play", question.toString());
             }
@@ -358,6 +370,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
             }else{
                 imageView.setImageResource(R.drawable.ic_wrong);
             }
+
         }
     }
 

@@ -1,5 +1,7 @@
 package com.badao.quiz.model;
 
+import com.badao.quiz.constants.AppConstants;
+
 public class RecordUserAnswer {
     private int ID = 0;
     private int historyId;
@@ -10,8 +12,11 @@ public class RecordUserAnswer {
     private String createdAt;
     private String lastUpdated;
 
-    public RecordUserAnswer(int questionId){
+    public RecordUserAnswer(int questionId, int type){
         this.questionId = questionId;
+//        if(type == AppConstants.QUESTION_SELECTION_TYPE){
+//            answer = AppConstants.TOKEN_FALSE_SELECT_ANSWER;
+//        }
     }
 
     public RecordUserAnswer(int ID,int historyId,int questionId, String answer, int status, boolean isSync, String createdAt, String lastUpdated) {
