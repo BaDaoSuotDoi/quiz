@@ -46,7 +46,7 @@ public class UserSelectionAdapter extends BaseAdapter<QuestionAnswer, UserSelect
         for(int i = 0; i< elements.length; i++){
             if(!elements[i].isEmpty()){
                 int id = Integer.parseInt(elements[i]);
-                if(item.getID() == id){
+                if(item.getId() == id){
                     if(item.getContent().startsWith(AppConstants.TOKEN_TRUE_SELECT_ANSWER)){
                         holder.imCheck.setImageResource(R.drawable.ic_correct);
                     }else{

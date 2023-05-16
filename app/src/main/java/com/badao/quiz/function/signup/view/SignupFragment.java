@@ -18,7 +18,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 @SuppressLint("NonConstantResourceId")
-@ViewInflate(presenter = SignupPresenter.class, layout = R.layout.fragment_signup, hasToolbar = false, isBackHardwareDisable = true)
+@ViewInflate(presenter = SignupPresenter.class, layout = R.layout.fragment_signup, hasToolbar = false)
 public class SignupFragment extends BaseAnnotatedFragment<SignupContract.View, SignupContract.Presenter> implements SignupContract.View{
     @BindView(R.id.edEmail)
     EditText edEmail;
@@ -43,6 +43,20 @@ public class SignupFragment extends BaseAnnotatedFragment<SignupContract.View, S
         String email = edEmail.getText().toString();
         String password = edPassword.getText().toString();
         String rePassword = edRePassword.getText().toString();
+        if(email.isEmpty()){
+            Toast.makeText(getContext(), "Email empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(password.isEmpty()){
+            Toast.makeText(getContext(), "Password empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(rePassword.isEmpty()){
+            Toast.makeText(getContext(), "RePassword empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(!password.equals(rePassword)){
             Toast.makeText(getContext(), "Password doesn't match", Toast.LENGTH_SHORT).show();
             return;

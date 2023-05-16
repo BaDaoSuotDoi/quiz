@@ -282,7 +282,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
 
     public void initViewMode(){
         if(viewMode == AppConstants.PROJECT_PLAY){
-            List<Question> allQuestion  = getPresenter().getQuestions(project.getID());
+            List<Question> allQuestion  = getPresenter().getQuestions(project.getId());
 
             if(!project.isRandom()){
                 questions = allQuestion;
@@ -314,7 +314,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
             }
 
             for(Question question: project.getQuestions()){
-                question.setAnswers(QuestionAnswerDB.getInstance(getContext()).findBy(question.getID()));
+                question.setAnswers(QuestionAnswerDB.getInstance(getContext()).findBy(question.getId()));
             }
 
             getPresenter().start();
@@ -324,7 +324,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
             questions = new ArrayList<>();
             for(RecordUserAnswer recordUserAnswer: recordUserAnswers){
                 Question question = QuestionDB.getInstance(getContext()).findByPk(recordUserAnswer.getQuestionId());
-                question.setAnswers(QuestionAnswerDB.getInstance(getContext()).findBy(question.getID()));
+                question.setAnswers(QuestionAnswerDB.getInstance(getContext()).findBy(question.getId()));
                 question.setUserAnswers(recordUserAnswer);
                 questions.add(question);
                 Log.e("Question result", question.toString());

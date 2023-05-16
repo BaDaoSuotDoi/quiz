@@ -26,7 +26,6 @@ public abstract class BaseMvpActivity<P extends BaseContract.Presenter> extends 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!availableCreateActivity()) return;
         presenter = createPresenterInstance();
 
         if (presenter != null) {
@@ -50,9 +49,4 @@ public abstract class BaseMvpActivity<P extends BaseContract.Presenter> extends 
         }
     }
 
-
-
-    protected boolean availableCreateActivity() {
-        return true;
-    }
 }

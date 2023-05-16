@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
-    private int ID = 0;
+    private int id = 0;
     private String content = "";
     private String createdAt = "";
     private String lastUpdated = "";
@@ -17,9 +17,13 @@ public class Question {
 
     private boolean isTemp = false;
     private boolean isViewed = false;
+    private int status = 0;
+    private int projectId;
+    private int version;
 
-    public Question(int ID, String content, String createdAt, String lastUpdated, int type, boolean isSync, String comment, int position) {
-        this.ID = ID;
+    public Question(int id, String content, String createdAt, String lastUpdated, int type, boolean isSync, String comment, int position,
+                    int status, int projectId, int version) {
+        this.id = id;
         this.content = content;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
@@ -27,35 +31,41 @@ public class Question {
         this.isSync = isSync;
         this.comment = comment;
         this.position = position;
-        this.userAnswers = new RecordUserAnswer(this.ID, this.type);
+        this.userAnswers = new RecordUserAnswer(this.id, this.type);
+        this.status = status;
+        this.projectId = projectId;
+        this.version = version;
     }
 
     public boolean isValid(){
-        return (!this.isTemp && !(this.ID == 0 && !this.isViewed));
+        return (!this.isTemp && !(this.id == 0 && !this.isViewed));
     }
     private List<QuestionAnswer> answers = new ArrayList<>();
     private RecordUserAnswer userAnswers ;
 
     public Question(int id) {
-        this.ID = id;
-        this.answers.add(new QuestionAnswer(this.ID));
+        this.id = id;
+        this.answers.add(new QuestionAnswer(this.id));
     }
 
-    public Question(int position, boolean isTemp) {
+    public Question(int projectId,int position, boolean isTemp) {
+        this.projectId = projectId;
         this.position = position;
-        this.answers.add(new QuestionAnswer(this.ID));
+        this.answers.add(new QuestionAnswer(this.id));
         this.isTemp = isTemp;
+        this.version = 1;
+        this.status = 1;
     }
     public Question() {
-        this.answers.add(new QuestionAnswer(this.ID));
+        this.answers.add(new QuestionAnswer(this.id));
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -146,10 +156,34 @@ public class Question {
         this.position = position;
     }
 
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
-                "ID=" + ID +
+                "ID=" + id +
                 ", content='" + content + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", lastUpdated='" + lastUpdated + '\'' +
@@ -159,8 +193,15 @@ public class Question {
                 ", position=" + position +
                 ", isTemp=" + isTemp +
                 ", isViewed=" + isViewed +
+                ", status=" + status +
+                ", projectId=" + projectId +
+                ", version=" + version +
                 ", answers=" + answers +
                 ", userAnswers=" + userAnswers +
                 '}';
+    }
+
+    public void upgrade() {
+        this.version += 1;
     }
 }

@@ -1,6 +1,7 @@
 package com.badao.quiz.function.home.presenter;
 import com.badao.quiz.base.contract.BaseContract;
 import com.badao.quiz.model.Project;
+import com.google.firebase.database.DatabaseReference;
 
 public class HomeContract {
 
@@ -10,9 +11,15 @@ public class HomeContract {
         void refreshView();
         void initProfileHeaderMenu();
         void setupSearch();
+        void syncSuccess();
+        DatabaseReference getMDatabase();
     }
 
     public interface Presenter extends BaseContract.Presenter<HomeContract.View> {
         void initProjects();
+        void firebaseListener();
+
+        void sync();
+
     }
 }

@@ -85,8 +85,14 @@ public abstract class BaseFragment extends Fragment {
     public boolean popBackStack() {
         NavHelper navHelper = findMainNav();
         if (navHelper != null) {
+            if(navHelper.getCurrentDestination().getId() == R.id.homeFragment){
+                getActivity().finish();
+                return false;
+            }
             return navHelper.popBackStack();
         } else if (getView() != null) {
+            Log.e("Pop here", "2");
+
             Navigation.findNavController(getView()).popBackStack();
         }
 

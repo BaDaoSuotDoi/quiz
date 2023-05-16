@@ -40,6 +40,31 @@
         android:layout_below="@+id/llName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/llSchedule"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        >
+        <ImageView
+            android:id="@+id/imSchedule"
+            android:src="@drawable/ic_clock"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            />
+
+        <TextView
+            android:id="@+id/tvSchedule"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/black"
+            android:text="Schedule"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_below="@+id/llSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/llCreatedAt"
         android:layout_margin="5dp"
         android:padding="5dp"

@@ -45,14 +45,12 @@ public abstract class BaseDialog extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        if (getDialog() != null) hideSystemUi(getDialog().getWindow());
     }
 
     @CallSuper
     @Override
     public void onResume() {
         super.onResume();
-//        if (getDialog() != null) hideSystemUi(getDialog().getWindow());
     }
 
     @Override
@@ -111,14 +109,5 @@ public abstract class BaseDialog extends DialogFragment {
 
     public void setupView(){
 
-    }
-
-    protected void setupDialog(int width, int height) {
-        if (getDialog() == null || getDialog().getWindow() == null) {
-            return;
-        }
-        //set dialog size
-        getDialog().getWindow().setLayout(width,
-                height);
     }
 }

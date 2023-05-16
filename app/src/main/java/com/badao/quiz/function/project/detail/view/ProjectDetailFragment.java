@@ -20,11 +20,14 @@ import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.dialog.ProjectNameDialog;
+import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.project.detail.dialog.QuestionPerSessionDialog;
+import com.badao.quiz.function.project.detail.dialog.ScheduleDialog;
 import com.badao.quiz.function.project.detail.dialog.SetupTimeDurationDialog;
 import com.badao.quiz.function.project.detail.presenter.ProjectDetailContract;
 import com.badao.quiz.function.project.detail.presenter.ProjectDetailPresenter;
 import com.badao.quiz.model.Project;
+import com.badao.quiz.service.NotificationService;
 import com.badao.quiz.utils.BundleBuilder;
 
 import java.util.HashMap;
@@ -39,6 +42,10 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     TextView tvName;
     @BindView(R.id.imName)
     ImageView imName;
+    @BindView(R.id.imSchedule)
+    ImageView imSchedule;
+    @BindView(R.id.tvSchedule)
+    TextView tvSchedule;
     @BindView(R.id.tvCreatedAt)
     TextView tvCreatedAt;
     @BindView(R.id.tvUpdatedAt)
@@ -103,7 +110,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                         switch (menuItem.getItemId()){
                             case R.id.action_yes:
                                 keys.put("is_random", 1+"");
-                                ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                                ProjectDB.getInstance(getContext()).update(keys, project.getId());
                                 Toast.makeText(getContext(),"Update Random Successful", Toast.LENGTH_SHORT).show();
                                 layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -112,7 +119,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                                 return true;
                             case R.id.action_no:
                                 keys.put("is_random", 0+"");
-                                ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                                ProjectDB.getInstance(getContext()).update(keys, project.getId());
                                 Toast.makeText(getContext(),"Update Random Successful", Toast.LENGTH_SHORT).show();
                                 layoutParams.height = 0;
                                 layoutParams.width = 0;
@@ -134,18 +141,12 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
             }
         });
 
-        imDuration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navigate(R.id.projectQuestionEditFragment, BundleBuilder.bundleOf(
-                        Pair.create(AppConstants.PROJECT_ID, project.getID())
+                        Pair.create(AppConstants.PROJECT_ID, project.getId())
                 ), AnimationType.FROM_RIGHT_TO_LEFT);
             }
         });
@@ -165,7 +166,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                     public void onDataChange(String content) {
                         Map<String, String> keys = new HashMap<>();
                         keys.put("question_per_session", content);
-                        ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                        ProjectDB.getInstance(getContext()).update(keys, project.getId());
                         tvQuestionPerSession.setText(content);
                         project.setQuestionPerSession(Integer.parseInt(content));
                         Toast.makeText(getContext(), "Update question per session successful!",Toast.LENGTH_SHORT).show();
@@ -184,12 +185,30 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                         Log.e("Save duration", "Ok");
                         Map<String, String> keys = new HashMap<>();
                         keys.put("duration",String.valueOf(time));
-                        ProjectDB.getInstance(getContext()).update(keys, project.getID());
+                        ProjectDB.getInstance(getContext()).update(keys, project.getId());
                         project.setDuration(time);
                         updateDuration();
                     }
                 });
                 dialog.show(getParentFragmentManager(),SetupTimeDurationDialog.class.getName());
+            }
+        });
+        imSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScheduleDialog scheduleDialog = new ScheduleDialog("", new ScheduleDialog.IListener() {
+                    @Override
+                    public void onSave(String date) {
+                        Log.e("Schedule",date);
+                        Map<String, String> keys = new HashMap<>();
+                        keys.put("schedule", date);
+                        ProjectDB.getInstance(getContext()).update(keys, project.getId());
+                        tvSchedule.setText(date);
+                        project.setSchedule(date);
+                        getViewModel().getMlScheduleNotificationProject().postValue(new MainActivityVM.Payload(AppConstants.SCHEDULE_NOTIFICATION, project));
+                    }
+                });
+               scheduleDialog.show(getParentFragmentManager(), ScheduleDialog.class.getName());
             }
         });
         observe();
@@ -203,12 +222,13 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         updateDuration();
         updateCreatedAt();
         updateUpdatedAt();
+        tvSchedule.setText(project.getSchedule());
     }
 
     @Override
     public void navigateProjectPlay() {
         navigate(R.id.projectPlayFragment, BundleBuilder.bundleOf(
-                Pair.create(AppConstants.PROJECT_ID, project.getID()),
+                Pair.create(AppConstants.PROJECT_ID, project.getId()),
                 Pair.create(AppConstants.VIEW_MODE, AppConstants.PROJECT_PLAY)
         ), AnimationType.FROM_RIGHT_TO_LEFT);
     }

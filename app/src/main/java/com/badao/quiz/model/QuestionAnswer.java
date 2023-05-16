@@ -3,7 +3,7 @@ package com.badao.quiz.model;
 import com.badao.quiz.constants.AppConstants;
 
 public class QuestionAnswer {
-    private int ID;
+    private int id;
     private int questionId;
     private String content = "";
     private int type = AppConstants.QUESTION_NORMAL_TYPE;
@@ -23,8 +23,8 @@ public class QuestionAnswer {
         this.questionId = questionId;
     }
 
-    public QuestionAnswer(int ID,int questionId, String content, int type, boolean isSync, String createdAt, String lastUpdated) {
-        this.ID = ID;
+    public QuestionAnswer(int id,int questionId, String content, int type, boolean isSync, String createdAt, String lastUpdated) {
+        this.id = id;
         this.questionId = questionId;
         this.content = content;
         this.type = type;
@@ -33,12 +33,12 @@ public class QuestionAnswer {
         this.lastUpdated = lastUpdated;
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -96,7 +96,7 @@ public class QuestionAnswer {
     @Override
     public String toString() {
         return "QuestionAnswer{" +
-                "ID=" + ID +
+                "ID=" + id +
                 ", questionId=" + questionId +
                 ", content='" + content + '\'' +
                 ", type=" + type +

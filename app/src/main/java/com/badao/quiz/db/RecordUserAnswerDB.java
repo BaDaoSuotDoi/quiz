@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.RecordUserAnswer;
 import com.badao.quiz.utils.Utils;
@@ -43,7 +44,7 @@ public class RecordUserAnswerDB extends SQLiteHelper{
         values.put("last_updated", recordUserAnswer.getLastUpdated());
         long id = sqlWrite.insert(RecordUserAnswerDB.name, null, values);
         Log.e(" RecordUserAnswerDB ID", id+"");
-        recordUserAnswer.setID((int)id);
+        recordUserAnswer.setId((int)id);
         return id ;
     }
     public List<RecordUserAnswer> findBy(Map<String, String>keys){
@@ -82,5 +83,25 @@ public class RecordUserAnswerDB extends SQLiteHelper{
         String lastUpdated = cursor.getString(7);
 
         return  new RecordUserAnswer(id,historyId,questionId, answer, status, isSync, createdAt, lastUpdated);
+    }
+
+    public List<RecordUserAnswer> getSync(){
+        List<RecordUserAnswer> recordUserAnswers = new ArrayList<>();
+        Cursor cursor = sqlRead.rawQuery("select * from record_user_answers where is_sync = 0", null);
+        while (cursor != null && cursor.moveToNext()){
+            RecordUserAnswer recordUserAnswer = exact(cursor);
+            recordUserAnswer.setSync(true);
+            recordUserAnswers.add(recordUserAnswer);
+        }
+
+        return  recordUserAnswers;
+    }
+
+    public void sync(int id){
+        ContentValues values = new ContentValues();
+        values.put("is_sync", 1);
+        String[] arg = {id+""};
+        sqlWrite.update(RecordUserAnswerDB.name, values, "id=?",arg);
+
     }
 }

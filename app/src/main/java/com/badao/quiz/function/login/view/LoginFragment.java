@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @SuppressLint("NonConstantResourceId")
-@ViewInflate(presenter = LoginPresenter.class, layout = R.layout.fragment_login, hasToolbar = false, isBackHardwareDisable = true)
+@ViewInflate(presenter = LoginPresenter.class, layout = R.layout.fragment_login, hasToolbar = false)
 public class LoginFragment extends BaseAnnotatedFragment<LoginContract.View, LoginContract.Presenter> implements LoginContract.View{
     @BindView(R.id.edEmail)
     EditText edEmail;

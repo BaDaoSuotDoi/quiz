@@ -1,8 +1,9 @@
-package com.badao.quiz.base.dialog;
+package com.badao.quiz.function.home.dialog;
 
+import com.badao.quiz.base.dialog.BaseEditForm;
 import com.badao.quiz.model.Project;
 
-public class DeleteProjectDialog extends BaseEditForm{
+public class DeleteProjectDialog extends BaseEditForm {
     private IListener iListener;
     public DeleteProjectDialog(Project project,IListener iListener){
         setTitle("Delete project");
@@ -10,6 +11,7 @@ public class DeleteProjectDialog extends BaseEditForm{
         setLabelApply("DELETE");
         setHideEditText(true);
         setShowApply(true);
+        setDisableKeyBoard(true);
         this.iListener = iListener;
     }
     @Override

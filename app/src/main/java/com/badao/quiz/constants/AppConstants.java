@@ -6,6 +6,7 @@ public class AppConstants {
     public static  final String VIEW_MODE = "viewMode";
     public static  final String HISTORY_PROJECT_ID = "historyProjectId";
     public  static final int PROJECT_ADD = 1;
+    public  static final int SCHEDULE_NOTIFICATION = 1;
     public  static final int PROJECT_UPDATE = 2;
     public  static final int QUESTION_TEMP_ADD = 3;
     public  static final int QUESTION_ACTIVE = 1;
@@ -25,4 +26,6 @@ public class AppConstants {
     public  static final String TOKEN_TRUE_SELECT_ANSWER= "1#";
     public  static final String TOKEN_FALSE_SELECT_ANSWER= "0#";
     public  static final String TOKEN_SPLIT_ANSWER_USER_SELECTION= "#";
+    public  static final int QUESTION_OBJECT_TYPE = 1;
+    public  static final int PROJECT_OBJECT_TYPE = 2;
 }

@@ -1,6 +1,7 @@
 package com.badao.quiz.utils;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.badao.quiz.constants.AppConstants;
@@ -8,6 +9,9 @@ import com.badao.quiz.model.Question;
 import com.badao.quiz.model.QuestionAnswer;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -100,5 +104,58 @@ public class Utils {
         Collections.shuffle(myList);
 
         return myList;
+    }
+
+    public static boolean isTimeAutomatic(Context context) {
+        return Settings.Global.getInt(
+                context.getContentResolver(),
+                Settings.Global.AUTO_TIME,
+                0
+        ) == 1;
+    }
+
+    public static long getTimeDiffCurrent(String date){
+        // 00#00#00
+        String time = date.substring(9);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime dateTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+            Duration duration = Duration.between( LocalDateTime.now(),dateTime);
+            long millisecondsDiff = duration.toMillis();
+            return  millisecondsDiff;
+        }
+        return -1;
+    }
+
+
+    public static long getTimeCycle(String date){
+        String[] times = date.substring(0, 8).split("#");
+        int monthCycle = Integer.parseInt(times[0]);
+        int weekCycle = Integer.parseInt(times[1]);
+        int dayCycle = Integer.parseInt(times[2]);
+        if(monthCycle == 1){
+            return 1000 * 30 * 24 * 3600;
+        }
+        if(weekCycle == 1){
+            return 1000 * 7 * 24 * 3600;
+        }
+        if(dayCycle == 1){
+            return 1000  * 24 * 3600;
+        }
+
+        return 0;
+    }
+
+    public static String getTime(String date){
+        String[] items = date.split(" ");
+        return  items[2].substring(0, 5);
+    }
+
+    public static String getDate(String date){
+        String[] items = date.split(" ");
+        return  items[1];
+    }
+
+    public static String generateKey(String tableName, int id){
+        return String.format("%s_%d", tableName, id);
     }
 }

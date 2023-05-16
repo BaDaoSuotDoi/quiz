@@ -41,7 +41,7 @@ public class ProjectPlayAdapter extends FragmentStateAdapter {
 
     @Override
     public long getItemId(int position) {
-        return project.getQuestions().get(position).getID();
+        return project.getQuestions().get(position).getId();
     }
 
     public void setViewMode(int viewMode){

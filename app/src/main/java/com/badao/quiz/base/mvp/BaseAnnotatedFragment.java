@@ -81,9 +81,6 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
         initBackHardware();
     }
 
-    protected void setBackHardwareDisable(boolean backHardwareDisable) {
-        backHandle(backHardwareDisable);
-    }
 
     private void initViewModel() {
         mainActivityVM = new ViewModelProvider(requireActivity(), BaseVMF.getInstance()).get(MainActivityVM.class);
@@ -95,21 +92,16 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
 
 
     private void initBackHardware() {
-        boolean backHardwareDisable = getClass().getAnnotation(ViewInflate.class).isBackHardwareDisable();
-        backHandle(backHardwareDisable);
+        backHandle();
     }
 
-    protected void backHandle(boolean backHardwareDisable) {
+    protected void backHandle() {
         if (getClass().getAnnotation(ViewInflate.class).isDisableBack()) return;
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (backHardwareDisable) {
-                    onBack();
-                } else {
-                    onBackHardwareClicked();
-                }
+                onBackHardwareClicked();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
@@ -119,8 +111,6 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
         popBackStack();
     }
 
-    protected void onBack() {
-    }
 
 
 }

@@ -27,9 +27,10 @@ public class SignupPresenter  extends BasePresenter<SignupContract.View> impleme
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
                             Log.d("Firebase", "createUserWithEmail:success"+user.toString());
+                            Toast.makeText(getContext(), "Signup successful", Toast.LENGTH_SHORT).show();
+                            getView().navigationLogin();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("Firebase", "createUserWithEmail:failure", task.getException());

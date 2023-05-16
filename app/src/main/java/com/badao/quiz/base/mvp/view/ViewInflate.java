@@ -19,7 +19,5 @@ public @interface ViewInflate {
 
     boolean hasToolbar() default true;
 
-    boolean isBackHardwareDisable() default false;
-
     boolean isDisableBack() default false;
 }

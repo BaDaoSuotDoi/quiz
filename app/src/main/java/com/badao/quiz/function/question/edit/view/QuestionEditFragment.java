@@ -76,7 +76,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
         edContent.setText(question.getContent());
         tvComment.setText(question.getComment());
         if(question.getAnswers().size() == 0){
-            question.getAnswers().add(new QuestionAnswer(question.getID()));
+            question.getAnswers().add(new QuestionAnswer(question.getId()));
         }
         updateListAnswer();
         edContent.addTextChangedListener(new TextWatcher() {
@@ -115,7 +115,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
             @Override
             public void onClick(View view) {
                 if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
-                    adapter.addData(new QuestionAnswer(question.getID(), AppConstants.QUESTION_SELECTION_TYPE));
+                    adapter.addData(new QuestionAnswer(question.getId(), AppConstants.QUESTION_SELECTION_TYPE));
                 }
             }
         });
@@ -150,7 +150,7 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
                             questionAnswer.setType(AppConstants.QUESTION_NORMAL_TYPE);
                             question.setAnswers(new ArrayList<>(Arrays.asList(questionAnswer)));
                         }else{
-                            question.setAnswers(new ArrayList<>(Arrays.asList(new QuestionAnswer(question.getID()))));
+                            question.setAnswers(new ArrayList<>(Arrays.asList(new QuestionAnswer(question.getId()))));
                         }
                         question.setType(AppConstants.QUESTION_NORMAL_TYPE);
                         adapter = new AnswerAdapter(getActivity(), question.getAnswers(), question.getType(),false);

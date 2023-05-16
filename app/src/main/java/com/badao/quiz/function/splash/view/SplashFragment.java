@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 @SuppressLint("NonConstantResourceId")
-@ViewInflate(presenter = SplashPresenter.class, layout = R.layout.fragment_splash, isBackHardwareDisable = true)
+@ViewInflate(presenter = SplashPresenter.class, layout = R.layout.fragment_splash)
 public class SplashFragment
         extends BaseAnnotatedFragment<SplashContract.View, SplashContract.Presenter>
         implements SplashContract.View {

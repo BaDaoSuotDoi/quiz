@@ -26,7 +26,7 @@ public class ProjectNameDialog extends BaseEditForm {
         Map<String, String >keys = new HashMap<>();
         keys.put("name", content);
         project.setName(content);
-        ProjectDB.getInstance(getContext()).update(keys,project.getID());
+        ProjectDB.getInstance(getContext()).update(keys,project.getId());
         getViewModel().setProjectStatus(new MainActivityVM.Payload(
                 AppConstants.PROJECT_UPDATE,
                 project

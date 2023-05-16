@@ -82,14 +82,14 @@ public class AnswerSelectionAdapter extends BaseAdapter<QuestionAnswer, AnswerSe
             ArrayList<String> newAnswers = new ArrayList<>();
             boolean isAnswered = false;
             for(int i=0; i< items.length ; i++){
-                if(items[i].equals(String.valueOf(questionAnswer.getID()))){
+                if(items[i].equals(String.valueOf(questionAnswer.getId()))){
                     isAnswered = true;
                 }else if(!items[i].isEmpty()){
                     newAnswers.add(items[i]);
                 }
             }
             if(!isAnswered){
-                newAnswers.add(String.valueOf(questionAnswer.getID()));
+                newAnswers.add(String.valueOf(questionAnswer.getId()));
             }
             iListener.onSelect(newAnswers.size() != 0);
             recordUserAnswer.setAnswer(String.join(AppConstants.TOKEN_SPLIT_ANSWER_USER_SELECTION, newAnswers));

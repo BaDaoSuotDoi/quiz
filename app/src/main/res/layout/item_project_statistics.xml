@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primary"
+    android:background="@drawable/radius_border_solid"
+    android:padding="5dp"
+    android:layout_margin="5dp"
     >
     <TextView
         android:id="@+id/tvProjectName"
@@ -10,8 +12,10 @@
         android:layout_height="wrap_content"
         android:text="Project name"
         android:textColor="@color/white"
+        android:textStyle="bold"
         />
     <TextView
+        android:textStyle="italic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvNumberPlayed"
@@ -22,13 +26,11 @@
     <LinearLayout
         android:id="@+id/llStatistic"
         android:layout_below="@+id/tvNumberPlayed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/correct"
-            />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        >
         <TextView
             android:id="@+id/tvNumberCorrect"
             android:layout_width="wrap_content"
@@ -36,15 +38,22 @@
             android:text="20/30"
             android:textColor="@color/white"
             />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:layout_marginLeft="5dp"
+           android:layout_marginRight="5dp"
+           >
+           <ProgressBar
+               android:id="@+id/skProgress"
+               style="?android:attr/progressBarStyleHorizontal"
+               android:layout_width="match_parent"
+               android:layout_height="10dp"
+               android:layout_marginTop="@dimen/_6sdp"
+               android:progress="10"
+               android:progressDrawable="@drawable/usage_progress" />
+       </LinearLayout>
     </LinearLayout>
-    <ProgressBar
-        android:layout_below="@+id/tvNumberPlayed"
-        android:layout_toEndOf="@+id/llStatistic"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:id="@+id/skProgress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:progress="10"
-        android:layout_height="@dimen/_8sdp"
-        android:progressDrawable="@drawable/usage_progress" />
 </RelativeLayout>

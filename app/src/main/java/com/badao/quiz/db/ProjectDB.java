@@ -7,17 +7,25 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.model.Project;
+import com.badao.quiz.model.Question;
+import com.badao.quiz.model.QuestionAnswer;
+import com.badao.quiz.model.RecordDestroySync;
+import com.badao.quiz.model.RecordUserAnswer;
 import com.badao.quiz.model.Statistic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ProjectDB  extends  SQLiteHelper{
     public  static  final  String name = "projects";
+    private  Context context;
     public ProjectDB(@Nullable Context context) {
         super(context);
+        this.context = context;
     }
     public static ProjectDB projectDB;
 
@@ -38,8 +46,9 @@ public class ProjectDB  extends  SQLiteHelper{
         values.put("duration", project.getDuration());
         values.put("mode", project.getMode());
         values.put("is_sync", project.isSync() ? 1: 0);
+        values.put("schedule", project.getSchedule());
         long id = sqlWrite.insert(ProjectDB.name, null, values);
-        project.setID((int)id);
+        project.setId((int)id);
         return project ;
     }
 
@@ -55,7 +64,7 @@ public class ProjectDB  extends  SQLiteHelper{
 
     public int getNumberQuestion(int id){
         String[] args = {id+""};
-        Cursor cursor = sqlRead.rawQuery("select count(*) from question_versions where project_id = ?  and status = 1", args);
+        Cursor cursor = sqlRead.rawQuery("select count(*) from questions where project_id = ?  and status = 1", args);
         if(cursor!= null && cursor.moveToNext()){
             return  cursor.getInt(0);
         }
@@ -104,9 +113,25 @@ public class ProjectDB  extends  SQLiteHelper{
     }
 
     public void destroy(Project project){
-        Log.e("Project delete", "Ok "+ project.getID());
-        String[] args = {project.getID()+""};
-        sqlWrite.delete("projects", "id = ?", args);
+        Log.e("Project delete", "Ok "+ project.getId());
+        Project project1 = findByPk(project.getId());
+        if(project1 != null){
+            Map<String, String> keys = new HashMap<>();
+            keys.put("project_id", project1.getId()+"");
+
+            RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(project.getId(),ProjectDB.name, 0, ""));
+            RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(0,HistorySubmitDB.name,project.getId(), ProjectDB.name));
+            List<Question> questions = QuestionDB.getInstance(context).findBy(keys);
+
+            for(Question question: questions){
+                RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(0, QuestionDB.name, question.getProjectId(), ProjectDB.name));
+                RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(0, QuestionAnswerDB.name,question.getId(), QuestionDB.name));
+                RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(0, RecordUserAnswerDB.name,question.getId(), QuestionDB.name));
+            }
+            String[] args = {project.getId()+""};
+            sqlWrite.delete("projects", "id = ?", args);
+        }
+
     }
 
     public void update(Map<String, String> keys, int id){
@@ -143,5 +168,42 @@ public class ProjectDB  extends  SQLiteHelper{
         }
         return statistics;
 
+    }
+
+    public List<Project> getProjectSync(){
+        List<Project> projects = new ArrayList<>();
+        Cursor cursor = sqlRead.rawQuery("select * from projects where is_sync = 0", null);
+        while (cursor != null && cursor.moveToNext()){
+            Project project = exact(cursor);
+            project.setSync(true);
+            projects.add(exact(cursor));
+        }
+        return  projects;
+    }
+
+    public boolean checkIsSync(){
+        Cursor cursor = sqlRead.rawQuery("SELECT 'projects' AS table_name FROM projects WHERE is_sync = 0\n" +
+                "UNION\n" +
+                "SELECT 'questions' AS table_name FROM questions WHERE is_sync = 0\n" +
+                "UNION\n" +
+                "SELECT 'question_answers' AS table_name FROM question_answers WHERE is_sync = 0\n" +
+                "UNION\n" +
+                "SELECT 'history_submits' AS table_name FROM history_submits WHERE is_sync = 0\n" +
+                "UNION\n" +
+                "SELECT 'record_user_answers' AS table_name FROM record_user_answers WHERE is_sync = 0;\n", null);
+
+
+        while (cursor!= null && cursor.moveToNext()){
+            Log.e("AAA",cursor.getString(0));
+            return true;
+        }
+
+        Cursor cursor1 = sqlRead.rawQuery("SELECT count(*) from record_destroy_sync", null);
+        while (cursor1 != null && cursor1.moveToNext()){
+            Log.e("Count",cursor1.getString(0));
+            return cursor1.getInt(0) > 0;
+        }
+
+        return false;
     }
 }

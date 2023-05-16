@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    >
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="31-01"
+        />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="23:00"
+        android:layout_below="@id/tvDate"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTime"
+        android:gravity="right"
+        >
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            />
+        <TextView
+            android:id="@+id/tvSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            />
+    </LinearLayout>
+</RelativeLayout>

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-    private int ID;
+    private int id;
     private String name;
     private String createdAt;
     private String lastUpdated;
@@ -15,10 +15,11 @@ public class Project {
     private int duration = -1 ;
     private int mode = 1;
     private boolean isSync = false;
+    private String schedule = "";
     private List<Question> questions = new ArrayList<>();
 
-    public Project(int ID, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync) {
-        this.ID = ID;
+    public Project(int id, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync) {
+        this.id = id;
         this.name = name;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
@@ -35,12 +36,13 @@ public class Project {
         this.lastUpdated = Utils.getTimeCurrent();
 
     }
-    public int getID() {
-        return ID;
+
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -115,10 +117,18 @@ public class Project {
         this.questions = questions;
     }
 
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
-                "ID=" + ID +
+                "ID=" + id +
                 ", name='" + name + '\'' +
                 ", createAt='" + createdAt + '\'' +
                 ", lastUpdated='" + lastUpdated + '\'' +

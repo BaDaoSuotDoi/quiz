@@ -33,18 +33,23 @@ public abstract class BaseEditForm  extends BaseDialog{
     private String instruction = "";
     private boolean isInputNumber = false;
     private boolean isShowApply = false;
+    private boolean isDisableKeyBoard = false;
 
     @Override
     public void onStart() {
         super.onStart();
         initView();
         edContent.requestFocus();
-        getViewModel().setStatusShowKey(true);
+        if(!isDisableKeyBoard){
+            getViewModel().setStatusShowKey(true);
+        }
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
-                getViewModel().setStatusShowKey(false);
+                if(!isDisableKeyBoard){
+                    getViewModel().setStatusShowKey(false);
+                }
             }
         });
 
@@ -87,7 +92,9 @@ public abstract class BaseEditForm  extends BaseDialog{
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        getViewModel().setStatusShowKey(false);
+        if(!isDisableKeyBoard){
+            getViewModel().setStatusShowKey(false);
+        }
     }
 
     public void initView(){
@@ -151,6 +158,10 @@ public abstract class BaseEditForm  extends BaseDialog{
 
     public void setShowApply(boolean showApply) {
         isShowApply = showApply;
+    }
+
+    public void setDisableKeyBoard(boolean disableKeyBoard) {
+        isDisableKeyBoard = disableKeyBoard;
     }
 
     @Override

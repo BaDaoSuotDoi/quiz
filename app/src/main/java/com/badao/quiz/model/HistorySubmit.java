@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistorySubmit {
-    private int ID;
+    private int id;
     private int projectId;
     private boolean isSync = false;
     private int timeElapsed;
@@ -15,8 +15,8 @@ public class HistorySubmit {
 
     private Project project;
 
-    public HistorySubmit(int ID, int projectId, boolean isSync, int timeElapsed, String submittedAt, int correctAnswerNumber, int noAnswerNumber, int questionNumber) {
-        this.ID = ID;
+    public HistorySubmit(int id, int projectId, boolean isSync, int timeElapsed, String submittedAt, int correctAnswerNumber, int noAnswerNumber, int questionNumber) {
+        this.id = id;
         this.projectId = projectId;
         this.isSync = isSync;
         this.timeElapsed = timeElapsed;
@@ -34,12 +34,13 @@ public class HistorySubmit {
         this.noAnswerNumber = noAnswerNumber;
         this.questionNumber = questionNumber;
     }
-    public int getID() {
-        return ID;
+
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getProjectId() {
@@ -110,7 +111,7 @@ public class HistorySubmit {
     @Override
     public String toString() {
         return "HistorySubmit{" +
-                "ID=" + ID +
+                "ID=" + id +
                 ", projectId=" + projectId +
                 ", isSync=" + isSync +
                 ", timeElapsed=" + timeElapsed +

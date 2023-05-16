@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     android:background="@color/primary"
     android:clickable="true"
     android:focusable="true"
@@ -18,10 +18,37 @@
         android:layout_height="64dp"
         android:src="@mipmap/ic_launcher" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/tvSync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data synchronization"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            />
+        <ImageView
+            android:id="@+id/imSync"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_sync"
+            />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <Button
+        android:id="@+id/btLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="logout"
+        />
 </LinearLayout>

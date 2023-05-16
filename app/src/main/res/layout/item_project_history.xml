@@ -2,26 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primary"
+    android:background="@drawable/radius_border_solid"
     android:id="@+id/rlProjectHistory"
+    android:layout_margin="10dp"
     >
     <LinearLayout
         android:id="@+id/llProjectName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
         <TextView
             android:id="@+id/tvProjectName"
             android:layout_weight="0.5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Project Name"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20dp"
             />
+
         <TextView
             android:id="@+id/tvPercent"
             android:layout_weight="0.5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="50%"
+            android:gravity="right"
+            android:textColor="@color/white"
+            android:textSize="20dp"
             />
     </LinearLayout>
     <LinearLayout
@@ -29,64 +39,120 @@
         android:id="@+id/llSubmittedAt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:padding="5dp"
         >
-        <TextView
-            android:id="@+id/tvSubmittedAt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="10/10/2010 10:10:10"
-            android:layout_weight="0.5"
-            />
-        <TextView
-            android:id="@+id/tvTimeElapsed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="10:10"
-            android:layout_weight="0.5"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@+id/llSubmittedAt"
-        android:id="@+id/llNumberCorrect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_weight="0.5"
+           android:gravity="center_vertical"
            >
+           <ImageView
+               android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:src="@drawable/ic_start_time"
+               />
            <TextView
+               android:layout_marginStart="5dp"
+               android:id="@+id/tvSubmittedAt"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:id="@+id/tvNumberCorrect"
-               android:text="10"
+               android:text="10/10/2010 10:10:10"
+               android:textColor="@color/white"
                />
        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center_vertical"
             >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_clock"
+                />
             <TextView
+                android:layout_marginStart="5dp"
+                android:id="@+id/tvTimeElapsed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10:10"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/llSubmittedAt"
+        android:id="@+id/llNumberCorrect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        >
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_weight="0.5"
+           android:gravity="center_vertical"
+           >
+           <ImageView
+               android:src="@drawable/ic_correct"
+               android:layout_width="20dp"
+               android:layout_height="20dp"
+               />
+           <TextView
+               android:layout_marginStart="5dp"
+               android:textColor="@color/white"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/tvNumberCorrect"
+               android:text="10"
+               android:textSize="20sp"
+               />
+       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            >
+            <ImageView
+                android:src="@drawable/ic_wrong"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                />
+            <TextView
+                android:layout_marginStart="5dp"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvNumberWrong"
                 android:text="1"
+                android:textSize="20dp"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center_vertical"
             >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_uncheck_wrong" />
+
             <TextView
+                android:id="@+id/tvNumberNoAnswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvNumberNoAnswer"
+                android:layout_marginStart="5dp"
                 android:text="9"
-                />
+                android:textColor="@color/white"
+                android:textSize="20dp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -18,6 +18,7 @@ import com.badao.quiz.model.RecordUserAnswer;
 import com.badao.quiz.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -77,7 +78,9 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
             String answer = question.getUserAnswers().getAnswer();
             if(answer.isEmpty()){
                 noAnswerNumber++;
-            }else if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
+            }
+
+            if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
                 QuestionAnswer questionAnswer =  question.getAnswers().get(0);
                 if(questionAnswer.getContent().equals(answer)){
                     correctAnswerNumber++;
@@ -86,7 +89,11 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
                 }
             }else if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
-                String[] elements = answer.split(AppConstants.TOKEN_SPLIT_ANSWER_USER_SELECTION);
+                Log.e("Start here", answer);
+
+                String[] elements = Arrays.stream(answer.split(AppConstants.TOKEN_SPLIT_ANSWER_USER_SELECTION)).filter(
+                        e -> !e.isEmpty()
+                ).toArray(String[]::new);
                 int questionCorrectNumber = 0;
                 boolean isAnswerCorrect = true;
                 for( QuestionAnswer questionAnswer : question.getAnswers()){
@@ -96,7 +103,7 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                         for (String element : elements) {
                             if (!element.isEmpty()) {
                                 int id = Integer.parseInt(element);
-                                if (questionAnswer.getID() == id) {
+                                if (questionAnswer.getId() == id) {
                                     isCorrect = true;
                                 }
                             }
@@ -113,18 +120,22 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
                 }
                 // when user selection all answer correct and some answer wrong
-                if(questionCorrectNumber != elements.length - 1){
+                if(questionCorrectNumber != elements.length ){
+                    Log.e("Fault here", "no match number choose "+elements.length);
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
                 }
 
+                if(correctAnswerNumber == 0 && elements.length == 0){
+                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+                }
             }
         }
 
         Log.e("Submit", "correctAnswerNumber: "+correctAnswerNumber+"//noAnswerNumber:"+noAnswerNumber );
-        HistorySubmit historySubmit = new HistorySubmit(project.getID(),totalTime, Utils.getTimeCurrent(),correctAnswerNumber,noAnswerNumber,questionNumber );
+        HistorySubmit historySubmit = new HistorySubmit(project.getId(),totalTime, Utils.getTimeCurrent(),correctAnswerNumber,noAnswerNumber,questionNumber );
         HistorySubmitDB.getInstance(getContext()).create(historySubmit);
         for(Question question: questions){
-            question.getUserAnswers().setHistoryId(historySubmit.getID());
+            question.getUserAnswers().setHistoryId(historySubmit.getId());
             RecordUserAnswer recordUserAnswer = question.getUserAnswers();
             RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
         }

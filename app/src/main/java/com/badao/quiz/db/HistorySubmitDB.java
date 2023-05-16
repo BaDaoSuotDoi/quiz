@@ -64,7 +64,7 @@ public class HistorySubmitDB extends  SQLiteHelper{
         values.put("no_answer_number", historySubmit.getNoAnswerNumber());
         values.put("question_number", historySubmit.getQuestionNumber());
         long id = sqlWrite.insert(HistorySubmitDB.name, null, values);
-        historySubmit.setID((int)id);
+        historySubmit.setId((int)id);
         return id ;
     }
 
@@ -80,4 +80,24 @@ public class HistorySubmitDB extends  SQLiteHelper{
 
         return  new HistorySubmit(id, projectId, isSync, timeElapsed, submittedAt, correctAnswerNumber, noAnswerNumber, questionNumber);
     }
+
+    public List<HistorySubmit> getSync(){
+        List<HistorySubmit> historySubmits = new ArrayList<>();
+        Cursor cursor = sqlRead.rawQuery("select * from history_submits where is_sync = 0", null);
+        while (cursor != null && cursor.moveToNext()){
+            HistorySubmit historySubmit = exact(cursor);
+            historySubmit.setSync(true);
+            historySubmits.add(historySubmit);
+        }
+        return  historySubmits;
+    }
+
+    public void sync(int id){
+        ContentValues values = new ContentValues();
+        values.put("is_sync", 1);
+        String[] arg = {id+""};
+        sqlWrite.update(HistorySubmitDB.name, values, "id=?",arg);
+    }
+
+
 }

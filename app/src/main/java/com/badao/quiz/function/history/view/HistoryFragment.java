@@ -57,7 +57,7 @@ public class HistoryFragment extends BaseAnnotatedFragment<HistoryContract.View,
         navigate(R.id.projectPlayFragment, BundleBuilder.bundleOf(
                 Pair.create(AppConstants.PROJECT_ID, historySubmit.getProjectId()),
                 Pair.create(AppConstants.VIEW_MODE, AppConstants.PROJECT_SHOW_ANSWER),
-                Pair.create(AppConstants.HISTORY_PROJECT_ID, historySubmit.getID())
+                Pair.create(AppConstants.HISTORY_PROJECT_ID, historySubmit.getId())
         ), AnimationType.FROM_RIGHT_TO_LEFT);
     }
 

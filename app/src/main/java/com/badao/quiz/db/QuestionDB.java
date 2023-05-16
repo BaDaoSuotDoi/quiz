@@ -8,8 +8,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.badao.quiz.constants.AppConstants;
+import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
 import com.badao.quiz.model.QuestionAnswer;
+import com.badao.quiz.model.RecordDestroySync;
 import com.badao.quiz.model.RecordUserAnswer;
 import com.badao.quiz.utils.Utils;
 
@@ -35,7 +37,7 @@ public class QuestionDB extends  SQLiteHelper{
         return  questionDB;
     }
 
-    public long create(Question question, int projectId, int version){
+    public long create(Question question){
 
         question.setCreatedAt(Utils.getTimeCurrent());
         question.setLastUpdated(Utils.getTimeCurrent());
@@ -47,13 +49,14 @@ public class QuestionDB extends  SQLiteHelper{
         values.put("is_sync", 0);
         values.put("comment", question.getComment());
         values.put("position", question.getPosition());
+        values.put("status", question.getStatus());
+        values.put("project_id", question.getProjectId());
+        values.put("version",  question.getVersion());
         long id = sqlWrite.insert(QuestionDB.name, null, values);
-        question.setID((int)id);
-
-        QuestionVersionDB.getInstance(this.context).create(projectId, question.getID(), version);
+        question.setId((int)id);
 
         for(QuestionAnswer questionAnswer : question.getAnswers()){
-            questionAnswer.setQuestionId(question.getID());
+            questionAnswer.setQuestionId(question.getId());
             Log.e("Question answer created", questionAnswer.toString());
             QuestionAnswerDB.getInstance(context).create(questionAnswer);
         }
@@ -69,17 +72,33 @@ public class QuestionDB extends  SQLiteHelper{
         return  null;
     }
 
+    public  List<Question> findBy(Map<String, String>keys){
+        List<Question> questions = new ArrayList<>();
+        List<String> args = new ArrayList<>();
+        String q = "select * from questions where ";
+        for(String key: keys.keySet()){
+            q += key + " = ? ";
+            args.add(keys.get(key));
+        }
+        Cursor cursor = sqlWrite.rawQuery(q,  args.toArray(new String[args.size()]) );
+        while (cursor != null && cursor.moveToNext()){
+            questions.add(exact(cursor));
+        }
+        return  questions;
+
+    }
+
     public  List<Question> findByProjectId(int projectId){
         String[] args = {projectId+""};
         List<Question> questions = new ArrayList<>();
         Cursor cursor = sqlRead.rawQuery(
-                "select q.id, q.content, q.created_at, q.last_updated, q.type,q.is_sync, q.comment,q.position " +
-                        "from questions as q, question_versions as qv " +
-                        "where q.id = qv.question_id and qv.project_id = ? and qv.status = 1 order by q.position asc",
+                "select q.id, q.content, q.created_at, q.last_updated, q.type,q.is_sync, q.comment,q.position,q.status, q.project_id, q.version " +
+                        "from questions as q " +
+                        "where q.project_id = ? and q.status = 1 order by q.position asc",
                 args);
         while (cursor != null && cursor.moveToNext()){
             Question question = exact(cursor);
-            question.setAnswers(QuestionAnswerDB.getInstance(context).findBy(question.getID()));
+            question.setAnswers(QuestionAnswerDB.getInstance(context).findBy(question.getId()));
             questions.add(question);
         }
         return  questions;
@@ -93,21 +112,31 @@ public class QuestionDB extends  SQLiteHelper{
         boolean isSync = cursor.getInt(5) == 1;
         String comment = cursor.getString(6);
         int position = cursor.getInt(7);
+        int status = cursor.getInt(8);
+        int projectId = cursor.getInt(9);
+        int version = cursor.getInt(10);
 
-        return  new Question(id,content, createdAt, lastUpdated, type, isSync, comment,position);
+        return  new Question(id,content, createdAt, lastUpdated, type, isSync, comment,position,status, projectId, version);
     }
 
     public void destroy(int id){
         String[] args = new String[]{id+""};
-        sqlWrite.delete(QuestionDB.name, "id=?",args);
+        Question question = findByPk(id);
+        if(question != null){
+            RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(question.getId(), QuestionDB.name, question.getProjectId(), ProjectDB.name));
+            RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(0, QuestionAnswerDB.name,question.getId(), QuestionDB.name));
+            RecordDestroySyncDB.getInstance(context).add(new RecordDestroySync(0, RecordUserAnswerDB.name,question.getId(), QuestionDB.name));
+            sqlWrite.delete(QuestionDB.name, "id=?",args);
+        }
     }
 
-    public void update(Question question, int projectId, boolean wasDone, boolean isDelete){
-        if(question.getID() <= 0){
-            create(question, projectId, 1);
+    public void update(Question question, boolean wasDone, boolean isDelete){
+        if(question.getId() <= 0){
+            create(question);
         } else {
-            Question questionExist = QuestionDB.getInstance(context).findByPk(question.getID());
-            List<QuestionAnswer> questionAnswers = QuestionAnswerDB.getInstance(context).findBy(question.getID());
+            Question questionExist = QuestionDB.getInstance(context).findByPk(question.getId());
+            List<QuestionAnswer> questionAnswers = QuestionAnswerDB.getInstance(context).findBy(question.getId());
+            List<QuestionAnswer> questionAnswersDeleted = new ArrayList<>();
             boolean isNewContent = false;
             boolean isNewAnswer = question.getAnswers().size() != questionAnswers.size();
             boolean isNewType = false;
@@ -120,33 +149,36 @@ public class QuestionDB extends  SQLiteHelper{
                 isNewType = true;
             }
 
-            if(!isNewAnswer){
-                for(QuestionAnswer questionAnswer: questionAnswers){
-                    boolean isAnswerAdd = true;
-                    for(QuestionAnswer answer: question.getAnswers()){
-                        if(questionAnswer.getID() == answer.getID()){
-                            isAnswerAdd = false;
-                            if(!questionAnswer.getContent().equals(answer.getContent())){
-                                isNewAnswer = true;
-                                break;
-                            }
+            Log.e("questionAnswers", questionAnswers.toString());
+            Log.e("question.getAnswers()", question.getAnswers().toString());
+            for(QuestionAnswer questionAnswer: questionAnswers){
+                boolean isAnswerAdd = true;
+                for(QuestionAnswer answer: question.getAnswers()){
+                    if(questionAnswer.getId() == answer.getId()){
+                        isAnswerAdd = false;
+                        if(!questionAnswer.getContent().equals(answer.getContent())){
+                            isNewAnswer = true;
                         }
                     }
-                    if(isAnswerAdd || isNewAnswer){
-                        isNewAnswer = true;
-                        break;
-                    }
+                }
+                if(isAnswerAdd){
+                    Log.e("DELETE","OK");
+                    questionAnswersDeleted.add(questionAnswer);
+                }
+                if(isAnswerAdd || isNewAnswer){
+                    isNewAnswer = true;
                 }
             }
+
             boolean isNew = isNewContent || isNewAnswer ||isNewType;
 
             // question edited
             if((isNew && wasDone) || (wasDone && isDelete)){
-                //update question all version
-                int version = QuestionVersionDB.getInstance(context).disable(projectId, question.getID());
+
+                QuestionDB.getInstance(context).disable(question.getId());
                 if(!isDelete){
-                    // copy to new question
-                    create(question, projectId,  version + 1);
+                    question.upgrade();
+                    create(question);
                 }
 
                 return;
@@ -154,7 +186,7 @@ public class QuestionDB extends  SQLiteHelper{
 
             if(isDelete){
                 Log.e("Question delete", question.toString());
-                destroy(question.getID());
+                destroy(question.getId());
                 return;
             }
             if(questionExist != null && !question.getComment().equals(questionExist.getComment())){
@@ -173,7 +205,8 @@ public class QuestionDB extends  SQLiteHelper{
                     values.put("comment",question.getComment());
                 }
                 if(values.size() != 0){
-                    String[]  arg = new String[]{question.getID()+""};
+                    String[]  arg = new String[]{question.getId()+""};
+                    values.put("is_sync", 0+"");
                     sqlWrite.update(QuestionDB.name, values, "id=?",arg);
                 }
 
@@ -181,15 +214,48 @@ public class QuestionDB extends  SQLiteHelper{
                 if(isNewAnswer){
                     Log.e("Run here", "update new answer");
                     for(QuestionAnswer answer: question.getAnswers()){
-                        Log.e("Run here", "update new answer"+ answer.getID());
+                        Log.e("Run here", "update new answer"+ answer.getId());
                         Map<String, String> v = new HashMap<>();
                         v.put("content", answer.getContent());
                         v.put("type", answer.getType()+"");
                         v.put("last_updated", Utils.getTimeCurrent());
+                        v.put("is_sync", 0+"");
                         QuestionAnswerDB.getInstance(context).update(v, answer);
+                    }
+
+                    for(QuestionAnswer questionAnswer: questionAnswersDeleted){
+                        Log.e("Delete ok",questionAnswer.toString());
+
+                        QuestionAnswerDB.getInstance(context).destroy(questionAnswer);
                     }
                 }
             }
         }
+    }
+
+    private void disable(int id) {
+        String[] arg = {id+""};
+        ContentValues values = new ContentValues();
+        values.put("status", 0);
+        sqlWrite.update(QuestionDB.name,values, "id=?", arg);
+    }
+
+    public List<Question> getQuestionSync(){
+        List<Question> questions = new ArrayList<>();
+        Cursor cursor = sqlRead.rawQuery("select * from questions where is_sync = 0", null);
+        while (cursor != null && cursor.moveToNext()){
+            Question question = exact(cursor);
+            question.setSync(true);
+            questions.add(question);
+        }
+        return  questions;
+    }
+
+    public void sync(int id){
+        ContentValues values = new ContentValues();
+        values.put("is_sync", 1);
+        String[] arg = {id+""};
+        sqlWrite.update(QuestionDB.name, values, "id=?",arg);
+
     }
 }

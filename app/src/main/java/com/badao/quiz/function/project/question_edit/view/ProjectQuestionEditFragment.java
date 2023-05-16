@@ -84,7 +84,7 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
     public  void initData(){
 
         project = getPresenter().getProject();
-        project.setQuestions(getPresenter().getQuestions(project.getID()));
+        project.setQuestions(getPresenter().getQuestions(project.getId()));
         int n = project.getQuestions().size();
         if(n>0){
             getPresenter().setQuestionIndex(project.getQuestions().get(n-1).getPosition()+1);
@@ -94,8 +94,8 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
         }
 
         //buffer question
-        project.getQuestions().add(new Question(getPresenter().getQuestionIndex(), false));
-        project.getQuestions().add(new Question(getPresenter().getQuestionIndex(), true));
+        project.getQuestions().add(new Question(project.getId(),getPresenter().getQuestionIndex(), false));
+        project.getQuestions().add(new Question(project.getId(),getPresenter().getQuestionIndex(), true));
 
         Question question = n > 0? project.getQuestions().get(n-1):project.getQuestions().get(0) ;
         question.setViewed(true);
@@ -181,25 +181,25 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                 List<String> questionIds = new ArrayList<>();
                 if(questionRemoved.size() != 0){
                     for(Question question: questionRemoved){
-                        questionIds.add(String.valueOf(question.getID()));
+                        questionIds.add(String.valueOf(question.getId()));
                     }
                 }
                 // update here remove question
                 for(Question question:questions){
                     if(question.isValid()){
-                        questionIds.add(String.valueOf(question.getID()));
+                        questionIds.add(String.valueOf(question.getId()));
                     }
                 }
                 boolean wasDone = RecordUserAnswerDB.getInstance(getContext()).findBy(questionIds).size() != 0;
                 for(Question question: questionRemoved){
                     if(question.isValid()){
-                        QuestionDB.getInstance(getContext()).update(question, project.getID(),wasDone,true);
+                        QuestionDB.getInstance(getContext()).update(question,wasDone,true);
                     }
                 }
 
                 for(Question question:questions){
                     if(question.isValid()){
-                        QuestionDB.getInstance(getContext()).update(question, project.getID(),wasDone, false);
+                        QuestionDB.getInstance(getContext()).update(question,wasDone, false);
                     }
                 }
                 Toast.makeText(getContext(), "Save Successful", Toast.LENGTH_SHORT).show();
@@ -213,7 +213,7 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                 Question question = project.getQuestions().get(itemCurrent);
                 int n = project.getQuestions().size();
                 if(n == 2 && itemCurrent == 0){
-                    Question questionTemp = new Question(getPresenter().getQuestionIndex(), false);
+                    Question questionTemp = new Question(project.getId(),getPresenter().getQuestionIndex(), false);
                     project.getQuestions().set(0, questionTemp );
                     removeMenuQuestion(question.getPosition());
                     addMenuQuestion(questionTemp.getPosition(), itemCurrent, "1. --Waiting edition--");
@@ -278,12 +278,12 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                         questionCurrent.setTemp(false);
                         addMenuQuestion(questionCurrent.getPosition(), n, n + ".--Waiting edition--");
                         selectMenuItem(position);
-                        adapter.addFragment(n, new Question(getPresenter().getQuestionIndex(), true));
+                        adapter.addFragment(n, new Question(project.getId(),getPresenter().getQuestionIndex(), true));
 //                        project.getQuestions().add(new Question(getPresenter().getQuestionIndex(), true));
                     }
                 }else{
                     // create menu for question temp
-                    if(questionCurrent.getID() == 0 && !questionCurrent.isViewed()){
+                    if(questionCurrent.getId() == 0 && !questionCurrent.isViewed()){
                         addMenuQuestion(questionCurrent.getPosition(), position + 1, (position + 1) +  ". --Waiting edition--");
                     }
                     selectMenuItem(position);
