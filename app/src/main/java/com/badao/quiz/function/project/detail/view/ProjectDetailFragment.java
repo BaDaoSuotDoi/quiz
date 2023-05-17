@@ -29,6 +29,7 @@ import com.badao.quiz.function.project.detail.presenter.ProjectDetailPresenter;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.service.NotificationService;
 import com.badao.quiz.utils.BundleBuilder;
+import com.badao.quiz.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -154,10 +155,13 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         imPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateProjectPlay();
+                if(totalQuestion > 0){
+                    navigateProjectPlay();
+                }else{
+                    Toast.makeText(getContext(), "Cannot play.Empty project!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
         imQuestionPerSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,7 +207,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                         Map<String, String> keys = new HashMap<>();
                         keys.put("schedule", date);
                         ProjectDB.getInstance(getContext()).update(keys, project.getId());
-                        tvSchedule.setText(date);
+                        tvSchedule.setText(Utils.displaySchedule(date));
                         project.setSchedule(date);
                         getViewModel().getMlScheduleNotificationProject().postValue(new MainActivityVM.Payload(AppConstants.SCHEDULE_NOTIFICATION, project));
                     }
@@ -222,7 +226,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         updateDuration();
         updateCreatedAt();
         updateUpdatedAt();
-        tvSchedule.setText(project.getSchedule());
+        tvSchedule.setText(Utils.displaySchedule(project.getSchedule()));
     }
 
     @Override

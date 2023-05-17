@@ -112,7 +112,8 @@ public class ProjectDB  extends  SQLiteHelper{
         int duration = cursor.getInt(6);
         int mode = cursor.getInt(7);
         Boolean isSync = cursor.getInt(8) == 1? true: false;
-        return  new Project(id,name, createdAt,lastUpdated,isRandom,questionPerSession,duration,mode,isSync );
+        String schedule = cursor.getString(9);
+        return  new Project(id,name, createdAt,lastUpdated,isRandom,questionPerSession,duration,mode,isSync, schedule );
     }
 
     public void destroyAll(){

@@ -13,6 +13,13 @@
         <item>Endless</item>
     </string-array>
 
+    <string-array name="interval_notification">
+        <item>No Repeat</item>
+        <item>Every day</item>
+        <item>Every week</item>
+        <item>Every month</item>
+    </string-array>
+
     <string-array name="minute_setup">
         <item>00 mm</item>
         <item>1 mm</item>

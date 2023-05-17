@@ -63,6 +63,23 @@ public class Utils {
         return "";
     }
 
+    public static String displaySchedule(String date){
+        String time = date.substring(9);
+        String[] times = date.substring(0, 8).split("#");
+        int monthCycle = Integer.parseInt(times[0]);
+        int weekCycle = Integer.parseInt(times[1]);
+        int dayCycle = Integer.parseInt(times[2]);
+        if(monthCycle == 1){
+            return "Every month "+ time;
+        }
+        if(weekCycle == 1){
+            return "Every week "+ time;
+        }
+        if(dayCycle == 1){
+            return "Every day "+ time;
+        }
+        return time;
+    }
     public static String displayTime(int t){
         String time = "";
         int seconds = t % 60;
@@ -144,6 +161,7 @@ public class Utils {
 
         return 0;
     }
+
 
     public static String getTime(String date){
         String[] items = date.split(" ");

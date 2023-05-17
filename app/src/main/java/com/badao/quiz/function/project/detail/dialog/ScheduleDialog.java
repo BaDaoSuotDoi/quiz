@@ -5,7 +5,9 @@ import android.app.TimePickerDialog;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -25,17 +27,21 @@ public class ScheduleDialog extends BaseDialog {
     TextView tvCancel;
     @BindView(R.id.tvSave)
     TextView tvSave;
+    @BindView(R.id.sRepeat)
+    Spinner sRepeat;
 
     private String date;
     private IListener iListener;
-    public ScheduleDialog(String date, IListener iListener){
-        if(date.isEmpty()){
+    public ScheduleDialog(String schedule, IListener iListener){
+        if(schedule.isEmpty()){
             date = "00#00#00 "+ Utils.getTimeCurrent();
+        }else{
+            this.date = schedule;
         }
 
         Log.e("Date", date);
-        this.date = date;
         this.iListener = iListener;
+
     }
     @Override
     protected int getDialogLayout() {
@@ -102,6 +108,28 @@ public class ScheduleDialog extends BaseDialog {
             public void onClick(View view) {
                 iListener.onSave(date);
                 dismiss();
+            }
+        });
+
+
+        sRepeat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String interval = adapterView.getItemAtPosition(position).toString();
+                if(interval.equals("Every day")) {
+                    date = "00#00#01 " + date.substring(9);
+                }else if(interval.equals("Every week")){
+                    date = "00#01#00 " + date.substring(9);
+                }else if(interval.equals("Every month")){
+                    date = "01#00#00 " + date.substring(9);
+                }else if(interval.equals("No repeat")){
+                    date = "00#00#00 " + date.substring(9);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }

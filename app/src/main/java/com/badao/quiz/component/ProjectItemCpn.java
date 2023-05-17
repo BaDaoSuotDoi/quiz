@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -95,7 +96,12 @@ public class ProjectItemCpn extends LinearLayout implements  View.OnClickListene
                                 iAction.onDelete(project);
                                 return true;
                             case R.id.action_play:
-                                iAction.navigateProjectPlay(project);
+                                int questionNumber = ProjectDB.getInstance(getContext()).getNumberQuestion(project.getId());
+                                if(questionNumber == 0){
+                                    Toast.makeText(getContext(), "Cannot play.Empty project!", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    iAction.navigateProjectPlay(project);
+                                }
                                 return true;
                         }
                         return false;

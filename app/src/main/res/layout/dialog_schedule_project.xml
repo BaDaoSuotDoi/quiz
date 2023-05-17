@@ -2,40 +2,97 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:background="@color/white"
     >
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="31-01"
-        />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/llDate"
+       android:padding="10dp"
+       >
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Start day:"
+           android:layout_weight="0.8"
+           android:textColor="@color/black"
+           />
+       <TextView
+           android:id="@+id/tvDate"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="31-01"
+           android:layout_weight="0.2"
+           android:textColor="@color/black"
+           />
+   </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="23:00"
-        android:layout_below="@id/tvDate"
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvTime"
+        android:layout_below="@+id/llDate"
+        android:padding="10dp"
+        android:id="@+id/llTime"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time:"
+            android:layout_weight="0.8"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="23:00"
+            android:layout_weight="0.2"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/llRepeat"
+        android:layout_below="@id/llTime"
+        android:padding="10dp"
+        >
+        <Spinner
+            android:id="@+id/sRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/interval_notification"
+            android:padding="5dp"
+            android:background="@color/grey"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llRepeat"
         android:gravity="right"
+        android:padding="10dp"
         >
         <TextView
             android:id="@+id/tvCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/black"
             />
         <TextView
             android:id="@+id/tvSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
+            android:textColor="@color/black"
+
             />
     </LinearLayout>
+
+
 </RelativeLayout>

@@ -18,7 +18,7 @@ public class Project {
     private String schedule = "";
     private List<Question> questions = new ArrayList<>();
 
-    public Project(int id, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync) {
+    public Project(int id, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync, String schedule) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
@@ -28,6 +28,7 @@ public class Project {
         this.duration = duration;
         this.mode = mode;
         this.isSync = isSync;
+        this.schedule = schedule;
     }
 
     public Project(String name){

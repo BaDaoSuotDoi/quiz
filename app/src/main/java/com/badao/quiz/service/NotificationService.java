@@ -48,6 +48,7 @@ public class NotificationService extends Service {
     String TAG = "Timers" ;
     private  AlarmManager alarmMgr;
     public void scheduleAlarm(String scheduledTimeString,int requestCode, String title, String message) {
+        long interval = getIntervalAlarm(scheduledTimeString);
         scheduledTimeString = scheduledTimeString.substring(9);
         Log.e("scheduledTimeString", scheduledTimeString);
         Intent intent = new Intent(getApplicationContext(), NotificationBroadcastReceiver.class);
@@ -64,11 +65,21 @@ public class NotificationService extends Service {
         }
 
         if (scheduledTime != null) {
-            alarmMgr.set(
-                    AlarmManager.RTC_WAKEUP,
-                    scheduledTime.getTime(),
-                    alarmIntent
-            );
+            if(interval == 0){
+                alarmMgr.set(
+                        AlarmManager.RTC_WAKEUP,
+                        scheduledTime.getTime(),
+                        alarmIntent
+                );
+            }else{
+                Log.e("Interval",interval+"");
+                alarmMgr.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        scheduledTime.getTime(),
+                        interval,
+                        alarmIntent);
+            }
+
         }
     }
 
@@ -83,9 +94,6 @@ public class NotificationService extends Service {
         Log. e ( TAG , "onStartCommand" ) ;
         super .onStartCommand(intent , flags , startId) ;
         alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
-        scheduleAlarm("2023-05-15 11:58:00", 0,"Hello", "OK");
-
         return START_STICKY ;
     }
     @Override
@@ -98,9 +106,25 @@ public class NotificationService extends Service {
         super.onDestroy() ;
     }
 
+    public long getIntervalAlarm(String date){
+        long interval = Utils.getTimeCycle(date);
+        if(interval == 1000L * 30 * 24 * 3600){
+            return  AlarmManager.INTERVAL_DAY * 30;
+        }
+
+        if(interval == 1000 * 7 * 24 * 3600){
+            return  AlarmManager.INTERVAL_DAY * 7;
+        }
+
+        if(interval == 1000 * 24 * 3600){
+            return  AlarmManager.INTERVAL_DAY;
+        }
+       return  0;
+    }
     public class NotificationBinder extends Binder {
         public NotificationService getService() {
             return NotificationService.this;
         }
     }
+
 }
