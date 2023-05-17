@@ -261,7 +261,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
 
     @Override
     public void updateRandomMode() {
-        tvRandomMode.setText(String.valueOf(project.isRandom()));
+        tvRandomMode.setText(String.valueOf(project.getIsRandom()));
     }
 
     @Override

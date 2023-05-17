@@ -51,11 +51,11 @@ public class HistorySubmit {
         this.projectId = projectId;
     }
 
-    public boolean isSync() {
+    public boolean getIsSync() {
         return isSync;
     }
 
-    public void setSync(boolean sync) {
+    public void setIsSync(boolean sync) {
         isSync = sync;
     }
 

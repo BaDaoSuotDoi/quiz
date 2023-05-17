@@ -284,7 +284,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         if(viewMode == AppConstants.PROJECT_PLAY){
             List<Question> allQuestion  = getPresenter().getQuestions(project.getId());
 
-            if(!project.isRandom()){
+            if(!project.getIsRandom()){
                 questions = allQuestion;
                 project.setQuestions(questions);
             }else{

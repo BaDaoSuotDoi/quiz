@@ -12,6 +12,7 @@ import com.badao.quiz.db.QuestionAnswerDB;
 import com.badao.quiz.db.QuestionDB;
 import com.badao.quiz.db.RecordDestroySyncDB;
 import com.badao.quiz.db.RecordUserAnswerDB;
+import com.badao.quiz.function.main.dialog.SyncDialog;
 import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
@@ -40,7 +41,6 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     public HomePresenter(Context context) {
         super(context);
     }
-
     @Override
     public void initProjects() {
         List<Project> projects = ProjectDB.getInstance(getContext()).findAll();
@@ -61,6 +61,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         Log.e("Run here", "SYnc");
         List<Project> projects = ProjectDB.getInstance(getContext()).getProjectSync();
         for(Project project: projects){
+            project.setIsSync(true);
             Log.e("project sync",project.toString());
             mDatabase.child(ProjectDB.name).child(Utils.generateKey(ProjectDB.name, project.getId()))
                     .setValue(project).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -83,6 +84,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
         List<Question> questions = QuestionDB.getInstance(getContext()).getQuestionSync();
         for(Question question: questions){
+            question.setIsSync(true);
             Log.e("question sync",question.toString());
             mDatabase.child(QuestionDB.name).child(Utils.generateKey(ProjectDB.name, question.getProjectId()))
                     .child(Utils.generateKey(QuestionDB.name, question.getId())).setValue(question).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -105,6 +107,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
         List<QuestionAnswer> questionAnswers = QuestionAnswerDB.getInstance(getContext()).getSync();
         for(QuestionAnswer questionAnswer: questionAnswers){
+            questionAnswer.setIsSync(true);
             Log.e("questionAnswers sync",questionAnswer.toString());
             mDatabase.child(QuestionAnswerDB.name).child(Utils.generateKey(QuestionDB.name, questionAnswer.getQuestionId()))
                     .child(Utils.generateKey(QuestionAnswerDB.name, questionAnswer.getId()))
@@ -129,6 +132,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
         List<HistorySubmit> historySubmits = HistorySubmitDB.getInstance(getContext()).getSync();
         for(HistorySubmit historySubmit: historySubmits){
+            historySubmit.setIsSync(true);
             Log.e("historySubmit sync",historySubmit.toString());
             mDatabase.child(HistorySubmitDB.name).child(Utils.generateKey(ProjectDB.name, historySubmit.getProjectId()))
                     .child(Utils.generateKey(HistorySubmitDB.name, historySubmit.getId())).setValue(historySubmit).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -149,6 +153,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
         List<RecordUserAnswer> recordUserAnswers = RecordUserAnswerDB.getInstance(getContext()).getSync();
         for(RecordUserAnswer recordUserAnswer: recordUserAnswers){
+            recordUserAnswer.setIsSync(true);
             Log.e("recordUserAnswer sync",recordUserAnswer.toString());
             mDatabase.child(RecordUserAnswerDB.name).child(Utils.generateKey(QuestionDB.name, recordUserAnswer.getQuestionId()))
                     .child(Utils.generateKey(RecordUserAnswerDB.name, recordUserAnswer.getId()))

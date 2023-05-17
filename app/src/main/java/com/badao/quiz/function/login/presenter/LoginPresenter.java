@@ -26,6 +26,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
                         Log.d("Login", "signInWithEmail:success");
                         FirebaseUser user = auth.getCurrentUser();
                         Log.e("user", user.toString());
+                        getView().triggerSyncData();
                         getView().navigationHome();
                     }   else {
                         // If sign in fails, display a message to the user.

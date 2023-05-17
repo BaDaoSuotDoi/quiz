@@ -61,11 +61,11 @@ public class QuestionAnswer {
         this.type = type;
     }
 
-    public boolean isSync() {
+    public boolean getIsSync() {
         return isSync;
     }
 
-    public void setSync(boolean sync) {
+    public void setIsSync(boolean sync) {
         isSync = sync;
     }
 

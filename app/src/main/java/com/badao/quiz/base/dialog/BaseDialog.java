@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 public abstract class BaseDialog extends DialogFragment {
     private static boolean isShowing = false;
-
+    private boolean isDisableDismiss = false;
     protected abstract int getDialogLayout();
     private MainActivityVM mainActivityVM;
     Unbinder unbinder;
@@ -66,6 +66,9 @@ public abstract class BaseDialog extends DialogFragment {
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if(isDisableDismiss){
+            setCancelable(false);
+        }
         return dialog;
     }
 
@@ -109,5 +112,9 @@ public abstract class BaseDialog extends DialogFragment {
 
     public void setupView(){
 
+    }
+
+    public void setDisableDismiss(boolean disableDismiss) {
+        isDisableDismiss = disableDismiss;
     }
 }

@@ -37,11 +37,37 @@ public class QuestionDB extends  SQLiteHelper{
         return  questionDB;
     }
 
+    public long createOnly(Question question){
+
+        question.setCreatedAt(Utils.getTimeCurrent());
+        question.setLastUpdated(Utils.getTimeCurrent());
+        ContentValues values = new ContentValues();
+        if(question.getId()!=0){
+            values.put("id", question.getId());
+        }
+        values.put("content", question.getContent());
+        values.put("created_at", question.getCreatedAt());
+        values.put("last_updated", question.getLastUpdated());
+        values.put("type", question.getType());
+        values.put("is_sync", question.getIsSync()?1:0);
+        values.put("comment", question.getComment());
+        values.put("position", question.getPosition());
+        values.put("status", question.getStatus());
+        values.put("project_id", question.getProjectId());
+        values.put("version",  question.getVersion());
+        long id = sqlWrite.insert(QuestionDB.name, null, values);
+        question.setId((int)id);
+        return id;
+    }
+
     public long create(Question question){
 
         question.setCreatedAt(Utils.getTimeCurrent());
         question.setLastUpdated(Utils.getTimeCurrent());
         ContentValues values = new ContentValues();
+        if(question.getId()!=0){
+            values.put("id", question.getId());
+        }
         values.put("content", question.getContent());
         values.put("created_at", question.getCreatedAt());
         values.put("last_updated", question.getLastUpdated());
@@ -245,7 +271,7 @@ public class QuestionDB extends  SQLiteHelper{
         Cursor cursor = sqlRead.rawQuery("select * from questions where is_sync = 0", null);
         while (cursor != null && cursor.moveToNext()){
             Question question = exact(cursor);
-            question.setSync(true);
+            question.setIsSync(true);
             questions.add(question);
         }
         return  questions;

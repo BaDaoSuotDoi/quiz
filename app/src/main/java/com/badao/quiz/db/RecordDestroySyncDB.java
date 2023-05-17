@@ -61,4 +61,8 @@ public class RecordDestroySyncDB  extends  SQLiteHelper{
         String[] arg = {id+""};
         sqlWrite.delete(RecordDestroySyncDB.name, "id=?", arg);
     }
+
+    public void destroyAll(){
+        sqlWrite.delete(RecordDestroySyncDB.name, null, null);
+    }
 }

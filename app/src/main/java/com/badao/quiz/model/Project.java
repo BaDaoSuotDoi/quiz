@@ -69,11 +69,11 @@ public class Project {
         this.lastUpdated = lastUpdated;
     }
 
-    public boolean isRandom() {
+    public boolean getIsRandom() {
         return isRandom;
     }
 
-    public void setRandom(boolean random) {
+    public void setIsRandom(boolean random) {
         isRandom = random;
     }
 
@@ -101,11 +101,11 @@ public class Project {
         this.mode = mode;
     }
 
-    public boolean isSync() {
+    public boolean getIsSync() {
         return isSync;
     }
 
-    public void setSync(boolean sync) {
+    public void setIsSync(boolean sync) {
         isSync = sync;
     }
 

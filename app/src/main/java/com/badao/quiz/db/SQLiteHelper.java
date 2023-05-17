@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "quiz.db";
-    private static int DATABASE_VERSION = 25;
+    private static int DATABASE_VERSION = 30;
 
     public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -17,7 +17,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     protected SQLiteDatabase sqlWrite = getWritableDatabase();
 
     @Override
+    public void onOpen(SQLiteDatabase db){
+        super.onOpen(db);
+        db.execSQL("PRAGMA foreign_keys=ON");
+    }
+    @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
         String projectDB = "CREATE TABLE IF NOT EXISTS projects (\n" +
                 "  id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "  name VARCHAR(255) NOT NULL,\n" +
@@ -43,7 +49,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "  status INTEGER NOT NULL,\n" +
                 "  project_id INTEGER NOT NULL,\n"+
                 "  version INTEGER NOT NULL,\n"+
-                "  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE\n"  +
+                "  FOREIGN  KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE\n"  +
                 ");\n";
 
         String questionAnswerDB = "CREATE TABLE IF NOT EXISTS question_answers (\n" +
@@ -90,6 +96,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "  parent_name VARCHAR(255) NOT NULL\n"+
                 ");\n";
 
+        sqLiteDatabase.execSQL("PRAGMA foreign_keys=ON");
         sqLiteDatabase.execSQL(projectDB);
         sqLiteDatabase.execSQL(questionDB);
         sqLiteDatabase.execSQL(questionAnswerDB);

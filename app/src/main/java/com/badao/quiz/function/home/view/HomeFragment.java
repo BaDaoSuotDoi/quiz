@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.badao.quiz.R;
 import com.badao.quiz.base.animation.AnimationType;
+import com.badao.quiz.db.RecordDestroySyncDB;
 import com.badao.quiz.function.home.dialog.DeleteProjectDialog;
 import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
@@ -28,8 +29,10 @@ import com.badao.quiz.component.ProjectItemCpn;
 import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.ProjectDB;
 import com.badao.quiz.dialog.ProjectDialog;
+import com.badao.quiz.function.home.dialog.WarningSyncDialog;
 import com.badao.quiz.function.home.presenter.HomeContract;
 import com.badao.quiz.function.home.presenter.HomePresenter;
+import com.badao.quiz.function.main.dialog.SyncDialog;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.utils.BundleBuilder;
 import com.google.android.flexbox.FlexboxLayout;
@@ -63,7 +66,8 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
     private TextView tvSync;
     private ImageView imSync;
 
-    private AlertDialog dialog;
+//    private AlertDialog dialog;
+    private SyncDialog syncDialog;
     @Override
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
@@ -72,6 +76,8 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
                 getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        syncDialog = new SyncDialog();
+
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -90,7 +96,6 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.e("Open", "OK");
                 if(ProjectDB.getInstance(getContext()).checkIsSync()){
                     tvSync.setTextColor(Color.parseColor("#D30C12"));
                 }else{
@@ -121,17 +126,6 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
         String email = user.getEmail();
         mDatabase = FirebaseDatabase.getInstance().getReference(email.substring(0, email.length() - 10));
 
-        mDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    Log.e("firebase", String.valueOf(task.getResult().getValue()));
-                }
-            }
-        });
         initProfileHeaderMenu();
         getPresenter().firebaseListener();
         setupSearch();
@@ -164,6 +158,22 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
                 addProject(project);
             }
         });
+
+        getViewModel().getEventReload().observe(this, isReload->{
+            if(isReload){
+                refreshView();
+                getPresenter().initProjects();
+            }
+        });
+
+//        getViewModel().getEventSyncData().observe(this, isSync->{
+//            Log.e("Sync", "OK");
+//            if(isSync){
+//                syncDialog.show(getActivity().getSupportFragmentManager(), SyncDialog.class.getName());
+//            }else{
+//                syncDialog.dismiss();
+//            }
+//        });
     }
 
     @Override
@@ -239,9 +249,24 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                FirebaseAuth.getInstance().signOut();
-                navigate(R.id.loginFragment, AnimationType.FROM_BOTTOM_LEFT_CORNER_TO_WHOLE_SCREEN);
+                if(ProjectDB.getInstance(getContext()).checkIsSync()){
+                    WarningSyncDialog warningSyncDialog = new WarningSyncDialog(new WarningSyncDialog.IListener() {
+                        @Override
+                        public void onForceLogout() {
+                            ProjectDB.getInstance(getContext()).destroyAll();
+                            RecordDestroySyncDB.getInstance(getContext()).destroyAll();
+                            FirebaseAuth.getInstance().signOut();
+                            navigate(R.id.loginFragment, AnimationType.FROM_BOTTOM_LEFT_CORNER_TO_WHOLE_SCREEN);
+                        }
+                    });
+                    warningSyncDialog.show(getParentFragmentManager(), WarningSyncDialog.class.getName());
+                }else{
+                    ProjectDB.getInstance(getContext()).destroyAll();
+                    RecordDestroySyncDB.getInstance(getContext()).destroyAll();
+                    FirebaseAuth.getInstance().signOut();
+                    navigate(R.id.loginFragment, AnimationType.FROM_BOTTOM_LEFT_CORNER_TO_WHOLE_SCREEN);
+                }
+                drawerLayout.closeDrawer(navigationView);
             }
         });
 
@@ -249,15 +274,16 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
             @Override
             public void onClick(View view) {
                 if(ProjectDB.getInstance(getContext()).checkIsSync()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                    LayoutInflater inflater = getLayoutInflater();
-                    View dialogView = inflater.inflate(R.layout.alter_sync, null);
-
-                    builder.setView(dialogView);
-                    builder.setCancelable(false);
-                    dialog = builder.create();
-                    dialog.show();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//
+//                    LayoutInflater inflater = getLayoutInflater();
+//                    View dialogView = inflater.inflate(R.layout.alter_sync, null);
+//
+//                    builder.setView(dialogView);
+//                    builder.setCancelable(false);
+//                    dialog = builder.create();
+//                    dialog.show();
+                    syncDialog.show(getActivity().getSupportFragmentManager(), SyncDialog.class.getName());
                     getPresenter().sync();
 
                 }
@@ -280,7 +306,7 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
     @Override
     public void syncSuccess() {
         tvSync.setTextColor(Color.parseColor("#23B81E"));
-        dialog.dismiss();
+        syncDialog.dismiss();
     }
 
     @Override

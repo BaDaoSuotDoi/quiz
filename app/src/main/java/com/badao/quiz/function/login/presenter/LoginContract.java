@@ -10,6 +10,7 @@ public class LoginContract {
     public interface View extends BaseContract.View {
         void navigationHome();
         void navigationSignup();
+        void triggerSyncData();
     }
 
     public interface Presenter extends BaseContract.Presenter<View> {

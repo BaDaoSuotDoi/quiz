@@ -38,14 +38,17 @@ public class ProjectDB  extends  SQLiteHelper{
 
     public Project create(Project project){
         ContentValues values = new ContentValues();
+        if(project.getId()!=0){
+            values.put("id", project.getId());
+        }
         values.put("name", project.getName());
         values.put("created_at", project.getCreatedAt());
         values.put("last_updated", project.getLastUpdated());
-        values.put("is_random", project.isRandom() ? 1 : 0);
+        values.put("is_random", project.getIsRandom() ? 1 : 0);
         values.put("question_per_session", project.getQuestionPerSession());
         values.put("duration", project.getDuration());
         values.put("mode", project.getMode());
-        values.put("is_sync", project.isSync() ? 1: 0);
+        values.put("is_sync", project.getIsSync() ? 1: 0);
         values.put("schedule", project.getSchedule());
         long id = sqlWrite.insert(ProjectDB.name, null, values);
         project.setId((int)id);
@@ -112,6 +115,9 @@ public class ProjectDB  extends  SQLiteHelper{
         return  new Project(id,name, createdAt,lastUpdated,isRandom,questionPerSession,duration,mode,isSync );
     }
 
+    public void destroyAll(){
+        sqlWrite.delete(ProjectDB.name, null, null);
+    }
     public void destroy(Project project){
         Log.e("Project delete", "Ok "+ project.getId());
         Project project1 = findByPk(project.getId());
@@ -137,12 +143,19 @@ public class ProjectDB  extends  SQLiteHelper{
     public void update(Map<String, String> keys, int id){
         String[] args = {id+""};
         ContentValues values = new ContentValues();
+        boolean isSync = false;
         for(String key: keys.keySet()){
-            if(key.equals("is_random") ||  key.equals("is_sync") || key.equals("question_per_session")){
+            if(key.equals("is_sync")){
+                isSync = true;
+            }
+            if(key.equals("is_random") || key.equals("question_per_session")){
                 values.put(key, Integer.parseInt(keys.get(key)));
             }else{
                 values.put(key, keys.get(key));
             }
+        }
+        if(!isSync){
+            values.put("is_sync", 0);
         }
         sqlWrite.update("projects",values,"id = ?",args);
     }
@@ -175,7 +188,7 @@ public class ProjectDB  extends  SQLiteHelper{
         Cursor cursor = sqlRead.rawQuery("select * from projects where is_sync = 0", null);
         while (cursor != null && cursor.moveToNext()){
             Project project = exact(cursor);
-            project.setSync(true);
+            project.setIsSync(true);
             projects.add(exact(cursor));
         }
         return  projects;

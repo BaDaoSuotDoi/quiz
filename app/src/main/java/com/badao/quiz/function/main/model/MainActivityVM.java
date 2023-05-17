@@ -13,6 +13,8 @@ public class MainActivityVM extends ViewModel {
     private MutableLiveData<Payload> mlUserChangeAnswer = new SingleLiveEvent<>();
     private MutableLiveData<Payload> mlScheduleNotificationProject = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> eventShowKeyBoard = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> eventSyncData = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> eventReload = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> getEventShowKeyBoard() {
         return eventShowKeyBoard;
     }
@@ -30,6 +32,12 @@ public class MainActivityVM extends ViewModel {
 
     public MutableLiveData<Payload> getMldProjectStatus() {
         return mldProjectStatus;
+    }
+    public SingleLiveEvent<Boolean> getEventSyncData() {
+        return eventSyncData;
+    }
+    public SingleLiveEvent<Boolean> getEventReload() {
+        return eventReload;
     }
 
     public MutableLiveData<Payload> getMlUserChangeAnswer() {

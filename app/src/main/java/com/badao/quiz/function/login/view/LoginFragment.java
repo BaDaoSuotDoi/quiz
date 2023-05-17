@@ -89,4 +89,9 @@ public class LoginFragment extends BaseAnnotatedFragment<LoginContract.View, Log
     protected void onBackHardwareClicked() {
         super.onBackHardwareClicked();
     }
+
+    @Override
+    public void triggerSyncData() {
+        getViewModel().getEventSyncData().postValue(true);
+    }
 }

@@ -56,8 +56,11 @@ public class HistorySubmitDB extends  SQLiteHelper{
     public long create(HistorySubmit historySubmit){
         Log.e("Create History", historySubmit.toString());
         ContentValues values = new ContentValues();
+        if(historySubmit.getId() !=0){
+            values.put("id", historySubmit.getId());
+        }
         values.put("project_id", historySubmit.getProjectId());
-        values.put("is_sync", historySubmit.isSync()? 1 : 0);
+        values.put("is_sync", historySubmit.getIsSync()? 1 : 0);
         values.put("time_elapsed", historySubmit.getTimeElapsed());
         values.put("submitted_at", historySubmit.getSubmittedAt() );
         values.put("correct_answer_number", historySubmit.getCorrectAnswerNumber());
@@ -86,7 +89,7 @@ public class HistorySubmitDB extends  SQLiteHelper{
         Cursor cursor = sqlRead.rawQuery("select * from history_submits where is_sync = 0", null);
         while (cursor != null && cursor.moveToNext()){
             HistorySubmit historySubmit = exact(cursor);
-            historySubmit.setSync(true);
+            historySubmit.setIsSync(true);
             historySubmits.add(historySubmit);
         }
         return  historySubmits;

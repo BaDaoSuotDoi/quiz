@@ -83,10 +83,13 @@ public class QuestionAnswerDB extends  SQLiteHelper{
         questionAnswer.setCreatedAt(Utils.getTimeCurrent());
         questionAnswer.setLastUpdated(Utils.getTimeCurrent());
         ContentValues values = new ContentValues();
-        values.put("question_id", questionAnswer.getQuestionId());
+        if(questionAnswer.getId()>0){
+            values.put("id", questionAnswer.getId());
+        }
         values.put("content", questionAnswer.getContent());
+        values.put("question_id", questionAnswer.getQuestionId());
         values.put("type", questionAnswer.getType());
-        values.put("is_sync", questionAnswer.isSync() ? 1: 0);
+        values.put("is_sync", questionAnswer.getIsSync() ? 1: 0);
         values.put("created_at", questionAnswer.getCreatedAt());
         values.put("last_updated", questionAnswer.getLastUpdated());
         long id = sqlWrite.insert(QuestionAnswerDB.name, null, values);
@@ -112,7 +115,7 @@ public class QuestionAnswerDB extends  SQLiteHelper{
         Cursor cursor = sqlRead.rawQuery("select * from question_answers where is_sync = 0", null);
         while (cursor != null && cursor.moveToNext()){
             QuestionAnswer question = exact(cursor);
-            question.setSync(true);
+            question.setIsSync(true);
             questionAnswers.add(question);
         }
         return questionAnswers;

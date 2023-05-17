@@ -35,11 +35,14 @@ public class RecordUserAnswerDB extends SQLiteHelper{
         ContentValues values = new ContentValues();
         recordUserAnswer.setCreatedAt(Utils.getTimeCurrent());
         recordUserAnswer.setLastUpdated(Utils.getTimeCurrent());
+        if(recordUserAnswer.getId() > 0){
+            values.put("id", recordUserAnswer.getId());
+        }
         values.put("history_id", recordUserAnswer.getHistoryId());
         values.put("question_id", recordUserAnswer.getQuestionId());
         values.put("answer", recordUserAnswer.getAnswer());
         values.put("status", recordUserAnswer.getStatus() );
-        values.put("is_sync", recordUserAnswer.isSync()? 1:0);
+        values.put("is_sync", recordUserAnswer.getIsSync()? 1:0);
         values.put("created_at", recordUserAnswer.getCreatedAt());
         values.put("last_updated", recordUserAnswer.getLastUpdated());
         long id = sqlWrite.insert(RecordUserAnswerDB.name, null, values);
@@ -90,7 +93,7 @@ public class RecordUserAnswerDB extends SQLiteHelper{
         Cursor cursor = sqlRead.rawQuery("select * from record_user_answers where is_sync = 0", null);
         while (cursor != null && cursor.moveToNext()){
             RecordUserAnswer recordUserAnswer = exact(cursor);
-            recordUserAnswer.setSync(true);
+            recordUserAnswer.setIsSync(true);
             recordUserAnswers.add(recordUserAnswer);
         }
 
