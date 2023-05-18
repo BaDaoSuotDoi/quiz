@@ -43,7 +43,6 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
             FrameLayout mainContent = mView.findViewById(R.id.content_layout);
             mainContent.addView(viewStub);
 
-            // fixed blink screen
             viewStub.postDelayed(() -> {
                 mView.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
             }, 50);

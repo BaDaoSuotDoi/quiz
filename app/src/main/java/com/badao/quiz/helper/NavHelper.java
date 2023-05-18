@@ -40,106 +40,29 @@ public class NavHelper {
             actionId = R.id.homeFragment;
         }
 
-        Log.e("actionId:", actionId+"//"+ R.id.homeFragment);
         navController.navigate(actionId, null, options);
     }
 
     public void navigate(int layoutId, AnimationType type) {
-        if (layoutId == R.id.loginFragment) {
-            forceNavigate(layoutId, type, null);
-            return;
-        }
-        if (hasBackStackNavigationId(layoutId)) {
-            NavDestination current = getCurrentDestination();
-            if (current != null && current.getId() == layoutId) {
-                BaseFragment baseFragment = (BaseFragment) getCurrentFragment();
-                if (baseFragment != null) {
-                    baseFragment.onRefreshData(null);
-                    return;
-                }
-            }
-
-            popBackStack(layoutId, false);
-        } else {
-            forceNavigate(layoutId, type, null);
-        }
+        NavOptions options = createNavOptions(layoutId, type);
+        navController.navigate(layoutId, null, options);
     }
 
     public void navigate(int layoutId, Bundle bundle, AnimationType type) {
-       
-        Log.e("Push here1", "OK");
-        if (hasBackStackNavigationId(layoutId)) {
-            NavDestination current = getCurrentDestination();
-            if (current != null && current.getId() == layoutId) {
-                BaseFragment baseFragment = (BaseFragment) getCurrentFragment();
-                if (baseFragment != null) {
-                    baseFragment.onRefreshData(bundle);
-                    Log.e("Push here2", "OK");
-                    return;
-                }
-            }
-            Log.e("Push here", "OK");
-            popBackStack(layoutId, false, bundle);
-        } else {
-            Log.e("Push here3", "OK");
-            forceNavigate(layoutId, type, bundle);
-        }
-    }
-
-    public void forceNavigate(int layoutId, AnimationType type, Bundle bundle) {
         NavOptions options = createNavOptions(layoutId, type);
-        Log.e("layout", layoutId+"//"+R.layout.fragment_home);
         navController.navigate(layoutId, bundle, options);
     }
+
 
     public boolean popBackStack() {
         return navController.popBackStack();
     }
 
-    public boolean popBackStack(int destinationId, boolean inclusive) {
-        return navController.popBackStack(destinationId, inclusive);
-    }
-
-    public void popBackStack(int destinationId, boolean inclusive, Bundle bundle) {
-        NavBackStackEntry entry = findDesinationFromBackstack(destinationId);
-        if (entry == null) {
-            forceNavigate(destinationId, AnimationType.NONE, bundle);
-            return;
-        }
-
-        NavDestination destination = getCurrentDestination();
-        if (destination != null && destination.getId() == destinationId) {
-            Fragment currentFragment = getCurrentFragment();
-            if (currentFragment instanceof BaseFragment) {
-                ((BaseFragment) currentFragment).setRefreshBundle(bundle);
-                ((BaseFragment) currentFragment).onRefreshData(bundle);
-            }
-            return;
-        }
-
-        entry.getSavedStateHandle().set(AppConstants.EXTRAS_REFRESH_BUNDLE, bundle);
-        popBackStack(destinationId, inclusive);
-    }
 
     public NavDestination getCurrentDestination() {
         return navController != null ? navController.getCurrentDestination() : null;
     }
 
-    private NavBackStackEntry findDesinationFromBackstack(int destinationId) {
-        try {
-            return navController.getBackStackEntry(destinationId);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private Fragment getCurrentFragment() {
-        Fragment navigationFragment = activity.getSupportFragmentManager().getPrimaryNavigationFragment();
-        if (navigationFragment != null) {
-            return navigationFragment.getChildFragmentManager().getPrimaryNavigationFragment();
-        }
-        return null;
-    }
 
     public Bundle getRefreshDataBundle() {
         try {
@@ -148,15 +71,6 @@ public class NavHelper {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private boolean hasBackStackNavigationId(int destinationId) {
-        try {
-            navController.getBackStackEntry(destinationId);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 

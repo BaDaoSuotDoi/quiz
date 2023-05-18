@@ -82,9 +82,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         project = getPresenter().getProject();
         viewMode = getPresenter().getViewMode();
         initViewMode();
-        updateQuestionPlay();
-        updateMenuQuestion();
-        initMenuHeader();
+
 
         vpQuestionPlay.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -171,7 +169,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         observe();
 
         if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-            btSubmit.setVisibility(View.INVISIBLE);
+            btSubmit.setText("REPLAY TEST");
         }
         btSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,8 +181,14 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                     historySubmit = getPresenter().submit(project);
                     setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
                     changeViewSubmit(historySubmit);
+                    btSubmit.setText("REPLAY TEST");
+                }else if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
+                    setViewMode(AppConstants.PROJECT_PLAY);
+                    initViewMode();
+                    btSubmit.setText("FINISH THE TEST");
 
                 }
+                drawerLayout.closeDrawer(navigationView);
             }
         });
     }
@@ -209,6 +213,14 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         if(navigationView != null){
             int n = project.getQuestions().size();
             Menu menu = navigationView.getMenu();
+            Log.e("Menu SIze",menu.size()+"");
+            if(menu.size() > 0){
+                for(int i = 0 ; i < n ;i++){
+                    Question question = project.getQuestions().get(i);
+                    menu.removeItem(question.getPosition());
+                }
+            }
+
             for(int i= 0; i< n; i++){
                 Question question = project.getQuestions().get(i);
                 if(question.isValid()) {
@@ -333,6 +345,10 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
             project.setQuestions(questions);
             updateTime(Utils.displayTime(historySubmit.getTimeElapsed()));
         }
+
+        updateQuestionPlay();
+        updateMenuQuestion();
+        initMenuHeader();
     }
 
 
@@ -379,7 +395,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         tvTimeElapsed.setText(Utils.displayTime(historySubmit.getTimeElapsed()));
         Log.e("historySubmit.getTimeElapsed(", Utils.displayTime(historySubmit.getTimeElapsed()));
         setModeMenuShowAnswer();
-        btSubmit.setVisibility(View.INVISIBLE);
+//        btSubmit.setVisibility(View.INVISIBLE);
     }
 
 }

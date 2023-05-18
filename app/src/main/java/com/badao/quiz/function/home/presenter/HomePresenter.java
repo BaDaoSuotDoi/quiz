@@ -181,16 +181,17 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
             if(recordDestroySync.getTableName().equals(ProjectDB.name)){
                 dr = mDatabase.child(recordDestroySync.getTableName())
                         .child(Utils.generateKey(recordDestroySync.getTableName(), recordDestroySync.getObjectId()));
-            }
-            if(recordDestroySync.getParentId() > 0){
-                Log.e("Run here", "OK");
-                dr = mDatabase.child(recordDestroySync.getTableName())
-                        .child(Utils.generateKey(recordDestroySync.getParentName(), recordDestroySync.getParentId()));
-            }
+            }else{
+                if(recordDestroySync.getParentId() > 0){
+                    Log.e("Run here", "OK");
+                    dr = mDatabase.child(recordDestroySync.getTableName())
+                            .child(Utils.generateKey(recordDestroySync.getParentName(), recordDestroySync.getParentId()));
+                }
 
-            if(recordDestroySync.getObjectId() > 0){
-                if(dr!= null){
-                    dr = dr.child(Utils.generateKey(recordDestroySync.getTableName(), recordDestroySync.getObjectId()));
+                if(recordDestroySync.getObjectId() > 0){
+                    if(dr!= null){
+                        dr = dr.child(Utils.generateKey(recordDestroySync.getTableName(), recordDestroySync.getObjectId()));
+                    }
                 }
             }
 

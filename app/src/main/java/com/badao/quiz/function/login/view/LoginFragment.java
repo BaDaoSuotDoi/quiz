@@ -21,11 +21,14 @@ import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.function.login.presenter.LoginContract;
 import com.badao.quiz.function.login.presenter.LoginPresenter;
+import com.badao.quiz.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.concurrent.CountDownLatch;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +47,8 @@ public class LoginFragment extends BaseAnnotatedFragment<LoginContract.View, Log
     Button btLogin;
     @BindView(R.id.tvSignup)
     TextView tvSignup;
+    @BindView(R.id.tvForgetPassword)
+    TextView tvForgetPassword;
     FirebaseAuth mAuth;
 
     @Override
@@ -54,25 +59,55 @@ public class LoginFragment extends BaseAnnotatedFragment<LoginContract.View, Log
             return;
         }
         mAuth = FirebaseAuth.getInstance();
+        tvForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = edEmail.getText().toString();
+                if(email.isEmpty() || !Utils.isValidEmail(email)){
+                    Toast.makeText(getContext(), "Email invalid!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Send email successful!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Send email fail!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+
+        btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setStatusButtonLogin(false);
+                String email = edEmail.getText().toString();
+                String password = edPassword.getText().toString();
+
+                if(email.equals("")){
+                    Toast.makeText(getContext(), "Email empty!",Toast.LENGTH_SHORT).show();
+                    setStatusButtonLogin(true);
+                    return;
+                }
+
+                if(password.equals("")){
+                    Toast.makeText(getContext(), "Password empty!",Toast.LENGTH_SHORT).show();
+                    setStatusButtonLogin(true);
+                    return;
+                }
+
+                getPresenter().login(getActivity(),mAuth, email, password);
+            }
+        });
+
+
     }
 
-    @OnClick(R.id.btLogin)
-    public void login(){
-        String email = edEmail.getText().toString();
-        String password = edPassword.getText().toString();
-
-        if(email.equals("")){
-            Toast.makeText(getContext(), "Email empty!",Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(password.equals("")){
-            Toast.makeText(getContext(), "Password empty!",Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        getPresenter().login(getActivity(),mAuth, email, password);
-    }
 
     @Override
     public void navigationHome() {
@@ -89,5 +124,10 @@ public class LoginFragment extends BaseAnnotatedFragment<LoginContract.View, Log
     @Override
     public void triggerSyncData() {
         getViewModel().getEventSyncData().postValue(true);
+    }
+
+    @Override
+    public void setStatusButtonLogin(boolean status) {
+        btLogin.setEnabled(status);
     }
 }

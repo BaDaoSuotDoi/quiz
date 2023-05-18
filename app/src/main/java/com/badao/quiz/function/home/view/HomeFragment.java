@@ -65,8 +65,8 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
     private  DatabaseReference mDatabase;
     private TextView tvSync;
     private ImageView imSync;
+    private String syncColorSuccess = "#1D551A";
 
-//    private AlertDialog dialog;
     private SyncDialog syncDialog;
     @Override
     public void initViews(boolean isRefreshData) {
@@ -98,7 +98,9 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
             public void onDrawerStateChanged(int newState) {
                 if(ProjectDB.getInstance(getContext()).checkIsSync()){
                     tvSync.setTextColor(Color.parseColor("#D30C12"));
+                    imSync.setImageResource(R.drawable.ic_wrong);
                 }else{
+                    tvSync.setTextColor(Color.parseColor(syncColorSuccess));
                     imSync.setImageResource(R.drawable.correct);
                 }
             }
@@ -123,8 +125,10 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
             }
         });
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String email = user.getEmail();
-        mDatabase = FirebaseDatabase.getInstance().getReference(email.substring(0, email.length() - 10));
+        if(user != null){
+            String email = user.getEmail();
+            mDatabase = FirebaseDatabase.getInstance().getReference(email.substring(0, email.length() - 10));
+        }
 
         initProfileHeaderMenu();
         getPresenter().firebaseListener();
@@ -305,7 +309,8 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
 
     @Override
     public void syncSuccess() {
-        tvSync.setTextColor(Color.parseColor("#23B81E"));
+        tvSync.setTextColor(Color.parseColor(syncColorSuccess));
+        imSync.setImageResource(R.drawable.correct);
         syncDialog.dismiss();
     }
 

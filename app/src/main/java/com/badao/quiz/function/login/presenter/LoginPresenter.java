@@ -10,6 +10,8 @@ import com.badao.quiz.base.mvp.presenter.BasePresenter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.concurrent.CountDownLatch;
+
 
 public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presenter{
 
@@ -34,6 +36,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
                         Toast.makeText(getContext(), "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
+                    getView().setStatusButtonLogin(true);
                 });
     }
 }

@@ -57,7 +57,7 @@ public abstract class BaseFragment extends Fragment {
     public void navigate(int layoutId, AnimationType type) {
         NavHelper navHelper = findMainNav();
         if (layoutId == R.id.loginFragment) {
-            navHelper.forceNavigate(layoutId, type, null);
+            navHelper.navigate(layoutId, null,type);
             return;
         }
         if (navHelper != null) {
@@ -70,10 +70,6 @@ public abstract class BaseFragment extends Fragment {
 
     public void navigate(int layoutId, Bundle bundle, AnimationType type) {
         NavHelper navHelper = findMainNav();
-        if (layoutId == R.id.loginFragment) {
-            navHelper.forceNavigate(layoutId, type, null);
-            return;
-        }
 
         if (navHelper != null) {
             navHelper.navigate(layoutId, bundle, type);
@@ -85,7 +81,7 @@ public abstract class BaseFragment extends Fragment {
     public boolean popBackStack() {
         NavHelper navHelper = findMainNav();
         if (navHelper != null) {
-            if(navHelper.getCurrentDestination().getId() == R.id.homeFragment){
+            if(navHelper.getCurrentDestination().getId() == R.id.loginFragment || navHelper.getCurrentDestination().getId() == R.id.homeFragment){
                 getActivity().finish();
                 return false;
             }

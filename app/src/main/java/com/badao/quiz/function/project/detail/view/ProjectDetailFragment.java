@@ -90,6 +90,12 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         project = getPresenter().getProject();
         totalQuestion = getPresenter().getNumberQuestion();
         init();
+        if(!project.getIsRandom()){
+            ViewGroup.LayoutParams layoutParams = llQuestionPerSession.getLayoutParams();
+            layoutParams.height = 0;
+            layoutParams.width = 0;
+            llQuestionPerSession.setLayoutParams(layoutParams);
+        }
         imName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,7 +232,9 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         updateDuration();
         updateCreatedAt();
         updateUpdatedAt();
-        tvSchedule.setText(Utils.displaySchedule(project.getSchedule()));
+        if(!project.getSchedule().isEmpty()){
+            tvSchedule.setText(Utils.displaySchedule(project.getSchedule()));
+        }
     }
 
     @Override

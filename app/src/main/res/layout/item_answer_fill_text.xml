@@ -9,6 +9,6 @@
         android:id="@+id/edContent"
         android:hint="Answer..."
         android:textColor="@color/black"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/grey"
         />
 </RelativeLayout>

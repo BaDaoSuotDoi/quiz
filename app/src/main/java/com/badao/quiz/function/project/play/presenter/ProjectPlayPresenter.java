@@ -123,9 +123,7 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                 if(questionCorrectNumber != elements.length ){
                     Log.e("Fault here", "no match number choose "+elements.length);
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
-                }
-
-                if(correctAnswerNumber == 0 && elements.length == 0){
+                }else if(correctAnswerNumber == 0 && elements.length == 0){
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
                 }
 

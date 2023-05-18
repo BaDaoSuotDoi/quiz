@@ -41,7 +41,7 @@ public class HistoryAdapter extends BaseAdapter<HistorySubmit, HistoryAdapter.Vi
         int numberNoAnswer = item.getNoAnswerNumber();
         int numberWrong = item.getQuestionNumber() - numberCorrect - numberNoAnswer;
         holder.tvProjectName.setText(item.getProject().getName());
-        holder.tvPercent.setText("30%");
+        holder.tvPercent.setText(String.format("%.2f", (float)(numberCorrect*100)/item.getQuestionNumber())+"%");
         holder.tvSubmittedAt.setText(item.getSubmittedAt());
         holder.tvTimeElapsed.setText(Utils.displayTime(item.getTimeElapsed()));
         holder.tvNumberCorrect.setText(String.valueOf(numberCorrect));

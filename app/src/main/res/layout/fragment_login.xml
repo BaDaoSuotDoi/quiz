@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_sync"
+            android:src="@drawable/ic_logo"
             android:id="@+id/idIcon"
             />
     </LinearLayout>
@@ -44,9 +44,26 @@
         android:backgroundTint="@color/primary"
         />
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llForgetPassword"
+        android:layout_below="@+id/edPassword"
+        android:gravity="right"
+        android:padding="10dp"
+        android:layout_marginRight="5dp"
+        >
+        <TextView
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forget password?"
+            android:id="@+id/tvForgetPassword"
+            />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edPassword"
+        android:layout_below="@+id/llForgetPassword"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
