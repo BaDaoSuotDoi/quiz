@@ -85,10 +85,6 @@ public class LoginFragment extends BaseAnnotatedFragment<LoginContract.View, Log
         navigate(R.id.signupFragment, AnimationType.FROM_BOTTOM_LEFT_CORNER_TO_WHOLE_SCREEN);
     }
 
-    @Override
-    protected void onBackHardwareClicked() {
-        super.onBackHardwareClicked();
-    }
 
     @Override
     public void triggerSyncData() {

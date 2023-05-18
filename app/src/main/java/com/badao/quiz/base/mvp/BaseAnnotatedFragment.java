@@ -77,8 +77,7 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
 
     private void prepareInitView() {
         initViewModel();
-
-        initBackHardware();
+        backHandle();
     }
 
 
@@ -90,27 +89,22 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
         return mainActivityVM;
     }
 
-
-    private void initBackHardware() {
-        backHandle();
-    }
-
     protected void backHandle() {
         if (getClass().getAnnotation(ViewInflate.class).isDisableBack()) return;
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                onBackHardwareClicked();
+                if(beforeBack()){
+                    popBackStack();
+
+                }
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
-    protected void onBackHardwareClicked() {
-        popBackStack();
+    public boolean beforeBack(){
+        return  true;
     }
-
-
-
 }

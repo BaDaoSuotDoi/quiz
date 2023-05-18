@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,8 @@ import butterknife.BindView;
 public class HistoryFragment extends BaseAnnotatedFragment<HistoryContract.View, HistoryContract.Presenter> implements HistoryContract.View{
     @BindView(R.id.rcProjectHistory)
     RecyclerView rcProjectHistory;
+    @BindView(R.id.imPrevious)
+    ImageView imPrevious;
 
     private List<HistorySubmit> historySubmits;
     private HistoryAdapter adapter;
@@ -45,6 +48,12 @@ public class HistoryFragment extends BaseAnnotatedFragment<HistoryContract.View,
             @Override
             public void onItemClick(BaseAdapter adapter, View view, int position) {
                 navigateProjectResult(historySubmits.get(position));
+            }
+        });
+        imPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popBackStack();
             }
         });
 

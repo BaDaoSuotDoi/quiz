@@ -2,6 +2,8 @@ package com.badao.quiz.function.statistics.view;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +26,8 @@ import butterknife.BindView;
 public class StatisticsFragment extends BaseAnnotatedFragment<StatisticsContract.View, StatisticsContract.Presenter> implements StatisticsContract.View{
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-
+    @BindView(R.id.imPrevious)
+    ImageView imPrevious;
     @Override
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
@@ -35,5 +38,11 @@ public class StatisticsFragment extends BaseAnnotatedFragment<StatisticsContract
         StatisticAdapter statisticAdapter = new StatisticAdapter(getActivity(), statistics);
         recyclerView.setAdapter(statisticAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        imPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popBackStack();
+            }
+        });
     }
 }

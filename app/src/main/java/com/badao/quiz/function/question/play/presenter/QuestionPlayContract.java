@@ -7,6 +7,7 @@ public class QuestionPlayContract {
         void updateContent();
         void updateComment();
         void updateSolution(boolean isShow);
+        void initAlterLeavePlayDialog();
     }
 
     public interface Presenter extends BaseContract.Presenter<QuestionPlayContract.View> {

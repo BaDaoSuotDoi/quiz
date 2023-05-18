@@ -89,6 +89,7 @@ public abstract class BaseFragment extends Fragment {
                 getActivity().finish();
                 return false;
             }
+            Log.e("Pop here ok", "2");
             return navHelper.popBackStack();
         } else if (getView() != null) {
             Log.e("Pop here", "2");

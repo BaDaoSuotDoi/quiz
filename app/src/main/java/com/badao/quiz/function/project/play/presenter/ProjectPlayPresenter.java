@@ -128,6 +128,12 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                 if(correctAnswerNumber == 0 && elements.length == 0){
                     question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
                 }
+
+                if(question.getUserAnswers().getStatus() == AppConstants.QUESTION_ANSWER_CORRECT){
+                    correctAnswerNumber++;
+                }else if(elements.length ==0){
+                    noAnswerNumber++;
+                }
             }
         }
 

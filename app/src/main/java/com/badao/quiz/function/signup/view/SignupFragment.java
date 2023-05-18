@@ -32,12 +32,6 @@ public class SignupFragment extends BaseAnnotatedFragment<SignupContract.View, S
         navigate(R.id.loginFragment,  AnimationType.FROM_BOTTOM_LEFT_CORNER_TO_WHOLE_SCREEN);
     }
 
-    @Override
-    protected void onBackHardwareClicked() {
-        Log.e("Run here", "back");
-        popBackStack();
-    }
-
     @OnClick(R.id.btSignup)
     public  void signup(){
         String email = edEmail.getText().toString();

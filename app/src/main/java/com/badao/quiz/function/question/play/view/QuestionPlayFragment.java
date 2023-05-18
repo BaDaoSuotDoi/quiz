@@ -1,6 +1,8 @@
 package com.badao.quiz.function.question.play.view;
 
+import android.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -14,6 +16,7 @@ import com.badao.quiz.base.mvp.BaseAnnotatedFragment;
 import com.badao.quiz.base.mvp.view.ViewInflate;
 import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.function.main.model.MainActivityVM;
+import com.badao.quiz.function.question.dialog.AlterLeavePlayDialog;
 import com.badao.quiz.function.question.edit.presenter.QuestionEditPresenter;
 import com.badao.quiz.function.question.play.adapter.AnswerFillTextAdapter;
 import com.badao.quiz.function.question.play.adapter.AnswerSelectionAdapter;
@@ -46,6 +49,7 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
     private  int position;
     private Question question;
 
+    private AlterLeavePlayDialog alterLeavePlayDialog;
     public QuestionPlayFragment(int position, Question question, int viewMode){
         this.position = position;
         this.question = question;
@@ -57,6 +61,7 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
         super.initViews(isRefreshData);
         updateContent();
         initMode();
+        initAlterLeavePlayDialog();
         Log.e("ViewMode question play", this.viewMode+"");
         if(this.viewMode == AppConstants.PROJECT_SHOW_ANSWER){
             if(!question.getComment().isEmpty()){
@@ -142,6 +147,25 @@ public class QuestionPlayFragment extends BaseAnnotatedFragment<QuestionPlayCont
         if(llSolution != null){
             initMode();
         }
+    }
+
+    @Override
+    public boolean beforeBack() {
+        if(viewMode == AppConstants.PROJECT_PLAY && alterLeavePlayDialog != null){
+            alterLeavePlayDialog.show(getParentFragmentManager(), AlterLeavePlayDialog.class.getName());
+            return false;
+        }
+        return  true;
+    }
+
+    @Override
+    public void initAlterLeavePlayDialog() {
+        alterLeavePlayDialog = new AlterLeavePlayDialog(new AlterLeavePlayDialog.IListener() {
+            @Override
+            public void onAgree() {
+                popBackStack();
+            }
+        });
     }
 
     public class QuestionUserAnswer{

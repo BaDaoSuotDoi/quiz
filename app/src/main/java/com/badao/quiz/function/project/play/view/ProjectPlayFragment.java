@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -80,7 +81,6 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         super.initViews(isRefreshData);
         project = getPresenter().getProject();
         viewMode = getPresenter().getViewMode();
-
         initViewMode();
         updateQuestionPlay();
         updateMenuQuestion();
@@ -381,4 +381,5 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         setModeMenuShowAnswer();
         btSubmit.setVisibility(View.INVISIBLE);
     }
+
 }
