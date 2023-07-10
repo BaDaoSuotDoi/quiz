@@ -40,12 +40,17 @@
         android:label="ProjectPlayFragment" />
 
     <fragment
+        android:id="@+id/projectChallengePlayFragment"
+        android:name="com.badao.quiz.function.project.play.challenge.view.ProjectChallengePlayFragment"
+        android:label="ProjectChallengePlayFragment" />
+
+    <fragment
         android:id="@+id/historyFragment"
         android:name="com.badao.quiz.function.history.view.HistoryFragment"
-        android:label="historyFragment" />
+        android:label="HistoryFragment" />
 
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.badao.quiz.function.statistics.view.StatisticsFragment"
-        android:label="statisticsFragment" />
+        android:label="StatisticsFragment" />
 </navigation>

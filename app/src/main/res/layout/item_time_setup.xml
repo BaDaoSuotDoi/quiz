@@ -5,25 +5,26 @@
     <Spinner
         android:id="@+id/sHour"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_weight="1"
         android:entries="@array/hour_setup"
         android:background="@color/grey"
         android:padding="5dp"
         />
-    <Spinner
-        android:id="@+id/sMinute"
+    <TextView
+        android:id="@+id/tvMinute"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_weight="1"
-        android:entries="@array/minute_setup"
         android:background="@color/grey"
         android:padding="5dp"
+        android:text="00mm"
+        android:textSize="16dp"
         />
     <Spinner
         android:id="@+id/sSecond"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_weight="1"
         android:entries="@array/second_setup"
         android:background="@color/grey"

@@ -48,13 +48,14 @@ public class Question {
         this.answers.add(new QuestionAnswer(this.id));
     }
 
-    public Question(int projectId,int position, boolean isTemp) {
+    public Question(int projectId,int position, boolean isTemp, int type) {
         this.projectId = projectId;
         this.position = position;
         this.answers.add(new QuestionAnswer(this.id));
         this.isTemp = isTemp;
         this.version = 1;
         this.status = 1;
+        this.type = type;
     }
     public Question() {
         this.answers.add(new QuestionAnswer(this.id));

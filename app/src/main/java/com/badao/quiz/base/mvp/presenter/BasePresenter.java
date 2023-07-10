@@ -22,7 +22,6 @@ public class BasePresenter<V extends BaseContract.View> implements BaseContract.
         this.context = context;
     }
 
-
     @Override
     final public void attachLifecycle(Lifecycle lifecycle) {
         lifecycle.addObserver(this);
@@ -66,7 +65,7 @@ public class BasePresenter<V extends BaseContract.View> implements BaseContract.
                 isFirstCreateFragment = false;
                 handler.postDelayed(() -> {
                     view.initViews(isRefreshData);
-                }, 900);
+                }, 500);
             } else {
                 view.initViews(isRefreshData);
             }

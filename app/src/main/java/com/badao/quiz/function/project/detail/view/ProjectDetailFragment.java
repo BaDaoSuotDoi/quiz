@@ -45,6 +45,8 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     ImageView imName;
     @BindView(R.id.imSchedule)
     ImageView imSchedule;
+    @BindView(R.id.imProjectMode)
+    ImageView imProjectMode;
     @BindView(R.id.tvSchedule)
     TextView tvSchedule;
     @BindView(R.id.tvCreatedAt)
@@ -53,6 +55,10 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     TextView tvUpdatedAt;
     @BindView(R.id.tvTotalQuestion)
     TextView tvTotalQuestion;
+    @BindView(R.id.tvProjectType)
+    TextView tvProjectType;
+    @BindView(R.id.imProjectType)
+    ImageView imProjectType;
 
     @BindView(R.id.tvRandomMode)
     TextView tvRandomMode;
@@ -88,6 +94,7 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
         project = getPresenter().getProject();
+        Log.e("project", project.toString());
         totalQuestion = getPresenter().getNumberQuestion();
         init();
         if(!project.getIsRandom()){
@@ -101,6 +108,34 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
             public void onClick(View view) {
                 ProjectNameDialog dialog = new ProjectNameDialog(project);
                 dialog.show(getParentFragmentManager(), ProjectNameDialog.class.getName());
+            }
+        });
+        imProjectType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(getContext(), imProjectType);
+                popupMenu.inflate(R.menu.menu_project_type);
+                Map<String, String> keys = new HashMap<>();
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        int projectType = project.getType();
+                        switch (menuItem.getItemId()){
+                            case R.id.action_normal:
+                                projectType = AppConstants.PROJECT_NORMAL_TYPE;
+                                break;
+                            case R.id.action_vocabulary:
+                                projectType = AppConstants.PROJECT_VOCABULARY_TYPE;
+                                break;
+                        }
+                        project.setType(projectType);
+                        keys.put("type", projectType+"");
+                        ProjectDB.getInstance(getContext()).update(keys, project.getId());
+                        tvProjectType.setText(project.getNameType());
+                        return true;
+                    }
+                });
+                popupMenu.show();
             }
         });
         imRandomMode.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +256,36 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
                scheduleDialog.show(getParentFragmentManager(), ScheduleDialog.class.getName());
             }
         });
+
+        imProjectMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(getContext(), imProjectMode);
+                popupMenu.inflate(R.menu.menu_project_mode);
+                Map<String, String> keys = new HashMap<>();
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        int projectMode = project.getMode();
+                        switch (menuItem.getItemId()){
+                            case R.id.project_exam_mode:
+                                projectMode = AppConstants.PROJECT_EXAM_MODE;
+                                break;
+                            case R.id.project_challenge_mode:
+                                projectMode = AppConstants.PROJECT_CHALLENGE_MODE;
+                                break;
+                        }
+
+                        project.setMode(projectMode);
+                        keys.put("mode", projectMode+"");
+                        ProjectDB.getInstance(getContext()).update(keys, project.getId());
+                        updateProjectPlay();
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
         observe();
     }
 
@@ -229,9 +294,11 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         updateRandomMode();
         updateTotalQuestion();
         updateQuestionPerSession();
+        updateProjectType();
         updateDuration();
         updateCreatedAt();
         updateUpdatedAt();
+        updateProjectPlay();
         if(!project.getSchedule().isEmpty()){
             tvSchedule.setText(Utils.displaySchedule(project.getSchedule()));
         }
@@ -239,7 +306,11 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
 
     @Override
     public void navigateProjectPlay() {
-        navigate(R.id.projectPlayFragment, BundleBuilder.bundleOf(
+        int page = R.id.projectPlayFragment;
+        if(project.getMode() == AppConstants.PROJECT_CHALLENGE_MODE){
+            page = R.id.projectChallengePlayFragment;
+        }
+        navigate(page, BundleBuilder.bundleOf(
                 Pair.create(AppConstants.PROJECT_ID, project.getId()),
                 Pair.create(AppConstants.VIEW_MODE, AppConstants.PROJECT_PLAY)
         ), AnimationType.FROM_RIGHT_TO_LEFT);
@@ -298,6 +369,21 @@ public class ProjectDetailFragment extends BaseAnnotatedFragment<ProjectDetailCo
         }else {
             tvDuration.setText(String.valueOf(duration));
             tvLabelDuration.setText("Duration of the questionnaire");
+        }
+    }
+
+    @Override
+    public void updateProjectType() {
+        tvProjectType.setText(project.getNameType());
+    }
+
+    @Override
+    public void updateProjectPlay() {
+        if(project.getMode() == AppConstants.PROJECT_CHALLENGE_MODE){
+            imPlay.setImageResource(R.drawable.ic_challenge_play);
+        }
+        if(project.getMode() == AppConstants.PROJECT_EXAM_MODE){
+            imPlay.setImageResource(R.drawable.ic_play);
         }
     }
 

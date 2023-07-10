@@ -121,12 +121,19 @@
             android:gravity="center_vertical"
             >
             <ImageView
-                android:id="@+id/imPlay"
-                android:src="@drawable/ic_play"
-                android:backgroundTint="@color/primary"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:id="@+id/imProjectMode"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/down"
+                android:layout_marginRight="10dp"
                 />
+
+            <ImageView
+                android:id="@+id/imPlay"
+                android:layout_width="25dp"
+                android:layout_height="21dp"
+                android:backgroundTint="@color/primary"
+                android:src="@drawable/ic_play" />
 
             <TextView
                 android:id="@+id/tvEdit"
@@ -205,6 +212,55 @@
                     android:layout_height="match_parent"
 
                     android:src="@drawable/pen"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llProjectType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            >
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Project type"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/primary"
+                android:textColor="@color/black"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                >
+                <TextView
+                    android:id="@+id/tvProjectType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Normal"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:id="@+id/imProjectType"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/down"
                     />
             </LinearLayout>
         </LinearLayout>

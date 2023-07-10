@@ -10,6 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.function.main.model.MainActivityVM;
 import com.badao.quiz.function.question.edit.view.QuestionEditFragment;
+import com.badao.quiz.function.question.edit.vocabulary.view.QuestionVocabularyEditFragment;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
 import com.badao.quiz.utils.Utils;
@@ -31,9 +32,18 @@ public class QuestionEditAdapter extends FragmentStateAdapter {
 //        if(position == project.getQuestions().size()- 1){
 //            project.getQuestions().add(new Question(AppConstants.QUESTION_TEMP_ID));
 //        }
-        QuestionEditFragment questionEditFragment = new QuestionEditFragment(position, question, questionEditListener);
-        questionEditFragment.setTagCustom("qe" +question.getPosition());
-        return questionEditFragment;
+        if(project.getType() == AppConstants.PROJECT_NORMAL_TYPE){
+            QuestionEditFragment questionEditFragment = new QuestionEditFragment(position, question, questionEditListener);
+            questionEditFragment.setTagCustom("qe" +question.getPosition());
+            return questionEditFragment;
+        }
+
+        if(project.getType() == AppConstants.PROJECT_VOCABULARY_TYPE){
+            QuestionVocabularyEditFragment questionVocabularyEditFragment = new QuestionVocabularyEditFragment(position, question, questionEditListener);
+            questionVocabularyEditFragment.setTagCustom("qe" +question.getPosition());
+            return questionVocabularyEditFragment;
+        }
+        return null;
     }
 
     @Override

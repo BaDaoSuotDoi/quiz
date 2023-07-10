@@ -13,21 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="?attr/colorPrimary"-->
-<!--            android:elevation="2dp"-->
-<!--            android:layout_gravity="end"-->
-
-<!--            app:titleTextColor="@android:color/white"/>-->
         <FrameLayout
             android:id="@+id/main_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/primary"
+            android:background="@color/white"
             >
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -43,54 +33,77 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     >
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/ic_previous"
-                        android:id="@+id/imPrevious"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvProjectName"
-                        android:text="Project Name"
-                        android:textColor="@color/white"
-                        android:textSize="20dp"
-                        android:layout_weight="1"
-                        />
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/save"
-                        android:id="@+id/imSave"
-                        android:layout_weight="1"
-                        />
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/across"
-                        android:id="@+id/imAcross"
-                        android:layout_weight="1"
-                        />
-<!--                    <ImageView-->
-<!--                        android:layout_width="30dp"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        android:src="@drawable/ic_expand"-->
-<!--                        android:id="@+id/imInsert"-->
-<!--                        android:layout_weight="1"-->
-<!--                        />-->
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/ic_menu"
-                        android:id="@+id/imMenu"
-                        android:layout_weight="1"
-                        />
+                        android:layout_weight="0.7"
+                        >
+
+                        <ImageView
+                            android:id="@+id/imPrevious"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_previous" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_star"
+                            />
+                        <TextView
+                            android:id="@+id/tvNumberCorrect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0/10"
+                            android:textSize="20dp"
+                            android:padding="3dp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/white"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:gravity="left"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_clock"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvTime"
+                            android:text="00:00"
+                            android:textColor="@color/white"
+                            android:textSize="20dp"
+                            android:layout_marginLeft="5dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:gravity="right"
+                        >
+                        <ImageView
+                            android:id="@+id/imQuit"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_quit"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vpQuestionEdit"
+                    android:id="@+id/vpQuestionPlay"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:clipChildren="false"
@@ -106,21 +119,22 @@
                     android:id="@+id/llDirectional"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:padding="10dp"
+                    android:background="@color/primary"
                     >
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvPrevious"
-                        android:text="Previous"
+                        android:id="@+id/tvLeft"
                         android:layout_weight="0.3"
                         android:textSize="20dp"
                         android:textStyle="bold"
                         android:textColor="@color/white"
+                        android:text="Give up"
                         />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvQuestionCurrent"
+                        android:id="@+id/tvQuestionIndex"
                         android:layout_gravity="center"
                         android:text="10/11"
                         android:layout_weight="0.4"
@@ -133,8 +147,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
-                        android:id="@+id/tvNext"
-                        android:text="Next"
+                        android:id="@+id/tvRight"
+                        android:text="Submit"
                         android:layout_weight="0.3"
                         android:textSize="20dp"
                         android:textStyle="bold"
@@ -145,15 +159,6 @@
 
         </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/toolbar_height"
-        android:background="@color/black"
-        />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

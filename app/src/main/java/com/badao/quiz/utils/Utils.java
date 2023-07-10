@@ -55,13 +55,15 @@ public class Utils {
             return "Invalid type";
         }
 
-        for(QuestionAnswer answer: question.getAnswers()){
-            if(answer.getContent().isEmpty() && answer.getType() == AppConstants.QUESTION_NORMAL_TYPE ){
-                return "Answer question empty";
-            }
+        if(question.getType() != AppConstants.QUESTION_VOCABULARY_TYPE){
+            for(QuestionAnswer answer: question.getAnswers()){
+                if(answer.getContent().isEmpty() && answer.getType() == AppConstants.QUESTION_NORMAL_TYPE ){
+                    return "Answer question empty";
+                }
 
-            if(answer.getContent().length() < 3 && answer.getType() == AppConstants.QUESTION_SELECTION_TYPE ){
-                return "Answer question empty";
+                if(answer.getContent().length() < 3 && answer.getType() == AppConstants.QUESTION_SELECTION_TYPE ){
+                    return "Answer question empty";
+                }
             }
         }
 
@@ -180,5 +182,28 @@ public class Utils {
 
     public static String generateKey(String tableName, int id){
         return String.format("%s_%d", tableName, id);
+    }
+
+    public static String randomHiddenStr(String s){
+        int n = s.length();
+        if(n == 1){
+            return s;
+        }
+        int minRandom = Math.max(0, n/2);
+        int maxRandom = n-1;
+        int rangeRandom = (int)(Math.random()*(maxRandom - minRandom +1)) + minRandom;
+        Set<Integer> gather = new HashSet<>();
+        while (gather.size() < rangeRandom){
+            gather.add((int)(Math.random()*(n-1)));
+        }
+        StringBuilder ans = new StringBuilder();
+        for(int i = 0; i< n; i++){
+            if(gather.contains(i)){
+                ans.append(" _ ");
+            }else{
+                ans.append(s.charAt(i));
+            }
+        }
+        return ans.toString();
     }
 }

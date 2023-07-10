@@ -199,7 +199,11 @@ public class HomeFragment extends BaseAnnotatedFragment<HomeContract.View, HomeC
 
             @Override
             public void navigateProjectPlay(Project project) {
-                navigate(R.id.projectPlayFragment, BundleBuilder.bundleOf(
+                int page = R.id.projectPlayFragment;
+                if(project.getMode() == AppConstants.PROJECT_CHALLENGE_MODE){
+                    page = R.id.projectChallengePlayFragment;
+                }
+                navigate(page, BundleBuilder.bundleOf(
                         Pair.create(AppConstants.PROJECT_ID, project.getId()),
                         Pair.create(AppConstants.VIEW_MODE, AppConstants.PROJECT_PLAY)
                 ), AnimationType.FROM_RIGHT_TO_LEFT);

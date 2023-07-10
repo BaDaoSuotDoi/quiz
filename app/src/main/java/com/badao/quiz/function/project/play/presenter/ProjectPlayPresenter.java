@@ -52,7 +52,7 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
                     getView().updateTime(Utils.displayTime(t));
                     if (t <= 0) {
                         getView().changeViewSubmit( submit(project));
-                        getView().setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+                        getView().setViewMode(AppConstants.PROJECT_SHOW_ANSWER, -1);
                         stopTime();
                     }
                 }, Throwable::printStackTrace);
@@ -74,65 +74,12 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
         int noAnswerNumber = 0;
 
         for(Question question: questions){
-            Log.e("getUserAnswers", question.getUserAnswers().toString());
-            String answer = question.getUserAnswers().getAnswer();
-            if(answer.isEmpty()){
-                noAnswerNumber++;
-            }
-
-            if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
-                QuestionAnswer questionAnswer =  question.getAnswers().get(0);
-                if(questionAnswer.getContent().equals(answer)){
-                    correctAnswerNumber++;
-                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
-                }else{
-                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
-                }
-            }else if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
-                Log.e("Start here", answer);
-
-                String[] elements = Arrays.stream(answer.split(AppConstants.TOKEN_SPLIT_ANSWER_USER_SELECTION)).filter(
-                        e -> !e.isEmpty()
-                ).toArray(String[]::new);
-                int questionCorrectNumber = 0;
-                boolean isAnswerCorrect = true;
-                for( QuestionAnswer questionAnswer : question.getAnswers()){
-                    if(questionAnswer.getContent().startsWith(AppConstants.TOKEN_TRUE_SELECT_ANSWER)){
-                        questionCorrectNumber++;
-                        boolean isCorrect = false;
-                        for (String element : elements) {
-                            if (!element.isEmpty()) {
-                                int id = Integer.parseInt(element);
-                                if (questionAnswer.getId() == id) {
-                                    isCorrect = true;
-                                }
-                            }
-                        }
-                        if(!isCorrect){
-                            isAnswerCorrect = false;
-                        }
-                    }
-                    Log.e("questionAnswer", questionAnswer.toString());
-                }
-
-                // user select all answer correct
-                if(isAnswerCorrect){
-                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
-                }
-                // when user selection all answer correct and some answer wrong
-                if(questionCorrectNumber != elements.length ){
-                    Log.e("Fault here", "no match number choose "+elements.length);
-                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
-                }else if(correctAnswerNumber == 0 && elements.length == 0){
-                    question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
-                }
-
-                if(question.getUserAnswers().getStatus() == AppConstants.QUESTION_ANSWER_CORRECT){
-                    correctAnswerNumber++;
-                }else if(elements.length ==0){
-                    noAnswerNumber++;
-                }
-            }
+           int status = checkAnswerQuestion(question);
+           if(status == 0){
+               noAnswerNumber++;
+           }else if(status == AppConstants.QUESTION_ANSWER_CORRECT){
+               correctAnswerNumber++;
+           }
         }
 
         Log.e("Submit", "correctAnswerNumber: "+correctAnswerNumber+"//noAnswerNumber:"+noAnswerNumber );
@@ -144,6 +91,79 @@ public class ProjectPlayPresenter extends BasePresenter<ProjectPlayContract.View
             RecordUserAnswerDB.getInstance(getContext()).create(recordUserAnswer);
         }
         return historySubmit;
+    }
+
+    @Override
+    public int checkAnswerQuestion(Question question) {
+        Log.e("getUserAnswers", question.getUserAnswers().toString());
+        String answer = question.getUserAnswers().getAnswer();
+        if(answer.isEmpty()){
+            return 0;
+        }
+
+        if(question.getType() == AppConstants.QUESTION_NORMAL_TYPE){
+            QuestionAnswer questionAnswer =  question.getAnswers().get(0);
+            if(questionAnswer.getContent().equals(answer)){
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+                return AppConstants.QUESTION_ANSWER_CORRECT;
+            }else{
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+                return AppConstants.QUESTION_ANSWER_WRONG;
+            }
+        }else if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
+            Log.e("Start here", answer);
+
+            String[] elements = Arrays.stream(answer.split(AppConstants.TOKEN_SPLIT_ANSWER_USER_SELECTION)).filter(
+                    e -> !e.isEmpty()
+            ).toArray(String[]::new);
+            int questionCorrectNumber = 0;
+            boolean isAnswerCorrect = true;
+            for( QuestionAnswer questionAnswer : question.getAnswers()){
+                if(questionAnswer.getContent().startsWith(AppConstants.TOKEN_TRUE_SELECT_ANSWER)){
+                    questionCorrectNumber++;
+                    boolean isCorrect = false;
+                    for (String element : elements) {
+                        if (!element.isEmpty()) {
+                            int id = Integer.parseInt(element);
+                            if (questionAnswer.getId() == id) {
+                                isCorrect = true;
+                            }
+                        }
+                    }
+                    if(!isCorrect){
+                        isAnswerCorrect = false;
+                    }
+                }
+                Log.e("questionAnswer", questionAnswer.toString());
+            }
+
+            // user select all answer correct
+            if(isAnswerCorrect){
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+            }
+            // when user selection all answer correct and some answer wrong
+            if(questionCorrectNumber != elements.length ){
+                Log.e("Fault here", "no match number choose "+elements.length);
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+                return AppConstants.QUESTION_ANSWER_WRONG;
+            }else if(elements.length == 0){
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+                return AppConstants.QUESTION_ANSWER_CORRECT;
+            }
+
+        }else if(question.getType() == AppConstants.QUESTION_VOCABULARY_TYPE){
+            Log.e("QUESTION_VOCABULARY_TYPE", answer);
+            if(question.getAnswers().get(0).getContent().equals(answer)){
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_CORRECT);
+                return AppConstants.QUESTION_ANSWER_CORRECT;
+            }else if(answer.isEmpty()){
+                return 0;
+            }else{
+                question.getUserAnswers().setStatus(AppConstants.QUESTION_ANSWER_WRONG);
+                return AppConstants.QUESTION_ANSWER_WRONG;
+            }
+        }
+        return 0;
     }
 
     @Override

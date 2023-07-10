@@ -28,9 +28,6 @@ import butterknife.ButterKnife;
 public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P extends BaseContract.Presenter<V>>
         extends BaseMvpFragment<V, P>  {
 
-    @BindView(R.id.content_layout)
-    protected View llBaseRootView;
-
     private MainActivityVM mainActivityVM;
     private View mView;
 
@@ -38,14 +35,7 @@ public abstract class BaseAnnotatedFragment<V extends BaseContract.View, P exten
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mView == null ) {
-            mView = inflater.inflate(R.layout.fragment_base_toolbar_back, container, false);
-            View viewStub = inflater.inflate(getLayoutId(), container, false);
-            FrameLayout mainContent = mView.findViewById(R.id.content_layout);
-            mainContent.addView(viewStub);
-
-            viewStub.postDelayed(() -> {
-                mView.findViewById(R.id.content_layout).setVisibility(View.VISIBLE);
-            }, 50);
+            mView = inflater.inflate(getLayoutId(), container, false);
         }
         unbinder = ButterKnife.bind(this, mView);
         prepareInitView();

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/project_exam_mode"
+        android:title="Exam mode"/>
+    <item android:id="@+id/project_challenge_mode"
+        android:title="Challenge mode"/>
+</menu>

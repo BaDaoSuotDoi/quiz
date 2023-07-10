@@ -25,9 +25,12 @@ import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.db.QuestionAnswerDB;
 import com.badao.quiz.db.QuestionDB;
 import com.badao.quiz.function.main.view.MainActivity;
+import com.badao.quiz.function.project.play.ProjectPlayBaseFragment;
 import com.badao.quiz.function.project.play.adapter.ProjectPlayAdapter;
+import com.badao.quiz.function.project.play.challenge.presenter.ProjectChallengePlayContract;
 import com.badao.quiz.function.project.play.presenter.ProjectPlayContract;
 import com.badao.quiz.function.project.play.presenter.ProjectPlayPresenter;
+import com.badao.quiz.function.question.play.QuestionPlayBaseFragment;
 import com.badao.quiz.function.question.play.view.QuestionPlayFragment;
 import com.badao.quiz.model.HistorySubmit;
 import com.badao.quiz.model.Project;
@@ -43,7 +46,7 @@ import butterknife.BindView;
 
 @SuppressLint("NonConstantResourceId")
 @ViewInflate(presenter = ProjectPlayPresenter.class, layout = R.layout.fragment_project_play)
-public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContract.View, ProjectPlayContract.Presenter> implements ProjectPlayContract.View{
+public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContract.View, ProjectPlayContract.Presenter> implements ProjectPlayContract.View {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
@@ -68,21 +71,23 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
     TextView tvQuestionSaw;
     TextView tvTimeElapsed;
     Button btSubmit;
-    private Project project;
-    private List<Question> questions;
     private ProjectPlayAdapter adapter;
 
     private HistorySubmit historySubmit;
 
     private int viewMode;
     private MenuItem menuItemSelected;
+    private Project project;
+    private List<Question> questions;
+
+
     @Override
     public void initViews(boolean isRefreshData) {
         super.initViews(isRefreshData);
-        project = getPresenter().getProject();
         viewMode = getPresenter().getViewMode();
+        project = getPresenter().getProject();
+        questions = getPresenter().getQuestions(project.getId());
         initViewMode();
-
 
         vpQuestionPlay.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -179,11 +184,11 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
 //                    Log.e("Submit", "OK");
 //                    adapter.setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
                     historySubmit = getPresenter().submit(project);
-                    setViewMode(AppConstants.PROJECT_SHOW_ANSWER);
+                    setViewMode(AppConstants.PROJECT_SHOW_ANSWER, -1);
                     changeViewSubmit(historySubmit);
                     btSubmit.setText("REPLAY TEST");
                 }else if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
-                    setViewMode(AppConstants.PROJECT_PLAY);
+                    setViewMode(AppConstants.PROJECT_PLAY, -1);
                     initViewMode();
                     btSubmit.setText("FINISH THE TEST");
 
@@ -208,7 +213,6 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         vpQuestionPlay.setOffscreenPageLimit(1);
     }
 
-    @Override
     public void updateMenuQuestion() {
         if(navigationView != null){
             int n = project.getQuestions().size();
@@ -227,7 +231,11 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                     MenuItem menuItem= menu.add(Menu.NONE, question.getPosition(), Menu.NONE, "");
                     View actionView = LayoutInflater.from(getContext()).inflate(R.layout.menu_question_play, null, false);
                     TextView tvContent = actionView.findViewById(R.id.tvMenuContent);
-                    tvContent.setText(question.getContent());
+                    if(question.getType() == AppConstants.QUESTION_VOCABULARY_TYPE){
+                        tvContent.setText(question.getContent());
+                    }else{
+                        tvContent.setText(question.getContent());
+                    }
                     menuItem.setActionView(actionView);
                     if(viewMode == AppConstants.PROJECT_SHOW_ANSWER){
                         setModeMenuShowAnswer();
@@ -237,7 +245,6 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         }
     }
 
-    @Override
     public void initMenuHeader() {
         View view = navigationView.getHeaderView(0);
         tvPage = view.findViewById(R.id.tvPage);
@@ -252,11 +259,10 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
         }
     }
 
-    @Override
     public void observe() {
         getViewModel().getMlUserChangeAnswer().observe(this, payload -> {
             if(payload.getAction() == AppConstants.USER_CHANGE_ANSWER){
-                QuestionPlayFragment.QuestionUserAnswer questionUserAnswer = (QuestionPlayFragment.QuestionUserAnswer) payload.getValue();
+                QuestionPlayFragment.QuestionUserAnswer questionUserAnswer = (QuestionPlayBaseFragment.QuestionUserAnswer) payload.getValue();
                 int position = questionUserAnswer.getQuestionPosition();
                 int n = questions.size();
                 int questionAnsweredNumber = 0;
@@ -267,7 +273,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                         MenuItem menuItem = navigationView.getMenu().getItem(i);
                         View view = menuItem.getActionView();
                         ImageView imageView = view.findViewById(R.id.imQuestionAnswer);
-                        if(questionUserAnswer.isAnswer()){
+                        if(!questionUserAnswer.getAnswer().isEmpty()){
                             imageView.setImageResource(R.drawable.ic_checked);
                         }else{
                             imageView.setImageResource(R.drawable.ic_uncheck);
@@ -278,7 +284,7 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                     }
                 }
 
-                if(questionUserAnswer.isAnswer()){
+                if(!questionUserAnswer.getAnswer().isEmpty()){
                     tvQuestionAnswered.setText(String.format(AppConstants.FORMAT_RATIO, questionAnsweredNumber, n));
 
                 }
@@ -309,6 +315,10 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
                 project.setQuestions(questions);
             }
             for(Question question: questions){
+                if(question.getType() == AppConstants.QUESTION_VOCABULARY_TYPE){
+                    question.setContent(Utils.randomHiddenStr(question.getContent()));
+                    Log.e("EDIT TYPE", question.getContent());
+                }
                 Log.e("Play", question.toString());
             }
             updateTime("00:00");
@@ -367,12 +377,11 @@ public class ProjectPlayFragment  extends BaseAnnotatedFragment<ProjectPlayContr
     }
 
     @Override
-    public void setViewMode(int viewMode) {
+    public void setViewMode(int viewMode, int idx) {
         this.viewMode = viewMode;
         adapter.setViewMode(viewMode);
     }
 
-    @Override
     public void setModeMenuShowAnswer() {
         Menu menu = navigationView.getMenu();
         int n = menu.size();

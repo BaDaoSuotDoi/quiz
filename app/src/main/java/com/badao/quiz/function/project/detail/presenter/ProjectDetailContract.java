@@ -12,6 +12,8 @@ public class ProjectDetailContract {
           void updateTotalQuestion();
           void updateQuestionPerSession();
           void updateDuration();
+          void updateProjectType();
+          void updateProjectPlay();
           void navigateProjectPlay();
           void observe();
     }

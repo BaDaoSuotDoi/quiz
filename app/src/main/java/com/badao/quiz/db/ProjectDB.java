@@ -50,6 +50,7 @@ public class ProjectDB  extends  SQLiteHelper{
         values.put("mode", project.getMode());
         values.put("is_sync", project.getIsSync() ? 1: 0);
         values.put("schedule", project.getSchedule());
+        values.put("type", project.getType());
         long id = sqlWrite.insert(ProjectDB.name, null, values);
         project.setId((int)id);
         return project ;
@@ -107,13 +108,14 @@ public class ProjectDB  extends  SQLiteHelper{
         String name = cursor.getString(1);
         String createdAt = cursor.getString(2);
         String lastUpdated = cursor.getString(3);
-        Boolean isRandom = cursor.getInt(4) == 1? true: false;
+        Boolean isRandom = cursor.getInt(4) == 1;
         int questionPerSession = cursor.getInt(5);
         int duration = cursor.getInt(6);
         int mode = cursor.getInt(7);
-        Boolean isSync = cursor.getInt(8) == 1? true: false;
+        Boolean isSync = cursor.getInt(8) == 1;
         String schedule = cursor.getString(9);
-        return  new Project(id,name, createdAt,lastUpdated,isRandom,questionPerSession,duration,mode,isSync, schedule );
+        int type = cursor.getInt(10);
+        return  new Project(id,name, createdAt,lastUpdated,isRandom,questionPerSession,duration,mode,isSync, schedule,type );
     }
 
     public void destroyAll(){

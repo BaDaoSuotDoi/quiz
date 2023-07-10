@@ -1,5 +1,6 @@
 package com.badao.quiz.model;
 
+import com.badao.quiz.constants.AppConstants;
 import com.badao.quiz.utils.Utils;
 
 import java.util.ArrayList;
@@ -13,12 +14,13 @@ public class Project {
     private boolean isRandom = true;
     private int questionPerSession = 10;
     private int duration = -1 ;
-    private int mode = 1;
+    private int mode = AppConstants.PROJECT_EXAM_MODE;
     private boolean isSync = false;
     private String schedule = "";
+    private int type = 0;
     private List<Question> questions = new ArrayList<>();
 
-    public Project(int id, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync, String schedule) {
+    public Project(int id, String name, String createdAt, String lastUpdated, boolean isRandom, int questionPerSession, int duration, int mode, boolean isSync, String schedule, int type) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
@@ -29,6 +31,7 @@ public class Project {
         this.mode = mode;
         this.isSync = isSync;
         this.schedule = schedule;
+        this.type = type;
     }
 
     public Project(String name){
@@ -37,7 +40,15 @@ public class Project {
         this.lastUpdated = Utils.getTimeCurrent();
 
     }
-
+    public String getNameType(){
+        if(this.type == AppConstants.PROJECT_NORMAL_TYPE){
+            return "Normal";
+        }
+        if(this.type == AppConstants.PROJECT_VOCABULARY_TYPE){
+            return "Vocabulary";
+        }
+        return "";
+    }
     public int getId() {
         return id;
     }
@@ -126,18 +137,28 @@ public class Project {
         this.schedule = schedule;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
-                "ID=" + id +
+                "id=" + id +
                 ", name='" + name + '\'' +
-                ", createAt='" + createdAt + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 ", lastUpdated='" + lastUpdated + '\'' +
                 ", isRandom=" + isRandom +
                 ", questionPerSession=" + questionPerSession +
                 ", duration=" + duration +
                 ", mode=" + mode +
                 ", isSync=" + isSync +
+                ", schedule='" + schedule + '\'' +
+                ", type=" + type +
                 ", questions=" + questions +
                 '}';
     }

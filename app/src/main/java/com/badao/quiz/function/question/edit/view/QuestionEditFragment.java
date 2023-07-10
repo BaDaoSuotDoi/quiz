@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -216,8 +217,12 @@ public class QuestionEditFragment extends BaseAnnotatedFragment<QuestionEditCont
             public void onItemClick(BaseAdapter adapter, View view, int position) {
                 Log.e("Run delete here", "Ok");
                 if(question.getType() == AppConstants.QUESTION_SELECTION_TYPE){
-                    question.getAnswers().remove(position);
-                    adapter.setData(question.getAnswers());
+                    if(question.getAnswers().size() > 1){
+                        question.getAnswers().remove(position);
+                        adapter.setData(question.getAnswers());
+                    }else{
+                        Toast.makeText(getContext(), "Must at least one anwer!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

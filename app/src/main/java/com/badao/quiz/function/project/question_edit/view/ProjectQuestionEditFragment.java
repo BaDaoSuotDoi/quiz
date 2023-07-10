@@ -41,6 +41,7 @@ import com.badao.quiz.function.project.question_edit.adapter.QuestionEditAdapter
 import com.badao.quiz.function.project.question_edit.presenter.ProjectQuestionEditContract;
 import com.badao.quiz.function.project.question_edit.presenter.ProjectQuestionEditPresenter;
 import com.badao.quiz.function.question.edit.view.QuestionEditFragment;
+import com.badao.quiz.function.question.edit.vocabulary.view.QuestionVocabularyEditFragment;
 import com.badao.quiz.model.Project;
 import com.badao.quiz.model.Question;
 import com.badao.quiz.model.QuestionAnswer;
@@ -81,6 +82,7 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
     private List<Question> questionRemoved = new ArrayList<>();
     private MenuItem menuItemSelected;
 
+    private int questionType;
     public  void initData(){
 
         project = getPresenter().getProject();
@@ -93,9 +95,13 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
             question.setPosition(getPresenter().getQuestionIndex());
         }
 
+        questionType = AppConstants.QUESTION_NORMAL_TYPE;
+        if(project.getType() == AppConstants.PROJECT_VOCABULARY_TYPE){
+            questionType = AppConstants.QUESTION_VOCABULARY_TYPE;
+        }
         //buffer question
-        project.getQuestions().add(new Question(project.getId(),getPresenter().getQuestionIndex(), false));
-        project.getQuestions().add(new Question(project.getId(),getPresenter().getQuestionIndex(), true));
+        project.getQuestions().add(new Question(project.getId(),getPresenter().getQuestionIndex(), false,questionType));
+        project.getQuestions().add(new Question(project.getId(),getPresenter().getQuestionIndex(), true,questionType));
 
         Question question = n > 0? project.getQuestions().get(n-1):project.getQuestions().get(0) ;
         question.setViewed(true);
@@ -113,23 +119,6 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
         for(Question question: project.getQuestions()){
             Log.e("Question here",question.toString());
         }
-
-        getViewModel().getMlQuestionStatus().observe(this, payload -> {
-            Log.e("Run here", "Create question 1");
-            if(payload.getAction()  == AppConstants.QUESTION_TEMP_ADD){
-                Log.e("Run here", "Create question ccc");
-                int numberQuestionInvalid = 0;
-                for(Question question: project.getQuestions()){
-                    if(!Utils.checkValid(question).isEmpty()){
-                       numberQuestionInvalid++;
-                    }
-                }
-                if(numberQuestionInvalid > 2){
-                    int n = project.getQuestions().size();
-                    adapter.removeFragment(n-1);
-                }
-            }
-        });
 
         tvPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,8 +157,12 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                                 if(fragment instanceof  BaseFragment){
                                     BaseFragment baseFragment = (BaseFragment) fragment;
                                     if(baseFragment.getTagCustom().equals("qe"+question.getPosition())){
-                                        QuestionEditFragment questionEditFragment = (QuestionEditFragment) baseFragment;
-                                        questionEditFragment.checkValidInput();
+                                        if(project.getType() == AppConstants.PROJECT_NORMAL_TYPE){
+                                            QuestionEditFragment questionEditFragment = (QuestionEditFragment) baseFragment;
+                                            questionEditFragment.checkValidInput();
+                                        }else if(question.getType() == AppConstants.PROJECT_VOCABULARY_TYPE){
+                                            QuestionVocabularyEditFragment questionVocabularyEditFragment = (QuestionVocabularyEditFragment) baseFragment;
+                                        }
                                     }
                                 }
                             }
@@ -213,7 +206,7 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                 Question question = project.getQuestions().get(itemCurrent);
                 int n = project.getQuestions().size();
                 if(n == 2 && itemCurrent == 0){
-                    Question questionTemp = new Question(project.getId(),getPresenter().getQuestionIndex(), false);
+                    Question questionTemp = new Question(project.getId(),getPresenter().getQuestionIndex(), false,questionType);
                     project.getQuestions().set(0, questionTemp );
                     removeMenuQuestion(question.getPosition());
                     addMenuQuestion(questionTemp.getPosition(), itemCurrent, "1. --Waiting edition--");
@@ -278,7 +271,7 @@ public class ProjectQuestionEditFragment extends BaseAnnotatedFragment<ProjectQu
                         questionCurrent.setTemp(false);
                         addMenuQuestion(questionCurrent.getPosition(), n, n + ".--Waiting edition--");
                         selectMenuItem(position);
-                        adapter.addFragment(n, new Question(project.getId(),getPresenter().getQuestionIndex(), true));
+                        adapter.addFragment(n, new Question(project.getId(),getPresenter().getQuestionIndex(), true, questionType));
 //                        project.getQuestions().add(new Question(getPresenter().getQuestionIndex(), true));
                     }
                 }else{

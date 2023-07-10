@@ -14,7 +14,7 @@ import com.badao.quiz.base.mvp.model.BasePresenterModel;
 import com.badao.quiz.helper.NavHelper;
 
 public abstract class BaseMvpFragment<V extends BaseContract.View, P extends BaseContract.Presenter<V>>
-        extends BaseFragment implements BaseContract.View, LifecycleOwner {
+        extends BaseFragment implements BaseContract.View {
     protected P presenter;
 
     protected abstract P createPresenterInstance();
